@@ -1,12 +1,13 @@
 
 function onStart () {
 	Data.URL = sf.core.localData("serverip");
+	Data.mainScene = "Recordings";
 	if(Data.URL==null) {
-		sf.scene.show("Settings", {parent:'Recordings'});
+		sf.scene.show("Settings");
 		sf.scene.focus("Settings");
 	} else {
-		sf.scene.show("Recordings");
-		sf.scene.focus("Recordings");
+		sf.scene.show(Data.mainScene);
+		sf.scene.focus(Data.mainScene);
 	}
 	
 	sf.start();
