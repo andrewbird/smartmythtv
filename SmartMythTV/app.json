@@ -1,0 +1,6 @@
+{
+	"scenes" : [ "Main", "Settings", "Recordings", "Player", "HtmlPlayer", "Videos"],
+	"files" : [],
+	"theme" : "base", 
+	"modules" : [ "ime" ]
+}

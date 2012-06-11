@@ -1,0 +1,73 @@
+/*#ScenePlayer {
+	position : absolute;
+	left : 0px;
+	top : 0px;
+	width : 960px;
+	height : 540px;
+	background-color : #ffffff;
+}*/
+
+#SceneSettings #svecLabel_TIME{
+	position : absolute;
+	font-size : 14pt;
+	color : #210000;
+	left : 0px;
+	top : 0px;
+	width : 200px;
+}
+
+#ScenePlayer #svecKeyHelp_4JNF{
+	position : absolute;
+	left : 0px;
+	top : 507px;
+}
+
+#time{
+    position:absolute; 
+    left:8px; top:0px;
+    width:472px; height:24px;
+}
+
+#progressBarBG{
+    position:absolute;
+    left:4px; top:8px;
+    width:400px; height:8px;
+    background-image:url("../Images/videoBox/progressBarBG.png");
+}
+
+#progressBar{
+    position:absolute;
+    left:0px; top:0px;
+    width:0%; height:8px;
+    background-image:url("../Images/videoBox/progressBar.png");
+}
+
+#timeInfo{
+    position:absolute;
+    left:408px; top:4px;
+    width:60px; height:16px;
+    
+    text-align:center;
+    font-size:12px;
+}
+
+#ScenePlayer .osd{
+    position:absolute;
+    left:20px;
+    width:400px;
+    height:20px;
+    color:white;
+	background-color:#ffffff;
+    font-size:22px;
+}
+
+#ScenePlayer #osd{
+    position:absolute;
+    top:541px;
+    left:0px;
+    width:960px;
+    height:148px;
+	background-color:#ffffff;
+    z-index:10;
+    display:none;
+}

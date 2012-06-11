@@ -1,0 +1,45 @@
+#SceneSceneRecordings {
+	position : absolute;
+	left : 0px;
+	top : 0px;
+	width : 960px;
+	height : 540px;
+	background-color : #ffffff;
+}
+
+#SceneRecordings #svecListbox_BOUK{
+	position : absolute;
+	left : 50px;
+	top : 70px;
+	width : 470px;
+}
+
+#SceneRecordings #svecScrollbar_UKRU{
+	position : absolute;
+	left : 540px;
+	top : 70px;
+	height : 400px;
+}
+
+#SceneRecordings #svecKeyHelp_O2NM{
+	position : absolute;
+	left : 0px;
+	top : 507px;
+}
+
+#SceneRecordings #description{
+	position : absolute;
+	font-size : 12pt;
+	color : #FFFFFF;
+	left : 550px;
+	top : 50px;
+	width : 400px;
+	height : 450px;
+	overflow : auto;
+}
+
+#SceneRecordings #svecLoadingImage_RBMO{
+	position : absolute;
+	left : 270px;
+	top : 190px;
+}
