@@ -2,7 +2,7 @@ var ServiceAPI = {
 	XHRObj : null,
 	onReceived : null,
 	onDeleteCurrent : null
-}
+};
 
 ServiceAPI.loadRecordings = function() {
 	XHRObj = new XMLHttpRequest();
@@ -23,7 +23,7 @@ ServiceAPI.loadRecordings = function() {
 	} else {
         alert("Failed to create XHR");
     }
-}
+};
 
 ServiceAPI.receiveRecordings = function() {
 	//var elements = JSON.parse(XHRObj.responseText);
@@ -50,7 +50,7 @@ ServiceAPI.receiveRecordings = function() {
 	widgetAPI.putInnerHTML(document.getElementById("description"), Data.Recordings[$('#svecListbox_BOUK').sfList('getIndex')].Description.replace(/\n/g, '<br>'));
 	XHRObj.destroy();
 	ServiceAPI.onReceived();
-}
+};
 
 ServiceAPI.loadVideos = function() {
 	XHRObj = new XMLHttpRequest();
@@ -71,7 +71,7 @@ ServiceAPI.loadVideos = function() {
 	} else {
         alert("Failed to create XHR");
     }
-}
+};
 
 ServiceAPI.receiveVideos = function() {
 	//var elements = JSON.parse(XHRObj.responseText);
@@ -97,15 +97,15 @@ ServiceAPI.receiveVideos = function() {
 	widgetAPI.putInnerHTML(document.getElementById("description"), Data.Videos[$('#svecListbox_BOUK').sfList('getIndex')].Description.replace(/\n/g, '<br>'));
 	XHRObj.destroy();
 	ServiceAPI.onReceived();
-}
+};
 
 ServiceAPI.deleteRecording = function(recording) {
 	XHRObj = new XMLHttpRequest();
 	XHRObj.onreadystatechange = function() {
 		XHRObj.destory();
-	}
+	};
 	XHRObj.open("POST", "http://"+Data.URL+':6544/Dvr/RemoveRecorded', true);
 	XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	XHRObj.send('ChanId='+recording.ChanId+'&StartTime='+recording.StartTime);
 	ServiceAPI.onDeleteCurrent();
-}
+};
