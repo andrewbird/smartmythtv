@@ -26,6 +26,10 @@ ScenePlayer.prototype.handleShow = function () {
 	});*/
 	letterbox = false;
     plugin.OnRenderingComplete = 'ScenePlayer.prototype.doHide';
+	plugin.OnCurrentPlayTime = 'OSD.updateOSD';
+	plugin.OnStreamInfoReady = function() {
+		OSD.initOSD(plugin.GetDuration());
+	};
 	//plugin.SetTotalBufferSize(20*1024);
 	//plugin.SetInitialBuffer(10*1024);
 	//plugin.SetPendingBuffer(10*1024);
@@ -112,9 +116,11 @@ ScenePlayer.prototype.doHide = function() {
 ScenePlayer.prototype.handleKeyDown = function (keyCode) {
 	switch (keyCode) {
 		case sf.key.PAUSE:
+			OSD.showOSD();
 			plugin.Pause();
 			break;
 		case sf.key.PLAY:
+			OSD.showOSD();
 			plugin.Resume();
 			break;
 		case tvKey.KEY_RETURN:
