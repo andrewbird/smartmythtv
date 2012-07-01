@@ -2,8 +2,6 @@ var widgetAPI = new Common.API.Widget(); // Create Common module
 
 function SceneVideos(options) {
 	this.options = options;
-	var current;
-	var parent;
 }
 
 SceneVideos.prototype.initialize = function () {
