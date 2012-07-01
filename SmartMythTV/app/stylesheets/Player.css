@@ -60,6 +60,7 @@
 	background-color:#000000;
     z-index:10;
 	display:none;
+	opacity: .9;
 }
 
 #ScenePlayer #osd_bar{
@@ -68,7 +69,8 @@
     left:30px;
     width:900px;
     height:5px;
-	background-color:#888888;
+	background-color:#999999;
+	opacity: .9;
 }
 
 #ScenePlayer #osd_bar_elapsed{
