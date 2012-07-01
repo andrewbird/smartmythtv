@@ -4,8 +4,6 @@ var tvKey = new Common.API.TVKeyValue();
 function SceneSettings(options) {
 	this.options = options;
 	var idx;
-	var ime_url;
-	var serverip;
 }
 
 SceneSettings.prototype.initialize = function () {
@@ -16,7 +14,6 @@ SceneSettings.prototype.initialize = function () {
 		+'Use TTX/MIX for . and PRE-CH to delete.'});
 	idx=1;
 	changestate(idx,'focus');
-	serverip = "";
 };
 
 SceneSettings.prototype.handleShow = function () {
