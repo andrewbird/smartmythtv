@@ -12,4 +12,4 @@ var Data = {
 	currentVideo : 0,
 	streamURL : "",
 	mainScene : ""
-}
+};
