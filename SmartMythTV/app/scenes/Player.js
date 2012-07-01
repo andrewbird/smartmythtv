@@ -3,10 +3,10 @@ function ScenePlayer(options) {
 	var plugin;
 	var audio;
 	var letterbox;
-}
+};
 
 ScenePlayer.prototype.initialize = function () {
-}
+};
 
 ScenePlayer.prototype.handleShow = function () {
 	plugin = document.getElementById("pluginPlayer");
@@ -59,18 +59,18 @@ ScenePlayer.prototype.handleShow = function () {
 	//return key
 	//pluginAPI.unregistKey(tvKey.KEY_RETURN);
 	pluginAPI.unregistKey(tvKey.KEY_PANEL_RETURN);
-}
+};
 
 ScenePlayer.prototype.handleHide = function () {
 	//sf.service.VideoPlayer.hide();
 	//plugin.Stop();
-}
+};
 
 ScenePlayer.prototype.handleFocus = function () {
-}
+};
 
 ScenePlayer.prototype.handleBlur = function () {
-}
+};
 
 /*ScenePlayer.prototype.setKeyHelp = function () {
 	return;
@@ -107,7 +107,7 @@ ScenePlayer.prototype.doHide = function() {
 	sf.scene.hide('Player');
 	sf.scene.show(Data.mainScene);
 	sf.scene.focus(Data.mainScene);
-}
+};
 
 ScenePlayer.prototype.handleKeyDown = function (keyCode) {
 	switch (keyCode) {
@@ -177,4 +177,4 @@ ScenePlayer.prototype.handleKeyDown = function (keyCode) {
 			});
 			break;
 	}
-}
+};
