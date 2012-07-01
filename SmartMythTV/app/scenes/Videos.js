@@ -17,14 +17,14 @@ SceneVideos.prototype.initialize = function () {
 		'return':'Back'
 	});
 	current = 0;
-}
+};
 
 SceneVideos.prototype.handleShow = function () {
-}
+};
 
 SceneVideos.prototype.handleHide = function () {
 	// this function will be called when the scene manager hide this scene  
-}
+};
 
 SceneVideos.prototype.handleFocus = function () {
 	Data.mainScene = "Videos";
@@ -40,10 +40,10 @@ SceneVideos.prototype.handleFocus = function () {
 		ServiceAPI.onDeleteCurrent = SceneVideos.prototype.removeCurrentRecording;
 		ServiceAPI.loadVideos();
 	}
-}
+};
 
 SceneVideos.prototype.handleBlur = function () {
-}
+};
 
 SceneVideos.prototype.receivedFailed = function() {
 	Data.titles = [ ];
@@ -59,7 +59,7 @@ SceneVideos.prototype.receivedFailed = function() {
 	index:current});
 	$('#svecLoadingImage_RBVI').sfLoading('hide');
 	SceneVideos.showDescription();
-}
+};
 
 /*function toText(value) {
 	return (value<10?"0":"")+value;
@@ -69,7 +69,7 @@ SceneVideos.prototype.showDescription = function () {
 	widgetAPI.putInnerHTML(document.getElementById("description_VI"),
 			SceneVideos.prototype.getVideo().Description.replace(/\n/g, '<br>')
 		);
-}
+};
 
 SceneVideos.prototype.removeCurrentRecording = function () {
 	/*current = $('#svecListbox_BOUK').sfList('getIndex');
@@ -77,11 +77,11 @@ SceneVideos.prototype.removeCurrentRecording = function () {
 	Data.Titles.splice(current, 1);
 	Data.max--;
 	$('#svecListbox_BOUK').sfList({data:Data.Titles, index:current});*/
-}
+};
 
 SceneVideos.prototype.getVideo = function () {
 	 return Data.Videos[$('#svecListbox_BOVI').sfList('getIndex')];
-}
+};
 
 SceneVideos.prototype.handleKeyDown = function (keyCode) {
 	switch (keyCode) {
@@ -132,4 +132,4 @@ SceneVideos.prototype.handleKeyDown = function (keyCode) {
 			sf.scene.focus('Settings');
 			break;
 	}
-}
+};
