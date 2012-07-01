@@ -17,19 +17,19 @@ SceneSettings.prototype.initialize = function () {
 	idx=1;
 	changestate(idx,'focus');
 	serverip = "";
-}
+};
 
 SceneSettings.prototype.handleShow = function () {
-}
+};
 
 SceneSettings.prototype.handleHide = function () {
-}
+};
 
 SceneSettings.prototype.handleFocus = function () {
-}
+};
 
 SceneSettings.prototype.handleBlur = function () {
-}
+};
 
 changestate = function(idx,action) {
 	switch(idx) {
@@ -43,11 +43,11 @@ changestate = function(idx,action) {
 			$('#svecButton_CAN').sfButton(action);
 			break;
 	}
-}
+};
 
 addchar = function(c) {
 	document.getElementById("serverip").value += c;
-}
+};
 
 SceneSettings.prototype.handleKeyDown = function (keyCode) {
 	switch (keyCode) {
@@ -123,4 +123,4 @@ SceneSettings.prototype.handleKeyDown = function (keyCode) {
 			document.getElementById("serverip").value = value.substr(0, value.length-1);
 			break;
 	}
-}
+};

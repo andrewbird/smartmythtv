@@ -2,7 +2,6 @@ var widgetAPI = new Common.API.Widget(); // Create Common module
 
 function SceneRecordings(options) {
 	this.options = options;
-	var current;
 }
 
 SceneRecordings.prototype.initialize = function () {
@@ -18,14 +17,14 @@ SceneRecordings.prototype.initialize = function () {
 		'return':'Back'
 	});
 	current = 0;
-}
+};
 
 SceneRecordings.prototype.handleShow = function () {
-}
+};
 
 SceneRecordings.prototype.handleHide = function () {
 	// this function will be called when the scene manager hide this scene  
-}
+};
 
 SceneRecordings.prototype.handleFocus = function () {
 	Data.mainScene = "Recordings";
@@ -41,10 +40,10 @@ SceneRecordings.prototype.handleFocus = function () {
 		ServiceAPI.onDeleteCurrent = SceneRecordings.prototype.removeCurrentRecording;
 		ServiceAPI.loadRecordings();
 	}
-}
+};
 
 SceneRecordings.prototype.handleBlur = function () {
-}
+};
 
 SceneRecordings.prototype.receivedFailed = function() {
 	Data.titles = [ ];
@@ -60,7 +59,7 @@ SceneRecordings.prototype.receivedFailed = function() {
 	index:current});
 	$('#svecLoadingImage_RBMO').sfLoading('hide');
 	SceneRecordings.showDescription();
-}
+};
 
 function toText(value) {
 	return (value<10?"0":"")+value;
@@ -70,7 +69,7 @@ SceneRecordings.prototype.showDescription = function () {
 	widgetAPI.putInnerHTML(document.getElementById("description"),
 			SceneRecordings.prototype.getRecording().Description.replace(/\n/g, '<br>')
 		);
-}
+};
 
 SceneRecordings.prototype.removeCurrentRecording = function () {
 	current = $('#svecListbox_BOUK').sfList('getIndex');
@@ -78,11 +77,11 @@ SceneRecordings.prototype.removeCurrentRecording = function () {
 	Data.Titles.splice(current, 1);
 	Data.max--;
 	$('#svecListbox_BOUK').sfList({data:Data.Titles, index:current});
-}
+};
 
 SceneRecordings.prototype.getRecording = function () {
 	 return Data.Recordings[$('#svecListbox_BOUK').sfList('getIndex')];
-}
+};
 
 SceneRecordings.prototype.handleKeyDown = function (keyCode) {
 	switch (keyCode) {
@@ -139,4 +138,4 @@ SceneRecordings.prototype.handleKeyDown = function (keyCode) {
 			sf.scene.focus('Settings');
 			break;
 	}
-}
+};
