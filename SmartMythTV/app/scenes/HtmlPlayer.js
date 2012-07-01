@@ -6,7 +6,7 @@ function SceneHtmlPlayer(options) {
 }
 
 SceneHtmlPlayer.prototype.initialize = function () {
-}
+};
 
 SceneHtmlPlayer.prototype.handleShow = function () {
 	//plugin = document.getElementById("pluginPlayer");
@@ -54,18 +54,18 @@ SceneHtmlPlayer.prototype.handleShow = function () {
 	//return key
 	//pluginAPI.unregistKey(tvKey.KEY_RETURN);
 	pluginAPI.unregistKey(tvKey.KEY_PANEL_RETURN);
-}
+};
 
 SceneHtmlPlayer.prototype.handleHide = function () {
 	//sf.service.VideoPlayer.hide();
 	plugin.Stop();
-}
+};
 
 SceneHtmlPlayer.prototype.handleFocus = function () {
-}
+};
 
 SceneHtmlPlayer.prototype.handleBlur = function () {
-}
+};
 
 /*SceneHtmlPlayer.prototype.setKeyHelp = function () {
 	return;
@@ -102,7 +102,7 @@ SceneHtmlPlayer.prototype.doHide = function() {
 	sf.scene.hide('Player');
 	sf.scene.show(parent);
 	sf.scene.focus(parent);
-}
+};
 
 SceneHtmlPlayer.prototype.handleKeyDown = function (keyCode) {
 	switch (keyCode) {
@@ -169,4 +169,4 @@ SceneHtmlPlayer.prototype.handleKeyDown = function (keyCode) {
 			});
 			break;
 	}
-}
+};
