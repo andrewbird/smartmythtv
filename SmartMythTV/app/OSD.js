@@ -1,9 +1,10 @@
+var osd = false;
+var osdtimeout = 0;
+var currenttime = 0;
+var totaltime = 1;
+
 function OSD() {
-	var totaltime;
-	var currenttime;
-	var osdtimeout;
-	var osd;
-};
+}
 
 OSD.initOSD = function(total) {
 	totaltime = total;
@@ -22,7 +23,7 @@ OSD.updateOSD = function(msecs) {
 	}
 };
 
-OSD.showOSD = function() {
+OSD.showOSD = function(timeout) {
 	osd = true;
 	document.getElementById("osd").style.display = "block";
 	$('#osd').animate({'top' : 492},'fast',function(){
@@ -31,5 +32,5 @@ OSD.showOSD = function() {
 	//  document.getElementById("osd").style.display = "none";
 	//}
 	});
-	osdtimeout = parseInt(currenttime)+2000;
+	osdtimeout = parseInt(currenttime)+timeout;
 };
