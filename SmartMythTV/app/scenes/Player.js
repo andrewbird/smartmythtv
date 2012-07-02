@@ -1,8 +1,9 @@
+var plugin;
+var audio;
+var letterbox;
+
 function ScenePlayer(options) {
 	this.options = options;
-	var plugin;
-	var audio;
-	var letterbox;
 };
 
 ScenePlayer.prototype.initialize = function () {
@@ -26,7 +27,9 @@ ScenePlayer.prototype.handleShow = function () {
 	});*/
 	letterbox = false;
     plugin.OnRenderingComplete = 'ScenePlayer.prototype.doHide';
-	plugin.OnCurrentPlayTime = 'OSD.updateOSD';
+	plugin.OnCurrentPlayTime = function(msecs) {
+		OSD.updateOSD(msecs);
+	};
 	plugin.OnStreamInfoReady = function() {
 		OSD.initOSD(plugin.GetDuration());
 	};
@@ -116,11 +119,11 @@ ScenePlayer.prototype.doHide = function() {
 ScenePlayer.prototype.handleKeyDown = function (keyCode) {
 	switch (keyCode) {
 		case sf.key.PAUSE:
-			OSD.showOSD();
+			OSD.showOSD(2000);
 			plugin.Pause();
 			break;
 		case sf.key.PLAY:
-			OSD.showOSD();
+			OSD.showOSD(2000);
 			plugin.Resume();
 			break;
 		case tvKey.KEY_RETURN:
@@ -132,16 +135,20 @@ ScenePlayer.prototype.handleKeyDown = function (keyCode) {
 			ScenePlayer.prototype.doHide();
 			break;
 		case sf.key.REW:
+			OSD.showOSD(-3000);
 			plugin.JumpBackward(5);
 			break;
 		case sf.key.FF:
+			OSD.showOSD(7000);
 			plugin.JumpForward(5);
 			break;
 		case sf.key.LEFT:
+			OSD.showOSD(-28000);
 			plugin.JumpBackward(30);
 			plugin.Resume();
 			break;
 		case sf.key.RIGHT:
+			OSD.showOSD(32000);
 			plugin.JumpForward(60);
 			plugin.Resume();
 			break;

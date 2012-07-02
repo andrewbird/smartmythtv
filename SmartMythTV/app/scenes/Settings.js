@@ -1,9 +1,9 @@
 var widgetAPI = new Common.API.Widget(); // Create Common module
 var tvKey = new Common.API.TVKeyValue();
+var idx;
 
 function SceneSettings(options) {
 	this.options = options;
-	var idx;
 }
 
 SceneSettings.prototype.initialize = function () {

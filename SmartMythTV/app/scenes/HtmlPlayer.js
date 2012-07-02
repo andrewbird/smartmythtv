@@ -1,8 +1,9 @@
+var plugin;
+var audio;
+var letterbox;
+
 function SceneHtmlPlayer(options) {
 	this.options = options;
-	var plugin;
-	var audio;
-	var letterbox;
 }
 
 SceneHtmlPlayer.prototype.initialize = function () {
