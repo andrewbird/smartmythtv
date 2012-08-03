@@ -27,12 +27,8 @@ ScenePlayer.prototype.handleShow = function () {
 	});*/
 	letterbox = false;
     plugin.OnRenderingComplete = 'ScenePlayer.prototype.doHide';
-	plugin.OnCurrentPlayTime = function(msecs) {
-		OSD.updateOSD(msecs);
-	};
-	plugin.OnStreamInfoReady = function() {
-		OSD.initOSD(plugin.GetDuration());
-	};
+	plugin.OnCurrentPlayTime = 'OSD.updateOSD';
+	plugin.OnStreamInfoReady = 'ScenePlayer.prototype.getDuration';
 	//plugin.SetTotalBufferSize(20*1024);
 	//plugin.SetInitialBuffer(10*1024);
 	//plugin.SetPendingBuffer(10*1024);
@@ -66,6 +62,10 @@ ScenePlayer.prototype.handleShow = function () {
 	//return key
 	//pluginAPI.unregistKey(tvKey.KEY_RETURN);
 	pluginAPI.unregistKey(tvKey.KEY_PANEL_RETURN);
+};
+
+ScenePlayer.prototype.getDuration = function() {
+	OSD.initOSD(plugin.GetDuration());
 };
 
 ScenePlayer.prototype.handleHide = function () {
@@ -148,7 +148,7 @@ ScenePlayer.prototype.handleKeyDown = function (keyCode) {
 			plugin.Resume();
 			break;
 		case sf.key.RIGHT:
-			OSD.showOSD(32000);
+			OSD.showOSD(62000);
 			plugin.JumpForward(60);
 			plugin.Resume();
 			break;
