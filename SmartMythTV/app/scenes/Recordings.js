@@ -46,19 +46,17 @@ SceneRecordings.prototype.handleBlur = function () {
 };
 
 SceneRecordings.prototype.receivedFailed = function() {
-	Data.titles = [ ];
-	Data.links = [ ];
-	Data.Description = [ ];
+	Data.Titles = [ ];
+	Data.Recordings = [ ];
 	Data.Titles[0] = "Failed to load mythtv recordings";
-	Data.Description[0] = "Failed to load mythtv recordings\nStatus: "+XHRObj.status
-		+"\nURL: "+"http://"+Data.URL+"/mythweb";
+	var r = new Object();
+	r.Description = "Failed to load mythtv recordings\nStatus: "+XHRObj.status
+		+"\nURL: "+"http://"+Data.URL+":6544/";
+	Data.Recordings[0] = r;
 	Data.max = 1;
 	current = 0;
-	$('#svecListbox_BOUK').sfList({
-	data:Data.titles,
-	index:current});
-	$('#svecLoadingImage_RBMO').sfLoading('hide');
-	SceneRecordings.showDescription();
+	ServiceAPI.onReceived();
+	SceneRecordings.prototype.showDescription();
 };
 
 function toText(value) {

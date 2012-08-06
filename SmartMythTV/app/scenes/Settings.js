@@ -23,6 +23,7 @@ SceneSettings.prototype.handleHide = function () {
 };
 
 SceneSettings.prototype.handleFocus = function () {
+	document.getElementById("serverip").value = Data.URL;
 };
 
 SceneSettings.prototype.handleBlur = function () {
@@ -69,10 +70,11 @@ SceneSettings.prototype.handleKeyDown = function (keyCode) {
 			changestate(idx,'focus');
 			break;
 		case sf.key.ENTER:
-			alert(idx);
 			switch(idx) {
 				case 1: //ok
 					sf.core.localData('serverip', document.getElementById("serverip").value);
+					Data.URL = document.getElementById("serverip").value;
+					Data.max = 0; //reload data
 					//no break
 				case 2: //cancel
 					sf.scene.hide('Settings');

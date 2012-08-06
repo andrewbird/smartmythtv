@@ -78,9 +78,7 @@ ServiceAPI.receiveVideos = function() {
 	var elements = eval('('+XHRObj.responseText+')'); //TODO security
 	var list = elements.VideoMetadataInfoList;
 	
-	Data.titles = [ ];
-	Data.links = [ ];
-	Data.description = [ ];
+	Data.Titles = [ ];
 	var index = 0;
 	for (var i in list.VideoMetadataInfos) {
 		Data.VideoTitles[index] = list.VideoMetadataInfos[i].Title+": "+list.VideoMetadataInfos[i].SubTitle;
