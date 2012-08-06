@@ -11,7 +11,7 @@ SceneSettings.prototype.initialize = function () {
 	$('#svecButton_OK').sfButton({text:'Ok'});
 	$('#svecButton_CAN').sfButton({text:'Cancel'});
 	$('#svecLabel_RTUS').sfLabel({text:'Please enter IP to mythweb and mythbackend (e.g. 192.168.1.99)<br>'
-		+'Use TTX/MIX for . and PRE-CH to delete.'});
+		+'Use TTX/MIX or SUBTITLE for . and the RED key to delete.'});
 	idx=1;
 	changestate(idx,'focus');
 };
@@ -113,9 +113,11 @@ SceneSettings.prototype.handleKeyDown = function (keyCode) {
 			break;
 		case 35: //emulator
 		case tvKey.KEY_TTX_MIX: //TTX
+		case tvKey.SUBTITLE:
 			addchar(".");
 			break;
 		case tvKey.KEY_PRECH:
+		case tvKey.RED:
 			var value = document.getElementById("serverip").value;
 			document.getElementById("serverip").value = value.substr(0, value.length-1);
 			break;
