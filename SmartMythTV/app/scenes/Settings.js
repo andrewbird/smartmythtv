@@ -117,7 +117,7 @@ SceneSettings.prototype.handleKeyDown = function (keyCode) {
 			addchar(".");
 			break;
 		case tvKey.KEY_PRECH:
-		case tvKey.RED:
+		case tvKey.KEY_RED:
 			var value = document.getElementById("serverip").value;
 			document.getElementById("serverip").value = value.substr(0, value.length-1);
 			break;
