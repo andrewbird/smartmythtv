@@ -11,7 +11,7 @@ SceneSettings.prototype.initialize = function () {
 	$('#svecButton_OK').sfButton({text:'Ok'});
 	$('#svecButton_CAN').sfButton({text:'Cancel'});
 	$('#svecLabel_RTUS').sfLabel({text:'Please enter IP to mythweb and mythbackend (e.g. 192.168.1.99)<br>'
-		+'Use TTX/MIX or SUBTITLE for . and the RED key to delete.'});
+		+'Use TTX/MIX or the GREEN key for . and the RED key to delete.'});
 	idx=1;
 	changestate(idx,'focus');
 };
