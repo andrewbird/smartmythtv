@@ -116,6 +116,7 @@ SceneSettings.prototype.handleKeyDown = function (keyCode) {
 		case 35: //emulator
 		case tvKey.KEY_TTX_MIX: //TTX
 		case tvKey.SUBTITLE:
+		case tvKey.KEY_GREEN:
 			addchar(".");
 			break;
 		case tvKey.KEY_PRECH:
