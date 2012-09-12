@@ -1,3 +1,4 @@
+var pluginAPI = new Common.API.Plugin();
 var plugin;
 var audio;
 var letterbox;
@@ -32,6 +33,7 @@ ScenePlayer.prototype.handleShow = function () {
 	//plugin.SetTotalBufferSize(20*1024);
 	//plugin.SetInitialBuffer(10*1024);
 	//plugin.SetPendingBuffer(10*1024);
+	pluginAPI.setOffScreenSaver();
 	plugin.StartPlayback();
 	
 	audio = document.getElementById("pluginAudio");
@@ -54,7 +56,6 @@ ScenePlayer.prototype.handleShow = function () {
 	var nnaviPlugin = document.getElementById('pluginObjectNNavi');		
 	nnaviPlugin.SetBannerState(2);
 
-	var pluginAPI = new Common.API.Plugin();
 	//volume OSD
 	pluginAPI.unregistKey(tvKey.KEY_VOL_UP);
 	pluginAPI.unregistKey(tvKey.KEY_VOL_DOWN);
@@ -111,6 +112,7 @@ ScenePlayer.prototype.handleBlur = function () {
 }*/
 
 ScenePlayer.prototype.doHide = function() {
+	pluginAPI.setOnScreenSaver();
 	sf.scene.hide('Player');
 	sf.scene.show(Data.mainScene);
 	sf.scene.focus(Data.mainScene);
@@ -121,8 +123,10 @@ ScenePlayer.prototype.handleKeyDown = function (keyCode) {
 		case sf.key.PAUSE:
 			OSD.showOSD(2000);
 			plugin.Pause();
+			pluginAPI.setOnScreenSaver();
 			break;
 		case sf.key.PLAY:
+			pluginAPI.setOffScreenSaver();
 			OSD.showOSD(2000);
 			plugin.Resume();
 			break;
