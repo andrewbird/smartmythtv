@@ -32,10 +32,17 @@
 	font-size : 12pt;
 	color : #FFFFFF;
 	left : 550px;
-	top : 50px;
+	top : 10px;
 	width : 400px;
-	height : 450px;
+	height : 240px;
 	overflow : auto;
+}
+#SceneVideos #cover_VI{
+	position : absolute;	
+	left : 550px;
+	top : 250px;
+	width : 400px;
+	height : 170px;	
 }
 
 #SceneVideos #svecLoadingImage_RBVI{
