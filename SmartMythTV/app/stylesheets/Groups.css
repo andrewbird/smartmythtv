@@ -1,0 +1,52 @@
+#SceneSceneGroups {
+	position : absolute;
+	left : 0px;
+	top : 0px;
+	width : 960px;
+	height : 540px;
+	background-color : #ffffff;
+}
+
+#GroupsLogoImage {
+	position : absolute;
+	right:10px;
+	top:10px;
+	z-index:2;
+}
+#SceneGroups #svecListbox_GOUK{
+	position : absolute;
+	left : 50px;
+	top : 70px;
+	width : 470px;
+}
+
+#SceneGroups #svecScrollbar_GKRU{
+	position : absolute;
+	left : 540px;
+	top : 70px;
+	height : 400px;
+}
+
+#SceneGroups #svecKeyHelp_G2NM{
+	position : absolute;
+	left : 0px;
+	top : 507px;
+}
+
+#SceneGroups #description{
+	position : absolute;
+	font-size : 12pt;
+	color : #FFFFFF;
+	left : 550px;
+	top : 100px;
+	width : 400px;
+	height : 400px;
+	overflow : auto;
+}
+
+
+#SceneGroups #svecLoadingImage_RBMO{
+	position : absolute;
+	left : 300px;
+	top : 190px;
+}
