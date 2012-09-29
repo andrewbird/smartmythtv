@@ -136,3 +136,101 @@ ServiceAPI.deleteRecording = function(recording) {
 	XHRObj.send('ChanId='+recording.ChanId+'&StartTime='+recording.StartTime);
 	ServiceAPI.onDeleteCurrent();
 };
+
+ServiceAPI.loadGroups = function() {
+	XHRObj = new XMLHttpRequest();
+    
+	if (XHRObj) {
+		XHRObj.onreadystatechange = function() {
+			if(XHRObj.readyState==4) {
+				if (XHRObj.status==200) {
+					ServiceAPI.receiveGroups();
+				} else {
+					ServiceAPI.onFailed();
+				}
+			}
+		};
+		XHRObj.open("GET", "http://"+Data.URL+":6544/Dvr/GetRecordedList?Descending=true", true); //&Count=10
+		XHRObj.setRequestHeader("Accept", "application/json");
+		XHRObj.send(null);
+	} else {
+        alert("Failed to create XHR");
+    }
+};
+
+ServiceAPI.receiveGroups = function() {
+	//var elements = JSON.parse(XHRObj.responseText);
+	var elements = eval('('+XHRObj.responseText+')'); //TODO security
+	var list = elements.ProgramList;
+	Data.GroupsList=[];
+	Data.GroupsGroupTitles=[];
+	Data.GroupsGroupCount=[];
+	Data.GroupsRecordings=[];
+	
+	
+	var index = 0;
+	for (var i in elements.ProgramList.Programs) {
+	    var pos=Data.GroupsList.indexOf(list.Programs[i].Title);
+		if(pos==-1){  //Not found		 
+		  Data.GroupsGroupCount[index]=0;
+		  Data.GroupsGroupTitles[index]=[];
+		  Data.GroupsList[index]=list.Programs[i].Title;
+		  Data.GroupsRecordings[index]=[];
+		  pos=index;
+		  index++;
+		}else{
+		  Data.GroupsGroupCount[pos]++;
+		}
+		
+		var info=list.Programs[i].SubTitle;
+		if(info==""){
+			info=ServiceAPI.showDate(ServiceAPI.getDate(list.Programs[i].StartTime));
+		}
+		var groupPos=Data.GroupsGroupCount[pos];
+		Data.GroupsGroupTitles[pos][groupPos] =info;
+				
+		var r=new Object();
+		Data.GroupsRecordings[pos][groupPos] = r;
+		r.Description = list.Programs[i].Description;
+		r.StartTime = list.Programs[i].Recording.StartTs;
+		r.ChanId = list.Programs[i].Channel.ChanId;
+		r.Title=list.Programs[i].Title;	
+		r.SubTitle=list.Programs[i].SubTitle;
+		r.FileName=list.Programs[i].FileName;
+		r.ChannelName=list.Programs[i].Channel.ChannelName;
+		r.FileSize=list.Programs[i].FileSize;
+		r.Status=list.Programs[i].Recording.Status;
+		
+		r.StartTimeDate=ServiceAPI.getDate(list.Programs[i].StartTime);		
+		r.EndTimeDate=ServiceAPI.getDate(list.Programs[i].EndTime);
+	}
+	
+	XHRObj.destroy();
+	Data.loadedGroups=1;
+	ServiceAPI.onReceived();
+};
+
+/**
+ * borrowed from http://subversion.assembla.com/svn/legend/mythtv/transcode-br/bindings/perl/MythTV.pm
+And the recstatus types
+our $recstatus_tunerbusy         = '-8';
+our $recstatus_lowdiskspace      = '-7';
+our $recstatus_cancelled         = '-6';
+our $recstatus_deleted           = '-5';
+our $recstatus_aborted           = '-4';
+our $recstatus_recorded          = '-3';
+our $recstatus_recording         = '-2';
+our $recstatus_willrecord        = '-1';
+our $recstatus_unknown           =   0 ;
+our $recstatus_dontrecord        =   1 ;
+our $recstatus_previousrecording =   2 ;
+our $recstatus_currentrecording  =   3 ;
+our $recstatus_earliershowing    =   4 ;
+our $recstatus_toomanyrecordings =   5 ;
+our $recstatus_notlisted         =   6 ;
+our $recstatus_conflict          =   7 ;
+our $recstatus_latershowing      =   8 ;
+our $recstatus_repeat            =   9 ;
+our $recstatus_inactive          =  10 ;
+our $recstatus_neverrecord       =  11 ;
+*/

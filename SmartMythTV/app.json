@@ -1,5 +1,5 @@
 {
-	"scenes" : [ "Main", "Settings", "Recordings", "Player", "HtmlPlayer", "Videos"],
+	"scenes" : [ "Main","Groups","Recordings","Player","Settings","Videos"  ],
 	"files" : [],
 	"theme" : "base", 
 	"modules" : [ "ime" ]

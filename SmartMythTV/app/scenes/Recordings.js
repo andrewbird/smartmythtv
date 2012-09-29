@@ -11,6 +11,7 @@ SceneRecordings.prototype.initialize = function () {
 		'user':'SmartMythTV 0.2.4',
 		'red':'Delete',
 		'green':'Videos',
+		'yellow':'Groups',
 		'enter':'Play',
 		'updown':'UpDown', 
 		'tools':'Settings',
@@ -129,6 +130,11 @@ SceneRecordings.prototype.handleKeyDown = function (keyCode) {
 			sf.scene.hide('Recordings');
 			sf.scene.show('Videos');
 			sf.scene.focus('Videos');
+			break;
+			case 21: //YELLO
+			sf.scene.hide('Recordings');
+			sf.scene.show('Groups');
+			sf.scene.focus('Groups');
 			break;
 		case sf.key.TOOLS:
 			sf.scene.hide('Recordings');
