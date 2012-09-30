@@ -49,3 +49,18 @@
 	top : 140px;
 	width : 440px;
 }
+#SceneSettings #svecCheckBox_Groups{
+	position : absolute;
+	left : 20px;
+	top : 210px;
+}
+
+
+#SceneSettings #svecButton_Groups{
+	position : absolute;
+	font-size : 10pt;
+	left : 50px;
+	top : 210px;
+	width : 250px;
+}
+
