@@ -231,6 +231,7 @@ SceneGroups.prototype.Level0 = function() {
 	$('#svecListbox_GOUK').sfList('focus');
 	level = 0;
 	SceneGroups.prototype.setHelp();
+	$('#descriptionGroups').sfLabel('destroy');
 	widgetAPI.putInnerHTML(document.getElementById("description"),
 			"");
 };
@@ -278,7 +279,7 @@ SceneGroups.prototype.showDescription = function() {
 	data = data + "</table>";
 	data = data + rec.Description.replace(/\n/g, '<br>');
 	data = data + "</table>";
-	widgetAPI.putInnerHTML(document.getElementById("description"), data);
+	$('#descriptionGroups').sfLabel({text:data});
 
 };
 
