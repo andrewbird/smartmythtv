@@ -227,7 +227,7 @@ SceneGroups.prototype.Level0 = function() {
 		data : Data.GroupsList,
 		index : groupid
 	});
-	$('#svecListbox_GOUK').sfList('blur');
+	$('#svecListbox_GOUK').sfList('focus');
 	level = 0;
 	SceneGroups.prototype.setHelp();
 	widgetAPI.putInnerHTML(document.getElementById("description"),
@@ -243,7 +243,7 @@ SceneGroups.prototype.Level1 = function() {
 		index : itemid
 	});
 	$('#svecListbox_GOUK').sfList('move', 0);
-	$('#svecListbox_GOUK').sfList('blur');
+	$('#svecListbox_GOUK').sfList('focus');
 	SceneGroups.prototype.showDescription();
 	level = 1;
 	SceneGroups.prototype.setHelp();
