@@ -279,8 +279,8 @@ SceneGroups.prototype.showDescription = function() {
 	data = data + "</table>";
 	data = data + rec.Description.replace(/\n/g, '<br>');
 	data = data + "</table>";
-	$('#descriptionGroups').sfLabel({text:data});
-
+	//$('#descriptionGroups').sfLabel({text:data});
+	widgetAPI.putInnerHTML(document.getElementById("descriptionGroups"),data);
 };
 
 // Find the current Recording
