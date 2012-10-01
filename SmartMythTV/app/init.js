@@ -1,11 +1,18 @@
 
 function onStart () {
 	Data.URL = sf.core.localData("serverip");
-	Data.mainScene = "Recordings";
+	
 	if(Data.URL==null) {
 		sf.scene.show("Settings");
 		sf.scene.focus("Settings");
 	} else {
+		Data.startGroups=sf.core.localData("startgroups");
+		alert("StartGroups:"+Data.startGroups);
+		if(Data.startGroups){
+		    Data.mainScene = "Groups";
+		}else{
+			Data.mainScene="Recordings";
+		}
 		sf.scene.show(Data.mainScene);
 		sf.scene.focus(Data.mainScene);
 	}

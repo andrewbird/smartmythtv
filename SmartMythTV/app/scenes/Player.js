@@ -146,6 +146,18 @@ ScenePlayer.prototype.handleKeyDown = function (keyCode) {
 			OSD.showOSD(7000);
 			plugin.JumpForward(5);
 			break;
+		case sf.key.DOWN:
+			// Jump back 5 mins
+			OSD.showOSD(-280000);
+			plugin.JumpBackward(300);
+			plugin.Resume();
+			break;
+		case sf.key.UP:
+			OSD.showOSD(280000);
+			// Jump forward 5 mins
+			plugin.JumpForward(300);
+			plugin.Resume();
+			break;
 		case sf.key.LEFT:
 			OSD.showOSD(-28000);
 			plugin.JumpBackward(30);

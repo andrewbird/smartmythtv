@@ -1,6 +1,7 @@
 var widgetAPI = new Common.API.Widget(); // Create Common module
 var tvKey = new Common.API.TVKeyValue();
 var idx;
+var idxMax=3;
 
 function SceneSettings(options) {
 	this.options = options;
@@ -12,6 +13,11 @@ SceneSettings.prototype.initialize = function () {
 	$('#svecButton_CAN').sfButton({text:'Cancel'});
 	$('#svecLabel_RTUS').sfLabel({text:'Please enter IP to mythweb and mythbackend (e.g. 192.168.1.99)<br>'
 		+'Use TTX/MIX or the GREEN key for . and the RED key to delete.'});
+	$('#svecCheckBox_Groups').sfCheckBox();
+	if(Data.startGroups){
+		$('#svecCheckBox_Groups').sfCheckBox('check');
+	}
+	$('#svecButton_Groups').sfButton({text:'Start in Groups View'});
 	idx=1;
 	changestate(idx,'focus');
 };
@@ -24,6 +30,7 @@ SceneSettings.prototype.handleHide = function () {
 
 SceneSettings.prototype.handleFocus = function () {
 	document.getElementById("serverip").value = Data.URL;
+	startGroups=Data.startGroups;
 };
 
 SceneSettings.prototype.handleBlur = function () {
@@ -40,6 +47,9 @@ changestate = function(idx,action) {
 		case 2:
 			$('#svecButton_CAN').sfButton(action);
 			break;
+		case 3:
+			$('#svecButton_Groups').sfButton(action);
+			break;
 	}
 };
 
@@ -55,14 +65,14 @@ SceneSettings.prototype.handleKeyDown = function (keyCode) {
 			if(idx>0) {
 				idx--;
 			} else {
-				idx=2;
+				idx=idxMax;
 			}
 			changestate(idx,'focus');
 			break;
 		case sf.key.RIGHT:
 		case sf.key.DOWN:
 			changestate(idx,'blur');
-			if(idx<2) {
+			if(idx<idxMax) {
 				idx++;
 			} else {
 				idx=0;
@@ -73,6 +83,12 @@ SceneSettings.prototype.handleKeyDown = function (keyCode) {
 			switch(idx) {
 				case 1: //ok
 					sf.core.localData('serverip', document.getElementById("serverip").value);
+					sf.core.localData('startgroups', Data.startGroups);
+					if(Data.startGroups){
+						Data.mainScene="Groups";
+					}else{
+						Data.mainScene="Recordings";
+					}
 					Data.URL = document.getElementById("serverip").value;
 					Data.max = 0; //reload data
 					//no break
@@ -80,6 +96,15 @@ SceneSettings.prototype.handleKeyDown = function (keyCode) {
 					sf.scene.hide('Settings');
 					sf.scene.show(Data.mainScene);
 					sf.scene.focus(Data.mainScene);
+					break;
+				case 3: //groups
+					if(Data.startGroups){
+						Data.startGroups=0;
+						$('#svecCheckBox_Groups').sfCheckBox('uncheck');
+					}else{
+						Data.startGroups=1;
+						$('#svecCheckBox_Groups').sfCheckBox('check');
+					}
 					break;
 			}
 			break;

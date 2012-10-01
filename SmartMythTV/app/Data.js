@@ -16,5 +16,6 @@ var Data = {
 	currentRecording : 0,
 	currentVideo : 0,
 	streamURL : "",
+	startGroups : 0,
 	mainScene : ""
 };

@@ -25,6 +25,7 @@ SceneGroups.prototype.initialize = function() {
 				index : 0
 			});
 			groupid = 0; itemid=0;			
+			$('#svecListbox_GOUK').sfList('focus');
 			$('#svecLoadingImage_GBMO').sfLoading('hide');
 		};
 		ServiceAPI.onFailed = function() {
@@ -227,9 +228,10 @@ SceneGroups.prototype.Level0 = function() {
 		data : Data.GroupsList,
 		index : groupid
 	});
-	$('#svecListbox_GOUK').sfList('blur');
+	$('#svecListbox_GOUK').sfList('focus');
 	level = 0;
 	SceneGroups.prototype.setHelp();
+	$('#descriptionGroups').sfLabel('destroy');
 	widgetAPI.putInnerHTML(document.getElementById("description"),
 			"");
 };
@@ -243,7 +245,7 @@ SceneGroups.prototype.Level1 = function() {
 		index : itemid
 	});
 	$('#svecListbox_GOUK').sfList('move', 0);
-	$('#svecListbox_GOUK').sfList('blur');
+	$('#svecListbox_GOUK').sfList('focus');
 	SceneGroups.prototype.showDescription();
 	level = 1;
 	SceneGroups.prototype.setHelp();
@@ -277,8 +279,8 @@ SceneGroups.prototype.showDescription = function() {
 	data = data + "</table>";
 	data = data + rec.Description.replace(/\n/g, '<br>');
 	data = data + "</table>";
-	widgetAPI.putInnerHTML(document.getElementById("description"), data);
-
+	//$('#descriptionGroups').sfLabel({text:data});
+	widgetAPI.putInnerHTML(document.getElementById("descriptionGroups"),data);
 };
 
 // Find the current Recording
