@@ -91,16 +91,18 @@ SceneRecordings.prototype.handleKeyDown = function (keyCode) {
 		case sf.key.UP:
 			$('#svecScrollbar_UKRU').sfScroll('prev');
 			var idx = $('#svecListbox_BOUK').sfList('getIndex');
-			if(idx == 0) break;
-            $('#svecListbox_BOUK').sfList('prev');
-			SceneRecordings.prototype.showDescription();
+			if(idx != 0) {
+				$('#svecListbox_BOUK').sfList('prev');
+				SceneRecordings.prototype.showDescription();
+			}
 			break;
 		case sf.key.DOWN:
 			$('#svecScrollbar_UKRU').sfScroll('next');
 			var idx = $('#svecListbox_BOUK').sfList('getIndex');
-			if(idx == Data.max) break;
-            $('#svecListbox_BOUK').sfList('next');
-			SceneRecordings.prototype.showDescription();
+			if(idx != Data.max) {
+				$('#svecListbox_BOUK').sfList('next');
+				SceneRecordings.prototype.showDescription();
+			}
 			break;
 		case sf.key.ENTER:
 			Data.currentTitle = Data.Titles[$('#svecListbox_BOUK').sfList('getIndex')];
