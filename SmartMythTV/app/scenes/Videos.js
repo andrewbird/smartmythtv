@@ -14,6 +14,7 @@ SceneVideos.prototype.initialize = function() {
 	$('#svecKeyHelp_O2VI').sfKeyHelp({
 		'red' : 'Delete',
 		'yellow' : 'Groups',
+		'blue' : 'Upcoming',
 		'enter' : 'Play',
 		'updown' : 'UpDown',
 		'tools' : 'Settings',
@@ -168,5 +169,10 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
 		sf.scene.show('Settings');
 		sf.scene.focus('Settings');
 		break;
+	case sf.key.BLUE:
+		sf.scene.hide('Videos');
+		sf.scene.show('Upcoming');
+		sf.scene.focus('Upcoming');
+		return;
 	}
 };

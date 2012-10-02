@@ -47,6 +47,7 @@ SceneGroups.prototype.setHelp = function() {
 			'green' : 'Videos',
 			'NO1' : 'Refresh',
 			'yellow' : 'Recordings',
+			'blue' : 'Upcoming',
 			'enter' : 'Select',
 			'tools' : 'Settings',
 			'return' : 'Back'
@@ -57,6 +58,7 @@ SceneGroups.prototype.setHelp = function() {
 			'red' : 'Delete',
 			'green' : 'Videos',
 			'yellow' : 'Recordings',
+			'blue' : 'Upcoming',
 			'enter' : 'Play',			
 			'return' : 'Back'
 		});
@@ -89,9 +91,14 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
 		sf.scene.focus('Recordings');
 		return;
 	case sf.key.TOOLS:
-		sf.scene.hide('Recordings');
+		sf.scene.hide('Groups');
 		sf.scene.show('Settings');
 		sf.scene.focus('Settings');
+		return;
+	case sf.key.BLUE:
+		sf.scene.hide('Groups');
+		sf.scene.show('Upcoming');
+		sf.scene.focus('Upcoming');
 		return;
 	case sf.key.N1:
 		$('#svecLoadingImage_GBMO').sfLoading('show');

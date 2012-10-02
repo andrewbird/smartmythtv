@@ -210,6 +210,60 @@ ServiceAPI.receiveGroups = function() {
 	ServiceAPI.onReceived();
 };
 
+ServiceAPI.loadUpcoming = function() {
+	XHRObj = new XMLHttpRequest();
+    
+	if (XHRObj) {
+		XHRObj.onreadystatechange = function() {
+			if(XHRObj.readyState==4) {
+				if (XHRObj.status==200) {
+					ServiceAPI.receiveUpcoming();
+				} else {
+					ServiceAPI.onFailed();
+				}
+			}
+		};
+		XHRObj.open("GET", "http://"+Data.URL+":6544/Dvr/GetUpcomingList?Count=10", true); 
+		XHRObj.setRequestHeader("Accept", "application/json");
+		XHRObj.send(null);
+	} else {
+        alert("Failed to create XHR");
+    }
+};
+
+ServiceAPI.receiveUpcoming = function() {
+	
+	var elements = eval('('+XHRObj.responseText+')'); //TODO security
+	var list = elements.ProgramList;
+	Data.UpcomingList=[];
+	Data.UpcomingDetail=[];	
+	
+	
+	var index = 0;
+	for (var i in elements.ProgramList.Programs) {
+	    	 
+	    Data.UpcomingList[index]=list.Programs[i].Title;
+		 		 
+		
+		var r=new Object();
+		Data.UpcomingDetail[index] = r;
+		r.Description = list.Programs[i].Description;		
+		r.ChanId = list.Programs[i].Channel.ChanId;
+		r.Title=list.Programs[i].Title;	
+		r.SubTitle=list.Programs[i].SubTitle;
+		r.FileName=list.Programs[i].FileName;
+		r.ChannelName=list.Programs[i].Channel.ChannelName;		
+		
+		r.StartTimeDate=ServiceAPI.getDate(list.Programs[i].StartTime);		
+		r.EndTimeDate=ServiceAPI.getDate(list.Programs[i].EndTime);
+		index++;
+	}
+	
+	XHRObj.destroy();
+	Data.loadedUpcoming=1;
+	ServiceAPI.onReceived();
+};
+
 /**
  * borrowed from http://subversion.assembla.com/svn/legend/mythtv/transcode-br/bindings/perl/MythTV.pm
 And the recstatus types

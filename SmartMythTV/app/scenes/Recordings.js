@@ -12,6 +12,7 @@ SceneRecordings.prototype.initialize = function () {
 		'red':'Delete',
 		'green':'Videos',
 		'yellow':'Groups',
+		'blue' : 'Upcoming',
 		'enter':'Play',
 		'updown':'UpDown', 
 		'tools':'Settings',
@@ -141,5 +142,10 @@ SceneRecordings.prototype.handleKeyDown = function (keyCode) {
 			sf.scene.show('Settings');
 			sf.scene.focus('Settings');
 			break;
+		case sf.key.BLUE:
+			sf.scene.hide('Recordings');
+			sf.scene.show('Upcoming');
+			sf.scene.focus('Upcoming');
+			return;
 	}
 };
