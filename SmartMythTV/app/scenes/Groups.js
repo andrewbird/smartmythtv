@@ -70,6 +70,7 @@ SceneGroups.prototype.handleHide = function() {
 };
 SceneGroups.prototype.handleFocus = function() {
 	Data.mainScene = "Groups";	
+	ServiceAPI.onDeleteCurrent = SceneGroups.prototype.removeCurrentRecording;
 };
 
 SceneGroups.prototype.handleBlur = function() {
@@ -185,31 +186,8 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
 														.getRecording());
 										$('#svecLoadingImage_GBMO').sfLoading(
 												'hide');
+										SceneGroups.prototype.removeCurrentRecording();
 										
-										if (Data.GroupsGroupTitles[groupid].length == 1) {
-											//Last one in this group, so remove the group from level0
-											Data.GroupsList.splice(groupid, 1);
-											Data.GroupsGroupTitles.splice(
-													groupid, 1);
-											Data.GroupsGroupCount.splice(
-													groupid, 1);
-											Data.GroupsRecordings.splice(
-													groupid, 1);
-											itemid=0;
-											SceneGroups.prototype.Level0();
-										} else {
-											alert("Remove item:"+itemid+" from groupid:"+groupid);
-											alert("GroupTitles before:"+Data.GroupsGroupTitles[groupid]);
-											//Just remove the item from the level 1 list
-											Data.GroupsGroupTitles[groupid]
-													.splice(itemid, 1);
-											Data.GroupsGroupCount[groupid]--;											
-											Data.GroupsRecordings[groupid]
-													.splice(itemid, 1);
-											alert("GroupTitles after:"+Data.GroupsGroupTitles[groupid]);
-											SceneGroups.prototype.Level1();
-											itemid--;
-										}
 									}
 								}
 							});
@@ -295,12 +273,28 @@ SceneGroups.prototype.getRecording = function() {
 };
 
 SceneGroups.prototype.removeCurrentRecording = function() {
-	current = $('#svecListbox_GOUK').sfList('getIndex');
-	Data.GroupsGroupTitles[groupid].splice(current, 1);
-	Data.GroupsRecordings[groupid].splice(current, 1);
-	Data.GroupsGroupCount[groupid]--;
-	$('#svecListbox_GOUK').sfList({
-		data : Data.GroupsGroupTitles[groupid],
-		index : current
-	});
+	if (Data.GroupsGroupTitles[groupid].length == 1) {
+		//Last one in this group, so remove the group from level0
+		Data.GroupsList.splice(groupid, 1);
+		Data.GroupsGroupTitles.splice(
+				groupid, 1);
+		Data.GroupsGroupCount.splice(
+				groupid, 1);
+		Data.GroupsRecordings.splice(
+				groupid, 1);
+		itemid=0;
+		SceneGroups.prototype.Level0();
+	} else {
+		alert("Remove item:"+itemid+" from groupid:"+groupid);
+		alert("GroupTitles before:"+Data.GroupsGroupTitles[groupid]);
+		//Just remove the item from the level 1 list
+		Data.GroupsGroupTitles[groupid]
+				.splice(itemid, 1);
+		Data.GroupsGroupCount[groupid]--;											
+		Data.GroupsRecordings[groupid]
+				.splice(itemid, 1);
+		alert("GroupTitles after:"+Data.GroupsGroupTitles[groupid]);
+		SceneGroups.prototype.Level1();
+		itemid--;
+	}
 };
