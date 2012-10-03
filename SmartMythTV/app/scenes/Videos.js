@@ -42,10 +42,11 @@ SceneVideos.prototype.handleFocus = function() {
 				index : current
 			});
 			$('#svecLoadingImage_RBVI').sfLoading('hide');
+			SceneVideos.prototype.showDescription();
 		};
 		ServiceAPI.onDeleteCurrent = SceneVideos.prototype.removeCurrentRecording;
 		ServiceAPI.loadVideos();
-		SceneVideos.prototype.showDescription();
+		
 	}
 };
 
