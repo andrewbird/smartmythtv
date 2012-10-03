@@ -44,9 +44,8 @@
 	overflow : auto;
 }
 
-
-#SceneGroups #svecLoadingImage_RBMO{
+#SceneGroups #svecLoadingImage_GBMO{
 	position : absolute;
-	left : 300px;
+	left : 270px;
 	top : 190px;
 }
