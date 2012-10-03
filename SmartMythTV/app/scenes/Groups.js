@@ -185,8 +185,7 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
 												.deleteRecording(SceneGroups.prototype
 														.getRecording());
 										$('#svecLoadingImage_GBMO').sfLoading(
-												'hide');
-										SceneGroups.prototype.removeCurrentRecording();
+												'hide');										
 										
 									}
 								}
@@ -273,6 +272,7 @@ SceneGroups.prototype.getRecording = function() {
 };
 
 SceneGroups.prototype.removeCurrentRecording = function() {
+	
 	if (Data.GroupsGroupTitles[groupid].length == 1) {
 		//Last one in this group, so remove the group from level0
 		Data.GroupsList.splice(groupid, 1);
@@ -283,18 +283,20 @@ SceneGroups.prototype.removeCurrentRecording = function() {
 		Data.GroupsRecordings.splice(
 				groupid, 1);
 		itemid=0;
+		if(groupid>0){
+			groupid--;
+		}
 		SceneGroups.prototype.Level0();
-	} else {
-		alert("Remove item:"+itemid+" from groupid:"+groupid);
-		alert("GroupTitles before:"+Data.GroupsGroupTitles[groupid]);
+	} else {		
+		
 		//Just remove the item from the level 1 list
 		Data.GroupsGroupTitles[groupid]
 				.splice(itemid, 1);
 		Data.GroupsGroupCount[groupid]--;											
 		Data.GroupsRecordings[groupid]
-				.splice(itemid, 1);
-		alert("GroupTitles after:"+Data.GroupsGroupTitles[groupid]);
+				.splice(itemid, 1);		
 		SceneGroups.prototype.Level1();
 		itemid--;
 	}
+	
 };
