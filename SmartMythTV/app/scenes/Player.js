@@ -111,13 +111,13 @@ ScenePlayer.prototype.handleBlur = function () {
 	alert("kk");
 }*/
 
-ScenePlayer.prototype.endOfStream = function() {
-	alert("end of Stream");
+ScenePlayer.prototype.endOfStream = function() {	
 	plugin.Stop();	
 	ScenePlayer.prototype.doHide();
 };
 
 ScenePlayer.prototype.doHide = function() {	
+	OSD.hideOSD();
 	pluginAPI.setOnScreenSaver();
 	sf.scene.hide('Player');
 	sf.scene.show(Data.mainScene);
