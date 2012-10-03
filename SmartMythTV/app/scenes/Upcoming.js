@@ -108,7 +108,8 @@ SceneUpcoming.prototype.handleKeyDown = function (keyCode) {
 				callback:function (rlt){
 					if(rlt==0) { //Yes
 						$('#svecLoadingImage_Upcoming').sfLoading('show');
-						ServiceAPI.removeRecordSchedule(SceneUpcoming.prototype.getRecording());
+						//TODO integrate "Don't record" feature, when available in backend
+						ServiceAPI.disableRecordSchedule(SceneUpcoming.prototype.getRecording());
 						$('#svecLoadingImage_Upcoming').sfLoading('hide');
 					}
 				}

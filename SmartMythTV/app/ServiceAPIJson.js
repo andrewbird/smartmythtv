@@ -138,13 +138,13 @@ ServiceAPI.deleteRecording = function(recording) {
 	ServiceAPI.onDeleteCurrent();
 };
 
-ServiceAPI.removeRecordSchedule = function(recording) {
+ServiceAPI.disableRecordSchedule = function(recording) {
 	XHRObj = new XMLHttpRequest();
 	//XHRObj.onreadystatechange = function() {
 	//	XHRObj.destroy();
 	//};
 	alert("Disable Record Schedule "+recording.RecordId);
-	XHRObj.open("POST", "http://"+Data.URL+':6544/Dvr/RemoveRecordSchedule', true);
+	XHRObj.open("POST", "http://"+Data.URL+':6544/Dvr/DisableRecordSchedule', true);
 	XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	XHRObj.send('RecordId='+recording.RecordId);
 	ServiceAPI.onDeleteCurrent();
