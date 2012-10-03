@@ -27,7 +27,7 @@ ScenePlayer.prototype.handleShow = function () {
 		fullScreen: true
 	});*/
 	letterbox = false;
-    plugin.OnRenderingComplete = 'ScenePlayer.prototype.doHide';
+    plugin.OnRenderingComplete = ScenePlayer.prototype.endOfStream;
 	plugin.OnCurrentPlayTime = 'OSD.updateOSD';
 	plugin.OnStreamInfoReady = 'ScenePlayer.prototype.getDuration';
 	//plugin.SetTotalBufferSize(20*1024);
@@ -111,7 +111,13 @@ ScenePlayer.prototype.handleBlur = function () {
 	alert("kk");
 }*/
 
-ScenePlayer.prototype.doHide = function() {
+ScenePlayer.prototype.endOfStream = function() {
+	alert("end of Stream");
+	plugin.Stop();	
+	ScenePlayer.prototype.doHide();
+};
+
+ScenePlayer.prototype.doHide = function() {	
 	pluginAPI.setOnScreenSaver();
 	sf.scene.hide('Player');
 	sf.scene.show(Data.mainScene);
