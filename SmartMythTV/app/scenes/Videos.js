@@ -93,6 +93,8 @@ SceneVideos.prototype.showDescription = function() {
 //		$('#cover_VI').sfImage({src:"http://" + Data.URL + ":6544"+vid.coverart});
 //		$('#cover_VI').sfImage('show');
 		widgetAPI.putInnerHTML(document.getElementById("cover_VI"), cover);
+	}else{
+		widgetAPI.putInnerHTML(document.getElementById("cover_VI"), "");
 	}
 	widgetAPI.putInnerHTML(document.getElementById("description_VI"), data);
 };
