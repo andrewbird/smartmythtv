@@ -209,7 +209,7 @@ SceneGroups.prototype.Level0 = function() {
 	level = 0;
 	SceneGroups.prototype.setHelp();
 	$('#descriptionGroups').sfLabel('destroy');
-	widgetAPI.putInnerHTML(document.getElementById("description"),
+	widgetAPI.putInnerHTML(document.getElementById("descriptionGroups"),
 			"");
 };
 
