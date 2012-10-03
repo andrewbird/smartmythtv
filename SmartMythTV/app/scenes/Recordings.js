@@ -132,7 +132,7 @@ SceneRecordings.prototype.handleKeyDown = function (keyCode) {
 			sf.scene.show('Videos');
 			sf.scene.focus('Videos');
 			break;
-			case 21: //YELLO
+		case 21: //YELLO
 			sf.scene.hide('Recordings');
 			sf.scene.show('Groups');
 			sf.scene.focus('Groups');
