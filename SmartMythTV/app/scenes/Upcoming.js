@@ -34,9 +34,15 @@ SceneUpcoming.prototype.initialize = function () {
 					"Failed to load data from MythTv backend");
 			$('#svecLoadingImage_Upcoming').sfLoading('hide');
 		};
+		ServiceAPI.onDeleteCurrent = function() {
+			current = $('#svecListbox_N9NK').sfList('getIndex');
+			Data.UpcomingDetail.splice(current, 1);
+			Data.UpcomingList.splice(current, 1);
+			$('#svecListbox_N9NK').sfList({data:Data.UpcomingList, index:current});
+		};
 
 		ServiceAPI.loadUpcoming();
-	}	
+	}
 	
 	SceneUpcoming.prototype.setHelp();
 };
@@ -47,7 +53,8 @@ SceneUpcoming.prototype.setHelp = function() {
 	
 		$('#svecKeyHelp_Upcoming').sfKeyHelp({
 			'user' : 'SmartMythTV 0.2.4',
-			'green' : 'Videos',			
+			'red' : 'Disable Recording',
+			'green' : 'Videos',
 			'yellow' : 'Groups',
 			'blue' : 'Recordings',
 			'tools' : 'Settings',
@@ -93,6 +100,21 @@ SceneUpcoming.prototype.handleKeyDown = function (keyCode) {
 			SceneUpcoming.prototype.showDescription();
 			break;
 		case sf.key.ENTER:
+			break;
+		case sf.key.RED:
+			$('#svecPopup_ok_cancel_0AM8').sfPopup({
+				text:'Do you really want to delete rule '+Data.UpcomingList[$('#svecListbox_N9NK').sfList('getIndex')]+'?', 
+				buttons:['Yes', 'No'], 
+				callback:function (rlt){
+					if(rlt==0) { //Yes
+						$('#svecLoadingImage_Upcoming').sfLoading('show');
+						ServiceAPI.removeRecordSchedule(SceneUpcoming.prototype.getRecording());
+						$('#svecLoadingImage_Upcoming').sfLoading('hide');
+					}
+				}
+			});
+			$('#svecPopup_ok_cancel_0AM8').sfPopup('show');
+			$('#svecPopup_ok_cancel_0AM8').sfPopup('focus');
 			break;
 		case sf.key.GREEN: 
 			sf.scene.hide('Upcoming');

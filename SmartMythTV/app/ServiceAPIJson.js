@@ -1,7 +1,8 @@
 var ServiceAPI = {
 	XHRObj : null,
 	onReceived : null,
-	onDeleteCurrent : null
+	onDeleteCurrent : null,
+	onUpdateUpcoming : null
 };
 
 ServiceAPI.loadRecordings = function() {
@@ -137,6 +138,18 @@ ServiceAPI.deleteRecording = function(recording) {
 	ServiceAPI.onDeleteCurrent();
 };
 
+ServiceAPI.removeRecordSchedule = function(recording) {
+	XHRObj = new XMLHttpRequest();
+	//XHRObj.onreadystatechange = function() {
+	//	XHRObj.destroy();
+	//};
+	alert("Disable Record Schedule "+recording.RecordId);
+	XHRObj.open("POST", "http://"+Data.URL+':6544/Dvr/RemoveRecordSchedule', true);
+	XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	XHRObj.send('RecordId='+recording.RecordId);
+	ServiceAPI.onDeleteCurrent();
+};
+
 ServiceAPI.loadGroups = function() {
 	XHRObj = new XMLHttpRequest();
     
@@ -253,6 +266,7 @@ ServiceAPI.receiveUpcoming = function() {
 		r.SubTitle=list.Programs[i].SubTitle;
 		r.FileName=list.Programs[i].FileName;
 		r.ChannelName=list.Programs[i].Channel.ChannelName;		
+		r.RecordId=list.Programs[i].Recording.RecordId;
 		
 		r.StartTimeDate=ServiceAPI.getDate(list.Programs[i].StartTime);		
 		r.EndTimeDate=ServiceAPI.getDate(list.Programs[i].EndTime);
