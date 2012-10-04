@@ -138,15 +138,24 @@ ServiceAPI.deleteRecording = function(recording) {
 	ServiceAPI.onDeleteCurrent();
 };
 
-ServiceAPI.disableRecordSchedule = function(recording) {
+ServiceAPI.changeRecordSchedule = function(recording) {
 	XHRObj = new XMLHttpRequest();
 	//XHRObj.onreadystatechange = function() {
 	//	XHRObj.destroy();
 	//};
-	alert("Disable Record Schedule "+recording.RecordId);
-	XHRObj.open("POST", "http://"+Data.URL+':6544/Dvr/DisableRecordSchedule', true);
-	XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-	XHRObj.send('RecordId='+recording.RecordId);
+	alert("change Record Schedule "+recording.RecordId);
+	if(recording.Status==-1){
+		//Current active, need to disable
+		XHRObj.open("POST", "http://"+Data.URL+':6544/Dvr/DisableRecordSchedule', true);
+		XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		XHRObj.send('RecordId='+recording.RecordId);
+	}else if(recording.Status==10){
+		//Current inactive, need to enable
+		XHRObj.open("POST", "http://"+Data.URL+':6544/Dvr/EnableRecordSchedule', true);
+		XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		XHRObj.send('RecordId='+recording.RecordId);
+	}
+	
 	ServiceAPI.onDeleteCurrent();
 };
 
@@ -236,7 +245,7 @@ ServiceAPI.loadUpcoming = function() {
 				}
 			}
 		};
-		XHRObj.open("GET", "http://"+Data.URL+":6544/Dvr/GetUpcomingList?Count=10", true); 
+		XHRObj.open("GET", "http://"+Data.URL+":6544/Dvr/GetUpcomingList?Count=30&ShowAll=true", true); 
 		XHRObj.setRequestHeader("Accept", "application/json");
 		XHRObj.send(null);
 	} else {
@@ -256,7 +265,16 @@ ServiceAPI.receiveUpcoming = function() {
 	var index = 0;
 	for (var i in elements.ProgramList.Programs) {
 	    	 
-	    Data.UpcomingList[index]=list.Programs[i].Title;
+		var status=list.Programs[i].Recording.Status;
+		var title=list.Programs[i].Title;
+		if(status==10){ //Inactive
+			title="<FONT COLOR='4682BE'>"+title+"</FONT>";
+		}else if(status==7){ //Conflict
+			title="<FONT COLOR='FF0000'>"+title+"</FONT>";
+		}else if(status!=-1){//Will Record
+			continue;   //We don't show any other statuses
+		}
+	    Data.UpcomingList[index]=title;
 		 		 
 		
 		var r=new Object();
@@ -268,10 +286,16 @@ ServiceAPI.receiveUpcoming = function() {
 		r.FileName=list.Programs[i].FileName;
 		r.ChannelName=list.Programs[i].Channel.ChannelName;		
 		r.RecordId=list.Programs[i].Recording.RecordId;
+		r.Status=status;
 		
 		r.StartTimeDate=ServiceAPI.getDate(list.Programs[i].StartTime);		
 		r.EndTimeDate=ServiceAPI.getDate(list.Programs[i].EndTime);
+		
+		
 		index++;
+		if(index==20){
+			break;
+		}
 	}
 	
 	XHRObj.destroy();

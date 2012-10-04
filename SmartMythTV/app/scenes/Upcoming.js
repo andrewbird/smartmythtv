@@ -3,6 +3,7 @@ function SceneUpcoming() {
 
 }
 var itemid=0;
+var lastStatus=99;
 
 SceneUpcoming.prototype.initialize = function () {
 	alert("SceneUpcoming.initialize()");
@@ -23,12 +24,14 @@ SceneUpcoming.prototype.initialize = function () {
 			alert("onReceived upcoming");
 			$('#svecListbox_N9NK').sfList({
 				data : Data.UpcomingList,
+				itemsPerPage : 12,
 				index : 0
 			});
 			SceneUpcoming.prototype.showDescription();
 			itemid=0;			
 			$('#svecListbox_N9NK').sfList('focus');
 			$('#svecLoadingImage_Upcoming').sfLoading('hide');
+			lastStatus=99;
 		};
 		ServiceAPI.onFailed = function() {
 			widgetAPI.putInnerHTML(document.getElementById("descriptionUpcoming"),
@@ -41,7 +44,8 @@ SceneUpcoming.prototype.initialize = function () {
 			//Reload the data again as deleting one rule may remove multiple items
 			//Delaying the reload for 5 seconds, as my mythbackend seems to a take a while to update the schedule
 		};
-
+		$('#svecRef_Upcoming').sfLabel({text:"<table><tr><td><FONT COLOR='4682BE'>Disabled recording</FONT></td></tr><tr><td><FONT COLOR='FF0000'>Conflict</FONT></td></tr></table>"});
+		$('#svecRef_Upcoming').sfLabel('show');
 		ServiceAPI.loadUpcoming();
 	}
 	
@@ -51,17 +55,48 @@ SceneUpcoming.prototype.initialize = function () {
 
 
 SceneUpcoming.prototype.setHelp = function() {
+	var rec = SceneUpcoming.prototype.getRecording();	
+	if(rec && lastStatus==rec.Status){
+		//Same status, no need to redraw
+		return;
+	}
 	
+	if(rec && rec.Status==10){
+		//Inactive
 		$('#svecKeyHelp_Upcoming').sfKeyHelp({
 			'user' : 'SmartMythTV 0.2.4',
-			'red' : 'Disable Recording',
+			'red' : "Enable Recording",
 			'green' : 'Videos',
 			'yellow' : 'Groups',
 			'blue' : 'Recordings',
 			'tools' : 'Settings',
 			'return' : 'Back'
 		});
-	
+		lastStatus=rec.Status;
+		
+	}else if(rec && rec.Status==-1){
+		$('#svecKeyHelp_Upcoming').sfKeyHelp({
+			'user' : 'SmartMythTV 0.2.4',
+			'red' : "Disable Recording",
+			'green' : 'Videos',
+			'yellow' : 'Groups',
+			'blue' : 'Recordings',
+			'tools' : 'Settings',
+			'return' : 'Back'
+		});
+		lastStatus=rec.Status;
+	}else{		
+		$('#svecKeyHelp_Upcoming').sfKeyHelp({
+			'user' : 'SmartMythTV 0.2.4',			
+			'green' : 'Videos',
+			'yellow' : 'Groups',
+			'blue' : 'Recordings',
+			'tools' : 'Settings',
+			'return' : 'Back'
+		});
+	}
+		
+		
 };
 SceneUpcoming.prototype.handleShow = function (data) {
 	alert("SceneUpcoming.handleShow()");
@@ -103,14 +138,25 @@ SceneUpcoming.prototype.handleKeyDown = function (keyCode) {
 		case sf.key.ENTER:
 			break;
 		case sf.key.RED:
+			var rec = SceneUpcoming.prototype.getRecording();			
+			var question="Do you really want to disable rule<br>";
+			if(rec.Status==-1){
+				//default
+			}else if(rec.Status==10){
+				//Inactive
+				question="Do you really want to enable rule<br>";				
+			}else{
+				//Not a status we handle
+				break;
+			}
 			$('#svecPopup_ok_cancel_0AM8').sfPopup({
-				text:'Do you really want to disable rule '+Data.UpcomingList[$('#svecListbox_N9NK').sfList('getIndex')]+'?', 
+				text:question+Data.UpcomingList[$('#svecListbox_N9NK').sfList('getIndex')]+'?', 
 				buttons:['Yes', 'No'], 
 				callback:function (rlt){
 					if(rlt==0) { //Yes
 						$('#svecLoadingImage_Upcoming').sfLoading('show');
 						//TODO integrate "Don't record" feature, when available in backend
-						ServiceAPI.disableRecordSchedule(SceneUpcoming.prototype.getRecording());
+						ServiceAPI.changeRecordSchedule(rec);
 						//onDeleteCurrent will be called back
 					}
 				}
@@ -167,10 +213,17 @@ SceneUpcoming.prototype.showDescription = function() {
 	if (rec.Status == -2) {
 		// Recording
 		data = data + "<tr><td colspan=2>Currently recording</td></tr>";
+	}else if(rec.Status==10){
+		//Inactive
+		data = data + "<tr><td colspan=2>Inactive</td></tr>";
+	}else if(rec.Status==7){
+		//Conflict
+		data = data + "<tr><td colspan=2>Conflict</td></tr>";
 	}
 	data = data + "</table>";
 	data = data + rec.Description.replace(/\n/g, '<br>');
 	data = data + "</table>";
 	//$('#descriptionUpcoming').sfLabel({text:data});
 	widgetAPI.putInnerHTML(document.getElementById("descriptionUpcoming"),data);
+	SceneUpcoming.prototype.setHelp();
 };
