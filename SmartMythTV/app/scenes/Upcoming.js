@@ -103,7 +103,7 @@ SceneUpcoming.prototype.handleKeyDown = function (keyCode) {
 			break;
 		case sf.key.RED:
 			$('#svecPopup_ok_cancel_0AM8').sfPopup({
-				text:'Do you really want to delete rule '+Data.UpcomingList[$('#svecListbox_N9NK').sfList('getIndex')]+'?', 
+				text:'Do you really want to disable rule '+Data.UpcomingList[$('#svecListbox_N9NK').sfList('getIndex')]+'?', 
 				buttons:['Yes', 'No'], 
 				callback:function (rlt){
 					if(rlt==0) { //Yes
