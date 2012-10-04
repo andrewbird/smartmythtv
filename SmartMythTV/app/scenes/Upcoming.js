@@ -20,6 +20,7 @@ SceneUpcoming.prototype.initialize = function () {
 		}
 		$('#svecLoadingImage_Upcoming').sfLoading('show');
 		ServiceAPI.onReceived = function() {
+			alert("onReceived upcoming");
 			$('#svecListbox_N9NK').sfList({
 				data : Data.UpcomingList,
 				index : 0
@@ -35,10 +36,10 @@ SceneUpcoming.prototype.initialize = function () {
 			$('#svecLoadingImage_Upcoming').sfLoading('hide');
 		};
 		ServiceAPI.onDeleteCurrent = function() {
-			current = $('#svecListbox_N9NK').sfList('getIndex');
-			Data.UpcomingDetail.splice(current, 1);
-			Data.UpcomingList.splice(current, 1);
-			$('#svecListbox_N9NK').sfList({data:Data.UpcomingList, index:current});
+			alert("onDeleteCurrent upcoming");
+			setTimeout(ServiceAPI.loadUpcoming,(5*1000));
+			//Reload the data again as deleting one rule may remove multiple items
+			//Delaying the reload for 5 seconds, as my mythbackend seems to a take a while to update the schedule
 		};
 
 		ServiceAPI.loadUpcoming();
@@ -110,7 +111,7 @@ SceneUpcoming.prototype.handleKeyDown = function (keyCode) {
 						$('#svecLoadingImage_Upcoming').sfLoading('show');
 						//TODO integrate "Don't record" feature, when available in backend
 						ServiceAPI.disableRecordSchedule(SceneUpcoming.prototype.getRecording());
-						$('#svecLoadingImage_Upcoming').sfLoading('hide');
+						//onDeleteCurrent will be called back
 					}
 				}
 			});
@@ -137,7 +138,12 @@ SceneUpcoming.prototype.handleKeyDown = function (keyCode) {
 			sf.scene.show('Settings');
 			sf.scene.focus('Settings');
 			return;
-	}
+		case sf.key.N1:  //Reload
+			$('#svecLoadingImage_Upcoming').sfLoading('show');
+			ServiceAPI.loadUpcoming();
+			$('#svecLoadingImage_Upcoming').sfLoading('hide');
+			return;	
+	};
 };
 SceneUpcoming.prototype.getRecording = function() {
 

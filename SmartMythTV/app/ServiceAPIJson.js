@@ -248,6 +248,7 @@ ServiceAPI.receiveUpcoming = function() {
 	
 	var elements = eval('('+XHRObj.responseText+')'); //TODO security
 	var list = elements.ProgramList;
+	alert("Receiving upcoming data");
 	Data.UpcomingList=[];
 	Data.UpcomingDetail=[];	
 	
