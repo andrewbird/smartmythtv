@@ -27,7 +27,7 @@
 	top : 507px;
 }
 
-#SceneGroups #descriptionGroups {
+#SceneGroups #svecDescription_GRPS {
 	position : absolute;
 	font-size : 12pt;
 	color : #FFFFFF;
@@ -43,7 +43,7 @@
 	left : 270px;
 	top : 190px;
 }
-#SceneGroups #GroupsLogoImage{
+#SceneGroups #svecLogoImage_GRPS{
 	position : absolute;
 	left : 800px;
 	top : 10px;

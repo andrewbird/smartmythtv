@@ -29,7 +29,7 @@ SceneGroups.prototype.initialize = function() {
 			$('#svecLoadingImage_GBMO').sfLoading('hide');
 		};
 		ServiceAPI.onFailed = function() {
-			widgetAPI.putInnerHTML(document.getElementById("descriptionGroups"),
+			widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"),
 					"Failed to load data from MythTv backend<br>Status: "+XHRObj.status
 					+"<br>URL: "+"http://"+Data.URL+":6544/");
 			$('#svecLoadingImage_GBMO').sfLoading('hide');
@@ -209,8 +209,8 @@ SceneGroups.prototype.Level0 = function() {
 	$('#svecListbox_GOUK').sfList('focus');
 	level = 0;
 	SceneGroups.prototype.setHelp();
-	$('#descriptionGroups').sfLabel('destroy');
-	widgetAPI.putInnerHTML(document.getElementById("descriptionGroups"),
+	$('#svecDescription_GRPS').sfLabel('destroy');
+	widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"),
 			"");
 };
 
@@ -257,8 +257,8 @@ SceneGroups.prototype.showDescription = function() {
 	data = data + "</table>";
 	data = data + rec.Description.replace(/\n/g, '<br>');
 	data = data + "</table>";
-	//$('#descriptionGroups').sfLabel({text:data});
-	widgetAPI.putInnerHTML(document.getElementById("descriptionGroups"),data);
+	//$('#svecDescription_GRPS').sfLabel({text:data});
+	widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"),data);
 };
 
 // Find the current Recording
