@@ -8,7 +8,7 @@ SceneRecordings.prototype.initialize = function () {
 	$('#svecListbox_BOUK').sfList({itemsPerPage:10});
 	$('#svecScrollbar_UKRU').sfScroll({page:0});
     $('#svecKeyHelp_O2NM').sfKeyHelp({
-		'user':'SmartMythTV 0.2.4',
+		'user':Data.SMARTMYTHTVVERSION,
 		'red':'Delete',
 		'green':'Videos',
 		'yellow':'Groups',

@@ -44,7 +44,7 @@ SceneGroups.prototype.initialize = function() {
 SceneGroups.prototype.setHelp = function() {
 	if (level == 0) {
 		$('#svecKeyHelp_G2NM').sfKeyHelp({
-			'user' : 'SmartMythTV 0.2.4',
+			'user' : Data.SMARTMYTHTVVERSION,
 			'green' : 'Videos',
 			'NO1' : 'Refresh',
 			'yellow' : 'Recordings',

@@ -12,6 +12,7 @@ SceneVideos.prototype.initialize = function() {
 		page : 0
 	});
 	$('#svecKeyHelp_O2VI').sfKeyHelp({
+		'user' : Data.SMARTMYTHTVVERSION,
 		'red' : 'Delete',
 		'yellow' : 'Groups',
 		'enter' : 'Play',
