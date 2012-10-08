@@ -2,7 +2,8 @@ var ServiceAPI = {
 	XHRObj : null,
 	onReceived : null,
 	onDeleteCurrent : null,
-	onUpdateUpcoming : null
+	onUpdateUpcoming : null,
+	onFailed : null	
 };
 
 ServiceAPI.loadRecordings = function() {
@@ -64,7 +65,7 @@ ServiceAPI.loadVideos = function() {
 				if (XHRObj.status==200) {
 					ServiceAPI.receiveVideos();
 				} else {
-					SceneRecordings.prototype.receivedFailed();
+					SceneVideos.prototype.receivedFailed();
 				}
 			}
 		};
@@ -168,6 +169,7 @@ ServiceAPI.loadGroups = function() {
 				if (XHRObj.status==200) {
 					ServiceAPI.receiveGroups();
 				} else {
+					alert("Status="+XHRObj.status);
 					ServiceAPI.onFailed();
 				}
 			}

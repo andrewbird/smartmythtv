@@ -55,20 +55,21 @@ SceneVideos.prototype.handleBlur = function() {
 };
 
 SceneVideos.prototype.receivedFailed = function() {
-	Data.titles = [];
+	Data.Titles = [];
 	Data.links = [];
-	Data.Description = [];
-	Data.Titles[0] = "Failed to load mythtv recordings";
-	Data.Description[0] = "Failed to load mythtv recordings\nStatus: "
-			+ XHRObj.status + "\nURL: " + "http://" + Data.URL + "/mythweb";
-	Data.maxVideos = 1;
+	Data.Videos = [];
+	Data.Titles[0] = "Failed to load mythtv videos";
+	var r = new Object();
+	r.Description = "Failed to load mythtv videos\nStatus: "+XHRObj.status
+		+"\nURL: "+"http://"+Data.URL+":6544/";
+	Data.Videos[0] = r;
 	current = 0;
 	$('#svecListbox_BOVI').sfList({
-		data : Data.titles,
+		data : Data.Titles,
 		index : current
 	});
-	$('#svecLoadingImage_RBVI').sfLoading('hide');
-	SceneVideos.showDescription();
+	$('#svecLoadingImage_RBVI').sfLoading('hide');	
+	SceneVideos.prototype.showDescription();
 };
 
 /*
@@ -76,10 +77,12 @@ SceneVideos.prototype.receivedFailed = function() {
  */
 
 SceneVideos.prototype.showDescription = function() {
+	
 	var vid = SceneVideos.prototype.getVideo();
+	
 	var data = "<table border>";
 
-	if(vid.SubTitle!="") {
+	if(vid.SubTitle && vid.SubTitle!="") {
 		data = data + "<tr><td>SubTitle</td><td>" + vid.SubTitle + "</td></tr>";
 	}
 	if(vid.length>0){

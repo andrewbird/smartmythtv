@@ -7,12 +7,6 @@
 	background-color : #ffffff;
 }
 
-#GroupsLogoImage {
-	position : absolute;
-	right:10px;
-	top:10px;
-	z-index:2;
-}
 #SceneGroups #svecListbox_GOUK{
 	position : absolute;
 	left : 50px;
@@ -44,9 +38,16 @@
 	overflow : auto;
 }
 
-
-#SceneGroups #svecLoadingImage_RBMO{
+#SceneGroups #svecLoadingImage_GBMO{
 	position : absolute;
-	left : 300px;
+	left : 270px;
 	top : 190px;
 }
+#SceneGroups #GroupsLogoImage{
+	position : absolute;
+	left : 800px;
+	top : 10px;
+	width : 130px;
+	height : 40px;
+}
+
