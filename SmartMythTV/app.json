@@ -1,5 +1,5 @@
 {
-	"scenes" : [ "Groups", "Recordings", "Player", "Settings", "Videos", "Upcoming" ],
+	"scenes" : [ "Groups", "Recordings", "Player", "Settings", "Videos", "Upcoming","Error" ],
 	"files" : [],
 	"theme" : "base"
 }

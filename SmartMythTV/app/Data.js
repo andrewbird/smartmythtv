@@ -13,6 +13,8 @@ var Data = {
 	loaded : 0,
 	loadedGroups : 0,
 	loadedUpcoming : 0,
+	loadedRecordings : 0,
+	loadedVideos : 0,
 	max : 0,
 	maxVideos : 0,
 	currentTitle : "",

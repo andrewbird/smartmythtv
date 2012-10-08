@@ -14,30 +14,7 @@ SceneGroups.prototype.initialize = function() {
 		page : 0
 	});
 	level = 0;
-	if (Data.loadedGroups == 0) {
-		if (Data.URL == null) {
-			Data.URL = sf.core.localData("serverip");
-		}
-		$('#svecLoadingImage_GBMO').sfLoading('show');
-		ServiceAPI.onReceived = function() {
-			$('#svecListbox_GOUK').sfList({
-				data : Data.GroupsList,
-				index : 0
-			});
-			groupid = 0; itemid=0;			
-			$('#svecListbox_GOUK').sfList('focus');
-			$('#svecLoadingImage_GBMO').sfLoading('hide');
-		};
-		ServiceAPI.onFailed = function() {
-			widgetAPI.putInnerHTML(document.getElementById("descriptionGroups"),
-					"Failed to load data from MythTv backend<br>Status: "+XHRObj.status
-					+"<br>URL: "+"http://"+Data.URL+":6544/");
-			$('#svecLoadingImage_GBMO').sfLoading('hide');
-		};
-
-		ServiceAPI.loadGroups();
-	}
-	SceneGroups.prototype.Level0();
+	
 	
 };
 
@@ -73,6 +50,28 @@ SceneGroups.prototype.handleHide = function() {
 };
 SceneGroups.prototype.handleFocus = function() {
 	Data.mainScene = "Groups";	
+	if (Data.loadedGroups == 0) {
+		if (Data.URL == null) {
+			Data.URL = sf.core.localData("serverip");
+		}
+		$('#svecLoadingImage_GBMO').sfLoading('show');
+		ServiceAPI.onReceived = function() {
+			$('#svecListbox_GOUK').sfList({
+				data : Data.GroupsList,
+				index : 0
+			});
+			groupid = 0; itemid=0;			
+			$('#svecListbox_GOUK').sfList('focus');
+			$('#svecLoadingImage_GBMO').sfLoading('hide');
+		};		
+		ServiceAPI.onFailed = function() {
+			$('#svecLoadingImage_GBMO').sfLoading('hide');
+			ServiceAPI.onError();
+		}
+
+		ServiceAPI.loadGroups();
+	}
+	SceneGroups.prototype.Level0();
 	ServiceAPI.onDeleteCurrent = SceneGroups.prototype.removeCurrentRecording;
 };
 

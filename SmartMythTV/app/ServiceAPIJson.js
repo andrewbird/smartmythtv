@@ -3,7 +3,7 @@ var ServiceAPI = {
 	onReceived : null,
 	onDeleteCurrent : null,
 	onUpdateUpcoming : null,
-	onFailed : null	
+	onFailed : null
 };
 
 ServiceAPI.loadRecordings = function() {
@@ -15,7 +15,7 @@ ServiceAPI.loadRecordings = function() {
 				if (XHRObj.status==200) {
 					ServiceAPI.receiveRecordings();
 				} else {
-					SceneRecordings.prototype.receivedFailed();
+					ServiceAPI.onFailed();
 				}
 			}
 		};
@@ -53,6 +53,7 @@ ServiceAPI.receiveRecordings = function() {
 	$('#svecLoadingImage_RBMO').sfLoading('hide');
 	widgetAPI.putInnerHTML(document.getElementById("description"), Data.Recordings[$('#svecListbox_BOUK').sfList('getIndex')].Description.replace(/\n/g, '<br>'));
 	XHRObj.destroy();
+	Data.loadedRecordings=1;
 	ServiceAPI.onReceived();
 };
 
@@ -65,7 +66,7 @@ ServiceAPI.loadVideos = function() {
 				if (XHRObj.status==200) {
 					ServiceAPI.receiveVideos();
 				} else {
-					SceneVideos.prototype.receivedFailed();
+					ServiceAPI.onFailed();
 				}
 			}
 		};
@@ -110,6 +111,7 @@ ServiceAPI.receiveVideos = function() {
 	$('#svecLoadingImage_RBMO').sfLoading('hide');
 	widgetAPI.putInnerHTML(document.getElementById("description"), Data.Videos[$('#svecListbox_BOVI').sfList('getIndex')].Description.replace(/\n/g, '<br>'));
 	XHRObj.destroy();
+	Data.loadedVideos=1;
 	ServiceAPI.onReceived();
 };
 
@@ -180,6 +182,12 @@ ServiceAPI.loadGroups = function() {
 	} else {
         alert("Failed to create XHR");
     }
+};
+
+ServiceAPI.onError = function() {
+	sf.scene.hide(Data.mainScene);
+	sf.scene.show('Error');
+	sf.scene.focus('Error');
 };
 
 ServiceAPI.receiveGroups = function() {
