@@ -29,8 +29,9 @@ SceneGroups.prototype.initialize = function() {
 			$('#svecLoadingImage_GBMO').sfLoading('hide');
 		};
 		ServiceAPI.onFailed = function() {
-			widgetAPI.putInnerHTML(document.getElementById("description"),
-					"Failed to load data from MythTv backend");
+			widgetAPI.putInnerHTML(document.getElementById("descriptionGroups"),
+					"Failed to load data from MythTv backend<br>Status: "+XHRObj.status
+					+"<br>URL: "+"http://"+Data.URL+":6544/");
 			$('#svecLoadingImage_GBMO').sfLoading('hide');
 		};
 
