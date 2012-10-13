@@ -43,8 +43,7 @@ OSD.showOSD = function(timeout) {
 	osdtimeout = parseInt(currenttime)+timeout;
 };
 
-String.prototype.toHHMMSS = function () {
-    sec_numb    = parseInt(this);
+OSD.toHHMMSS = function(sec_numb) {
     var hours   = Math.floor(sec_numb / 3600);
     var minutes = Math.floor((sec_numb - (hours * 3600)) / 60);
     var seconds = sec_numb - (hours * 3600) - (minutes * 60);
@@ -54,4 +53,8 @@ String.prototype.toHHMMSS = function () {
     if (seconds < 10) {seconds = "0"+seconds;}
     var time    = hours+':'+minutes+':'+seconds;
     return time;
+};
+	
+String.prototype.toHHMMSS = function () {
+    return OSD.toHHMMSS(parseInt(this));
 };
