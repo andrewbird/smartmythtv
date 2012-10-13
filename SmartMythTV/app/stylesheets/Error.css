@@ -1,0 +1,41 @@
+#SceneError {
+	position : absolute;
+	left : 0px;
+	top : 0px;
+	width : 960px;
+	height : 540px;
+	background-color : #ffffff;
+}
+
+#SceneError #svecImage_P4CH{
+	position : absolute;
+	left : 20px;
+	top : 10px;
+	width : 130px;
+	height : 40px;
+}
+
+#SceneError #svecKeyHelp_D1ZT{
+	position : absolute;
+	left : 0px;
+	top : 507px;
+}
+
+#SceneError #svecLabel_DRCH{
+	position : absolute;
+	font-size : 20pt;
+	color : #ff0000;
+	left : 400px;
+	top : 10px;
+	width : 130px;
+}
+
+#SceneError #svecLabel_PLYI{
+	position : absolute;
+	font-size : 10pt;
+	color : #210000;
+	left : 60px;
+	top : 80px;
+	width : 640px;
+}
+

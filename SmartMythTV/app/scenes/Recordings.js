@@ -12,6 +12,7 @@ SceneRecordings.prototype.initialize = function () {
 		'red':'Delete',
 		'green':'Videos',
 		'yellow':'Groups',
+		'blue' : 'Upcoming',
 		'enter':'Play',
 		'updown':'UpDown', 
 		'tools':'Settings',
@@ -29,7 +30,7 @@ SceneRecordings.prototype.handleHide = function () {
 
 SceneRecordings.prototype.handleFocus = function () {
 	Data.mainScene = "Recordings";
-	if(Data.max==0) {
+	if(Data.loadedRecordings==0) {
 		if(Data.URL==null) {
 			Data.URL = sf.core.localData("serverip");
 		}
@@ -37,6 +38,10 @@ SceneRecordings.prototype.handleFocus = function () {
 		ServiceAPI.onReceived = function() {
 			$('#svecListbox_BOUK').sfList({data:Data.Titles, index:current});
 			$('#svecLoadingImage_RBMO').sfLoading('hide');
+		};
+		ServiceAPI.onFailed = function() {		
+			$('#svecLoadingImage_RBMO').sfLoading('hide');
+			ServiceAPI.onError();
 		};
 		ServiceAPI.onDeleteCurrent = SceneRecordings.prototype.removeCurrentRecording;
 		ServiceAPI.loadRecordings();
@@ -143,5 +148,10 @@ SceneRecordings.prototype.handleKeyDown = function (keyCode) {
 			sf.scene.show('Settings');
 			sf.scene.focus('Settings');
 			break;
+		case sf.key.BLUE:
+			sf.scene.hide('Recordings');
+			sf.scene.show('Upcoming');
+			sf.scene.focus('Upcoming');
+			return;
 	}
 };

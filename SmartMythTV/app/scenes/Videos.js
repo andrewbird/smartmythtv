@@ -15,6 +15,7 @@ SceneVideos.prototype.initialize = function() {
 		'user' : Data.SMARTMYTHTVVERSION,
 		'red' : 'Delete',
 		'yellow' : 'Groups',
+		'blue' : 'Upcoming',
 		'enter' : 'Play',
 		'updown' : 'UpDown',
 		'tools' : 'Settings',
@@ -32,7 +33,7 @@ SceneVideos.prototype.handleHide = function() {
 
 SceneVideos.prototype.handleFocus = function() {
 	Data.mainScene = "Videos";
-	if(Data.maxVideos==0) {
+	if(Data.loadedVideos==0) {
 		if(Data.URL==null) {
 			Data.URL = sf.core.localData("serverip");
 		}
@@ -45,6 +46,10 @@ SceneVideos.prototype.handleFocus = function() {
 			$('#svecLoadingImage_RBVI').sfLoading('hide');
 			SceneVideos.prototype.showDescription();
 		};
+		ServiceAPI.onFailed = function() {			
+			$('#svecLoadingImage_RBVI').sfLoading('hide');
+			ServiceAPI.onError();
+		};
 		ServiceAPI.onDeleteCurrent = SceneVideos.prototype.removeCurrentRecording;
 		ServiceAPI.loadVideos();
 		
@@ -54,23 +59,6 @@ SceneVideos.prototype.handleFocus = function() {
 SceneVideos.prototype.handleBlur = function() {
 };
 
-SceneVideos.prototype.receivedFailed = function() {
-	Data.Titles = [];
-	Data.links = [];
-	Data.Videos = [];
-	Data.Titles[0] = "Failed to load mythtv videos";
-	var r = new Object();
-	r.Description = "Failed to load mythtv videos\nStatus: "+XHRObj.status
-		+"\nURL: "+"http://"+Data.URL+":6544/";
-	Data.Videos[0] = r;
-	current = 0;
-	$('#svecListbox_BOVI').sfList({
-		data : Data.Titles,
-		index : current
-	});
-	$('#svecLoadingImage_RBVI').sfLoading('hide');	
-	SceneVideos.prototype.showDescription();
-};
 
 /*
  * function toText(value) { return (value<10?"0":"")+value; }
@@ -175,5 +163,10 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
 		sf.scene.show('Settings');
 		sf.scene.focus('Settings');
 		break;
+	case sf.key.BLUE:
+		sf.scene.hide('Videos');
+		sf.scene.show('Upcoming');
+		sf.scene.focus('Upcoming');
+		return;
 	}
 };

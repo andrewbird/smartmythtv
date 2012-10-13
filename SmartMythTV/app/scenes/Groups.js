@@ -38,7 +38,6 @@ SceneGroups.prototype.initialize = function() {
 		ServiceAPI.loadGroups();
 	}
 	SceneGroups.prototype.Level0();
-	
 };
 
 SceneGroups.prototype.setHelp = function() {
@@ -48,6 +47,7 @@ SceneGroups.prototype.setHelp = function() {
 			'green' : 'Videos',
 			'NO1' : 'Refresh',
 			'yellow' : 'Recordings',
+			'blue' : 'Upcoming',
 			'enter' : 'Select',
 			'tools' : 'Settings',
 			'return' : 'Back'
@@ -58,6 +58,7 @@ SceneGroups.prototype.setHelp = function() {
 			'red' : 'Delete',
 			'green' : 'Videos',
 			'yellow' : 'Recordings',
+			'blue' : 'Upcoming',
 			'enter' : 'Play',			
 			'return' : 'Back'
 		});
@@ -71,6 +72,28 @@ SceneGroups.prototype.handleHide = function() {
 };
 SceneGroups.prototype.handleFocus = function() {
 	Data.mainScene = "Groups";	
+	if (Data.loadedGroups == 0) {
+		if (Data.URL == null) {
+			Data.URL = sf.core.localData("serverip");
+		}
+		$('#svecLoadingImage_GBMO').sfLoading('show');
+		ServiceAPI.onReceived = function() {
+			$('#svecListbox_GOUK').sfList({
+				data : Data.GroupsList,
+				index : 0
+			});
+			groupid = 0; itemid=0;			
+			$('#svecListbox_GOUK').sfList('focus');
+			$('#svecLoadingImage_GBMO').sfLoading('hide');
+		};		
+		ServiceAPI.onFailed = function() {
+			$('#svecLoadingImage_GBMO').sfLoading('hide');
+			ServiceAPI.onError();
+		}
+
+		ServiceAPI.loadGroups();
+	}
+	SceneGroups.prototype.Level0();
 	ServiceAPI.onDeleteCurrent = SceneGroups.prototype.removeCurrentRecording;
 };
 
@@ -91,9 +114,14 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
 		sf.scene.focus('Recordings');
 		return;
 	case sf.key.TOOLS:
-		sf.scene.hide('Recordings');
+		sf.scene.hide('Groups');
 		sf.scene.show('Settings');
 		sf.scene.focus('Settings');
+		return;
+	case sf.key.BLUE:
+		sf.scene.hide('Groups');
+		sf.scene.show('Upcoming');
+		sf.scene.focus('Upcoming');
 		return;
 	case sf.key.N1:
 		$('#svecLoadingImage_GBMO').sfLoading('show');

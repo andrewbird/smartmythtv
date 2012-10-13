@@ -1,8 +1,9 @@
 var ServiceAPI = {
 	XHRObj : null,
 	onReceived : null,
-	onFailed : null,
-	onDeleteCurrent : null
+	onDeleteCurrent : null,
+	onUpdateUpcoming : null,
+	onFailed : null
 };
 
 ServiceAPI.loadRecordings = function() {
@@ -14,7 +15,7 @@ ServiceAPI.loadRecordings = function() {
 				if (XHRObj.status==200) {
 					ServiceAPI.receiveRecordings();
 				} else {
-					SceneRecordings.prototype.receivedFailed();
+					ServiceAPI.onFailed();
 				}
 			}
 		};
@@ -52,6 +53,7 @@ ServiceAPI.receiveRecordings = function() {
 	$('#svecLoadingImage_RBMO').sfLoading('hide');
 	widgetAPI.putInnerHTML(document.getElementById("description"), Data.Recordings[$('#svecListbox_BOUK').sfList('getIndex')].Description.replace(/\n/g, '<br>'));
 	XHRObj.destroy();
+	Data.loadedRecordings=1;
 	ServiceAPI.onReceived();
 };
 
@@ -64,7 +66,7 @@ ServiceAPI.loadVideos = function() {
 				if (XHRObj.status==200) {
 					ServiceAPI.receiveVideos();
 				} else {
-					SceneVideos.prototype.receivedFailed();
+					ServiceAPI.onFailed();
 				}
 			}
 		};
@@ -109,6 +111,7 @@ ServiceAPI.receiveVideos = function() {
 	$('#svecLoadingImage_RBMO').sfLoading('hide');
 	widgetAPI.putInnerHTML(document.getElementById("description"), Data.Videos[$('#svecListbox_BOVI').sfList('getIndex')].Description.replace(/\n/g, '<br>'));
 	XHRObj.destroy();
+	Data.loadedVideos=1;
 	ServiceAPI.onReceived();
 };
 
@@ -138,6 +141,27 @@ ServiceAPI.deleteRecording = function(recording) {
 	ServiceAPI.onDeleteCurrent();
 };
 
+ServiceAPI.changeRecordSchedule = function(recording) {
+	XHRObj = new XMLHttpRequest();
+	//XHRObj.onreadystatechange = function() {
+	//	XHRObj.destroy();
+	//};
+	alert("change Record Schedule "+recording.RecordId);
+	if(recording.Status==-1){
+		//Current active, need to disable
+		XHRObj.open("POST", "http://"+Data.URL+':6544/Dvr/DisableRecordSchedule', true);
+		XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		XHRObj.send('RecordId='+recording.RecordId);
+	}else if(recording.Status==10){
+		//Current inactive, need to enable
+		XHRObj.open("POST", "http://"+Data.URL+':6544/Dvr/EnableRecordSchedule', true);
+		XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		XHRObj.send('RecordId='+recording.RecordId);
+	}
+	
+	ServiceAPI.onDeleteCurrent();
+};
+
 ServiceAPI.loadGroups = function() {
 	XHRObj = new XMLHttpRequest();
     
@@ -158,6 +182,12 @@ ServiceAPI.loadGroups = function() {
 	} else {
         alert("Failed to create XHR");
     }
+};
+
+ServiceAPI.onError = function() {
+	sf.scene.hide(Data.mainScene);
+	sf.scene.show('Error');
+	sf.scene.focus('Error');
 };
 
 ServiceAPI.receiveGroups = function() {
@@ -209,6 +239,77 @@ ServiceAPI.receiveGroups = function() {
 	
 	XHRObj.destroy();
 	Data.loadedGroups=1;
+	ServiceAPI.onReceived();
+};
+
+ServiceAPI.loadUpcoming = function() {
+	XHRObj = new XMLHttpRequest();
+    
+	if (XHRObj) {
+		XHRObj.onreadystatechange = function() {
+			if(XHRObj.readyState==4) {
+				if (XHRObj.status==200) {
+					ServiceAPI.receiveUpcoming();
+				} else {
+					ServiceAPI.onFailed();
+				}
+			}
+		};
+		XHRObj.open("GET", "http://"+Data.URL+":6544/Dvr/GetUpcomingList?Count=30&ShowAll=true", true); 
+		XHRObj.setRequestHeader("Accept", "application/json");
+		XHRObj.send(null);
+	} else {
+        alert("Failed to create XHR");
+    }
+};
+
+ServiceAPI.receiveUpcoming = function() {
+	
+	var elements = eval('('+XHRObj.responseText+')'); //TODO security
+	var list = elements.ProgramList;
+	alert("Receiving upcoming data");
+	Data.UpcomingList=[];
+	Data.UpcomingDetail=[];	
+	
+	
+	var index = 0;
+	for (var i in elements.ProgramList.Programs) {
+	    	 
+		var status=list.Programs[i].Recording.Status;
+		var title=list.Programs[i].Title;
+		if(status==10){ //Inactive
+			title="<FONT COLOR='4682BE'>"+title+"</FONT>";
+		}else if(status==7){ //Conflict
+			title="<FONT COLOR='FF0000'>"+title+"</FONT>";
+		}else if(status!=-1){//Will Record
+			continue;   //We don't show any other statuses
+		}
+	    Data.UpcomingList[index]=title;
+		 		 
+		
+		var r=new Object();
+		Data.UpcomingDetail[index] = r;
+		r.Description = list.Programs[i].Description;		
+		r.ChanId = list.Programs[i].Channel.ChanId;
+		r.Title=list.Programs[i].Title;	
+		r.SubTitle=list.Programs[i].SubTitle;
+		r.FileName=list.Programs[i].FileName;
+		r.ChannelName=list.Programs[i].Channel.ChannelName;		
+		r.RecordId=list.Programs[i].Recording.RecordId;
+		r.Status=status;
+		
+		r.StartTimeDate=ServiceAPI.getDate(list.Programs[i].StartTime);		
+		r.EndTimeDate=ServiceAPI.getDate(list.Programs[i].EndTime);
+		
+		
+		index++;
+		if(index==20){
+			break;
+		}
+	}
+	
+	XHRObj.destroy();
+	Data.loadedUpcoming=1;
 	ServiceAPI.onReceived();
 };
 
