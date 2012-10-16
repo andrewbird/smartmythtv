@@ -11,11 +11,7 @@ SceneUpcoming.prototype.initialize = function() {
 	// initialize the scene controls and styles, and initialize your variables
 	// here
 	// scene HTML and CSS will be loaded before this function is called
-
-	$('#svecImage_QTRS').sfImage({
-		src : 'images/mythtv.png'
-	}).sfImage('show');
-
+	
 	SceneUpcoming.prototype.setHelp();
 };
 
@@ -83,7 +79,7 @@ SceneUpcoming.prototype.handleFocus = function() {
 			alert("onReceived upcoming");
 			$('#svecListbox_N9NK').sfList({
 				data : Data.UpcomingList,
-				itemsPerPage : 12,
+				itemsPerPage : 10,
 				index : 0
 			});
 			SceneUpcoming.prototype.showDescription();
@@ -104,12 +100,7 @@ SceneUpcoming.prototype.handleFocus = function() {
 			// Delaying the reload for 5 seconds, as my mythbackend seems to a
 			// take a while to update the schedule
 		};
-		$('#svecRef_Upcoming')
-				.sfLabel(
-						{
-							text : "<table><tr><td><FONT COLOR='4682BE'>Disabled recording</FONT></td></tr><tr><td><FONT COLOR='FF0000'>Conflict</FONT></td></tr></table>"
-						});
-		$('#svecRef_Upcoming').sfLabel('show');
+		
 		ServiceAPI.loadUpcoming();
 	}
 };
@@ -221,15 +212,17 @@ SceneUpcoming.prototype.showDescription = function() {
 			+ ServiceAPI.showDate(rec.StartTimeDate) + "</td></tr>";
 	data = data + "<tr><td>End</td><td>" + ServiceAPI.showDate(rec.EndTimeDate)
 			+ "</td></tr>";
+	
+	
 	if (rec.Status == -2) {
 		// Recording
 		data = data + "<tr><td colspan=2>Currently recording</td></tr>";
 	} else if (rec.Status == 10) {
 		// Inactive
-		data = data + "<tr><td colspan=2>Inactive</td></tr>";
+		data = data + "<tr><td colspan=2><FONT COLOR='4682BE'>Inactive</FONT></td></tr>";
 	} else if (rec.Status == 7) {
 		// Conflict
-		data = data + "<tr><td colspan=2>Conflict</td></tr>";
+		data = data + "<tr><td colspan=2><FONT COLOR='FF0000'>Conflict</FONT></td></tr>";
 	}
 	data = data + "</table>";
 	data = data + rec.Description.replace(/\n/g, '<br>');

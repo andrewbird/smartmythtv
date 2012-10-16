@@ -32,7 +32,7 @@
 	font-size : 12pt;
 	color : #FFFFFF;
 	left : 550px;
-	top : 50px;
+	top : 100px;
 	width : 400px;
 	height : 450px;
 	overflow : auto;
@@ -42,4 +42,12 @@
 	position : absolute;
 	left : 270px;
 	top : 190px;
+}
+
+#SceneRecordings #RecordingsLogoImage{
+	position : absolute;
+	left : 800px;
+	top : 10px;
+	width : 130px;
+	height : 40px;
 }

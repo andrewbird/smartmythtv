@@ -32,21 +32,40 @@
 	font-size : 12pt;
 	color : #FFFFFF;
 	left : 550px;
-	top : 10px;
+	top : 60px;
 	width : 400px;
-	height : 240px;
+	height : 210px;
+	overflow : auto;
+}
+#SceneVideos #descriptionTable_VI{
+	position : absolute;
+	font-size : 12pt;
+	color : #FFFFFF;
+	left : 755px;
+	top : 280px;
+	width : 200px;
+	height : 150px;
 	overflow : auto;
 }
 #SceneVideos #cover_VI{
 	position : absolute;	
 	left : 550px;
-	top : 250px;
-	width : 400px;
-	height : 170px;	
+	top : 280px;
+	width : 200px;
+	height : 200px;	
 }
 
 #SceneVideos #svecLoadingImage_RBVI{
 	position : absolute;
 	left : 270px;
 	top : 190px;
+}
+
+
+#SceneVideos #VideosLogoImage{
+	position : absolute;
+	left : 800px;
+	top : 10px;
+	width : 130px;
+	height : 40px;
 }
