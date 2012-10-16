@@ -66,28 +66,35 @@ SceneVideos.prototype.handleBlur = function() {
 SceneVideos.prototype.showDescription = function() {
 	
 	var vid = SceneVideos.prototype.getVideo();
-	
+	var hasinfo=false;
 	var data = "<table border>";
 
 	if(vid.SubTitle && vid.SubTitle!="") {
+		hasinfo=true;
 		data = data + "<tr><td>SubTitle</td><td>" + vid.SubTitle + "</td></tr>";
 	}
 	if(vid.length>0){
+		hasinfo=true;
 		data = data + "<tr><td>Length</td><td>" + vid.length + " minutes</td></tr>";
 	}	
 	
 	data = data + "</table>";
-	data = data + vid.Description.replace(/\n/g, '<br>');	
+	if(hasinfo==false){
+		data="";
+	}
+	
 	
 	if(vid.coverart){
-		var cover= "<img src=\"http://" + Data.URL + ":6544"+vid.coverart+"\" width=150>";
+		var cover= "<img src=\"http://" + Data.URL + ":6544"+vid.coverart+"\" height=200>";
 //		$('#cover_VI').sfImage({src:"http://" + Data.URL + ":6544"+vid.coverart});
 //		$('#cover_VI').sfImage('show');
 		widgetAPI.putInnerHTML(document.getElementById("cover_VI"), cover);
 	}else{
 		widgetAPI.putInnerHTML(document.getElementById("cover_VI"), "");
 	}
-	widgetAPI.putInnerHTML(document.getElementById("description_VI"), data);
+	var detail= vid.Description.replace(/\n/g, '<br>');	
+	widgetAPI.putInnerHTML(document.getElementById("description_VI"), detail);
+	widgetAPI.putInnerHTML(document.getElementById("descriptionTable_VI"), data);
 };
 
 SceneVideos.prototype.removeCurrentRecording = function() {
