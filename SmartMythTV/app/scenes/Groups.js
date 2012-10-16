@@ -4,7 +4,7 @@ function SceneGroups(options) {
 var widgetAPI = new Common.API.Widget(); // Create Common module
 var level = 0;
 var groupid = 0;
-var itemid=0;
+var itemid = 0;
 
 SceneGroups.prototype.initialize = function() {
 	$('#svecListbox_GOUK').sfList({
@@ -24,14 +24,17 @@ SceneGroups.prototype.initialize = function() {
 				data : Data.GroupsList,
 				index : 0
 			});
-			groupid = 0; itemid=0;			
+			groupid = 0;
+			itemid = 0;
 			$('#svecListbox_GOUK').sfList('focus');
 			$('#svecLoadingImage_GBMO').sfLoading('hide');
 		};
 		ServiceAPI.onFailed = function() {
-			widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"),
-					"Failed to load data from MythTv backend<br>Status: "+XHRObj.status
-					+"<br>URL: "+"http://"+Data.URL+":6544/");
+			widgetAPI.putInnerHTML(document
+					.getElementById("svecDescription_GRPS"),
+					"Failed to load data from MythTv backend<br>Status: "
+							+ XHRObj.status + "<br>URL: " + "http://"
+							+ Data.URL + ":6544/");
 			$('#svecLoadingImage_GBMO').sfLoading('hide');
 		};
 
@@ -59,7 +62,7 @@ SceneGroups.prototype.setHelp = function() {
 			'green' : 'Videos',
 			'yellow' : 'Recordings',
 			'blue' : 'Upcoming',
-			'enter' : 'Play',			
+			'enter' : 'Play',
 			'return' : 'Back'
 		});
 	}
@@ -71,7 +74,7 @@ SceneGroups.prototype.handleHide = function() {
 	// this function will be called when the scene manager hide this scene
 };
 SceneGroups.prototype.handleFocus = function() {
-	Data.mainScene = "Groups";	
+	Data.mainScene = "Groups";
 	if (Data.loadedGroups == 0) {
 		if (Data.URL == null) {
 			Data.URL = sf.core.localData("serverip");
@@ -82,10 +85,11 @@ SceneGroups.prototype.handleFocus = function() {
 				data : Data.GroupsList,
 				index : 0
 			});
-			groupid = 0; itemid=0;			
+			groupid = 0;
+			itemid = 0;
 			$('#svecListbox_GOUK').sfList('focus');
 			$('#svecLoadingImage_GBMO').sfLoading('hide');
-		};		
+		};
 		ServiceAPI.onFailed = function() {
 			$('#svecLoadingImage_GBMO').sfLoading('hide');
 			ServiceAPI.onError();
@@ -101,7 +105,7 @@ SceneGroups.prototype.handleBlur = function() {
 };
 
 SceneGroups.prototype.handleKeyDown = function(keyCode) {
-
+	
 	switch (keyCode) {
 	case 20: // GREEN
 		sf.scene.hide('Groups');
@@ -133,23 +137,24 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
 
 	if (level == 0) {
 		switch (keyCode) {
-		case sf.key.LEFT:			
+		case sf.key.LEFT:
 			break;
 		case sf.key.RIGHT:
 		case sf.key.ENTER:
 		case sf.key.PLAY:
-			//Select a level 0 item from Group, now change the list to be All the titles in that group and move to level 1
-			itemid=0;
+			// Select a level 0 item from Group, now change the list to be All
+			// the titles in that group and move to level 1
+			itemid = 0;
 			SceneGroups.prototype.Level1();
 			break;
 		case sf.key.UP:
-			//Show previous item in level 0 list			
+			// Show previous item in level 0 list
 			$('#svecScrollbar_GKRU').sfScroll('prev');
 			$('#svecListbox_GOUK').sfList('prev');
 			groupid = $('#svecListbox_GOUK').sfList('getIndex');
 			break;
 		case sf.key.DOWN:
-			//Show next item in level 0 list			
+			// Show next item in level 0 list
 			$('#svecScrollbar_GKRU').sfScroll('next');
 			$('#svecListbox_GOUK').sfList('next');
 			groupid = $('#svecListbox_GOUK').sfList('getIndex');
@@ -157,33 +162,34 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
 
 		}
 	} else {
-		//level 1, items in the group
+		// level 1, items in the group
 		switch (keyCode) {
+		case sf.key.RETURN:		
+			sf.key.preventDefault();
 		case sf.key.LEFT:
 		case sf.key.BACK:
-		case sf.key.RETURN:
-			//Go back to previous level, show all the groups
+			// Go back to previous level, show all the groups
 			SceneGroups.prototype.Level0();
 			break;
-		
+
 		case sf.key.UP:
-			$('#svecScrollbar_GKRU').sfScroll('prev');		
+			$('#svecScrollbar_GKRU').sfScroll('prev');
 			$('#svecListbox_GOUK').sfList('prev');
-			itemid= $('#svecListbox_GOUK').sfList('getIndex');
+			itemid = $('#svecListbox_GOUK').sfList('getIndex');
 			SceneGroups.prototype.showDescription();
 			break;
-			
+
 		case sf.key.DOWN:
-			$('#svecScrollbar_GKRU').sfScroll('next');			
+			$('#svecScrollbar_GKRU').sfScroll('next');
 			$('#svecListbox_GOUK').sfList('next');
-			itemid= $('#svecListbox_GOUK').sfList('getIndex');
+			itemid = $('#svecListbox_GOUK').sfList('getIndex');
 			SceneGroups.prototype.showDescription();
 			break;
-			
+
 		case sf.key.RIGHT:
 		case sf.key.ENTER:
 		case sf.key.PLAY:
-			//Play the selected item
+			// Play the selected item
 			Data.currentRecording = SceneGroups.prototype.getRecording();
 			Data.currentTitle = Data.currentRecording.Title;
 			Data.streamURL = "http://" + Data.URL
@@ -196,36 +202,33 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
 			});
 			sf.scene.focus('Player');
 			break;
-			
+
 		case sf.key.RED:
-			//Delete the selected item
-			$('#svecPopup_ok_cancel_GAM7')
-					.sfPopup(
-							{
-								text : 'Do you really want to delete '
-										+ SceneGroups.prototype.getRecording().Title
-										+ '?',
-								buttons : [ 'Yes', 'No' ],
-								callback : function(rlt) {
-									if (rlt == 0) {
-										$('#svecLoadingImage_GBMO').sfLoading(
-												'show');
-										ServiceAPI
-												.deleteRecording(SceneGroups.prototype
-														.getRecording());
-										$('#svecLoadingImage_GBMO').sfLoading(
-												'hide');										
-										
-									}
-								}
-							});
+			// Delete the selected item
+			$('#svecPopup_ok_cancel_GAM7').sfPopup(
+					{
+						text : 'Do you really want to delete '
+								+ SceneGroups.prototype.getRecording().Title
+								+ '?',
+						buttons : [ 'Yes', 'No' ],
+						callback : function(rlt) {
+							if (rlt == 0) {
+								$('#svecLoadingImage_GBMO').sfLoading('show');
+								ServiceAPI
+										.deleteRecording(SceneGroups.prototype
+												.getRecording());
+								$('#svecLoadingImage_GBMO').sfLoading('hide');
+
+							}
+						}
+					});
 			$('#svecPopup_ok_cancel_GAM7').sfPopup('show');
 			$('#svecPopup_ok_cancel_GAM7').sfPopup('focus');
 			break;
 
 		}
 	}
-	
+
 };
 
 SceneGroups.prototype.Level0 = function() {
@@ -238,12 +241,11 @@ SceneGroups.prototype.Level0 = function() {
 	level = 0;
 	SceneGroups.prototype.setHelp();
 	$('#svecDescription_GRPS').sfLabel('destroy');
-	widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"),
-			"");
+	widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"), "");
 };
 
 SceneGroups.prototype.Level1 = function() {
-	
+
 	alert("Going to groupid:" + groupid);
 	$('#svecListbox_GOUK').sfList('clear');
 	$('#svecListbox_GOUK').sfList({
@@ -258,9 +260,8 @@ SceneGroups.prototype.Level1 = function() {
 	$('#svecScrollbar_GKRU').sfScroll({
 		page : 0
 	});
-	
-};
 
+};
 
 // Fill the Description area with details of the selected Recording
 SceneGroups.prototype.showDescription = function() {
@@ -285,8 +286,9 @@ SceneGroups.prototype.showDescription = function() {
 	data = data + "</table>";
 	data = data + rec.Description.replace(/\n/g, '<br>');
 	data = data + "</table>";
-	//$('#svecDescription_GRPS').sfLabel({text:data});
-	widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"),data);
+	// $('#svecDescription_GRPS').sfLabel({text:data});
+	widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"),
+			data);
 };
 
 // Find the current Recording
@@ -301,31 +303,26 @@ SceneGroups.prototype.getRecording = function() {
 };
 
 SceneGroups.prototype.removeCurrentRecording = function() {
-	
+
 	if (Data.GroupsGroupTitles[groupid].length == 1) {
-		//Last one in this group, so remove the group from level0
+		// Last one in this group, so remove the group from level0
 		Data.GroupsList.splice(groupid, 1);
-		Data.GroupsGroupTitles.splice(
-				groupid, 1);
-		Data.GroupsGroupCount.splice(
-				groupid, 1);
-		Data.GroupsRecordings.splice(
-				groupid, 1);
-		itemid=0;
-		if(groupid>0){
+		Data.GroupsGroupTitles.splice(groupid, 1);
+		Data.GroupsGroupCount.splice(groupid, 1);
+		Data.GroupsRecordings.splice(groupid, 1);
+		itemid = 0;
+		if (groupid > 0) {
 			groupid--;
 		}
 		SceneGroups.prototype.Level0();
-	} else {		
-		
-		//Just remove the item from the level 1 list
-		Data.GroupsGroupTitles[groupid]
-				.splice(itemid, 1);
-		Data.GroupsGroupCount[groupid]--;											
-		Data.GroupsRecordings[groupid]
-				.splice(itemid, 1);		
+	} else {
+
+		// Just remove the item from the level 1 list
+		Data.GroupsGroupTitles[groupid].splice(itemid, 1);
+		Data.GroupsGroupCount[groupid]--;
+		Data.GroupsRecordings[groupid].splice(itemid, 1);
 		SceneGroups.prototype.Level1();
 		itemid--;
 	}
-	
+
 };
