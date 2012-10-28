@@ -32,9 +32,7 @@ ServiceAPI.receiveRecordings = function() {
 	var elements = eval('('+XHRObj.responseText+')'); //TODO security
 	var list = elements.ProgramList;
 	
-	Data.titles = [ ];
-	Data.links = [ ];
-	Data.description = [ ];
+	Data.Titles = [ ];
 	var index = 0;
 	for (var i in elements.ProgramList.Programs) {
 		Data.Titles[index] = list.Programs[i].Title+": "+list.Programs[i].SubTitle;
@@ -83,7 +81,7 @@ ServiceAPI.receiveVideos = function() {
 	var elements = eval('('+XHRObj.responseText+')'); //TODO security
 	var list = elements.VideoMetadataInfoList;
 	
-	Data.Titles = [ ];
+	Data.VideoTitles = [ ];
 	var index = 0;
 	for (var i in list.VideoMetadataInfos) {
 		Data.VideoTitles[index] = list.VideoMetadataInfos[i].Title;
