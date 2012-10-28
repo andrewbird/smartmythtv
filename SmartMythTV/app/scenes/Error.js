@@ -31,22 +31,22 @@ SceneError.prototype.initialize = function () {
 SceneError.prototype.handleShow = function (data) {
 	alert("SceneError.handleShow()");
 	// this function will be called when the scene manager show this scene 
-}
+};
 
 SceneError.prototype.handleHide = function () {
 	alert("SceneError.handleHide()");
 	// this function will be called when the scene manager hide this scene  
-}
+};
 
 SceneError.prototype.handleFocus = function () {
 	alert("SceneError.handleFocus()");
 	// this function will be called when the scene manager focus this scene
-}
+};
 
 SceneError.prototype.handleBlur = function () {
 	alert("SceneError.handleBlur()");
 	// this function will be called when the scene manager move focus to another scene from this scene
-}
+};
 
 SceneError.prototype.handleKeyDown = function (keyCode) {
 	
@@ -77,4 +77,4 @@ SceneError.prototype.handleKeyDown = function (keyCode) {
 			sf.scene.focus('Settings');
 			return;
 	}
-}
+};

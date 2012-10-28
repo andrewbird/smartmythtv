@@ -93,7 +93,7 @@ SceneGroups.prototype.handleFocus = function() {
 		ServiceAPI.onFailed = function() {
 			$('#svecLoadingImage_GBMO').sfLoading('hide');
 			ServiceAPI.onError();
-		}
+		};
 
 		ServiceAPI.loadGroups();
 	}
