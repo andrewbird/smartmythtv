@@ -87,6 +87,7 @@ ServiceAPI.receiveVideos = function() {
 		Data.VideoTitles[index] = list.VideoMetadataInfos[i].Title;
 		var v = new Object();
 		Data.Videos[index] = v;
+		v.Title=list.VideoMetadataInfos[i].Title;
 		v.SubTitle=list.VideoMetadataInfos[i].SubTitle;
 		v.Description = list.VideoMetadataInfos[i].Description;
 		if(list.VideoMetadataInfos[i].Artwork && list.VideoMetadataInfos[i].Artwork.ArtworkInfos.length>0){
@@ -111,6 +112,17 @@ ServiceAPI.receiveVideos = function() {
 	XHRObj.destroy();
 	Data.loadedVideos=1;
 	ServiceAPI.onReceived();
+};
+
+ServiceAPI.deleteVideo = function(video) {
+	XHRObj = new XMLHttpRequest();
+	//XHRObj.onreadystatechange = function() {
+	//	XHRObj.destroy();
+	//};
+	XHRObj.open("POST", "http://"+Data.URL+':6544/Video/RemoveVideoFromDB', true);
+	XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	XHRObj.send('Id='+video.Id);
+	ServiceAPI.onDeleteCurrent();
 };
 
 ServiceAPI.getDate = function(inTime){

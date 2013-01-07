@@ -46,13 +46,12 @@ SceneVideos.prototype.handleFocus = function() {
 			$('#svecLoadingImage_RBVI').sfLoading('hide');
 			SceneVideos.prototype.showDescription();
 		};
-		ServiceAPI.onFailed = function() {			
+		ServiceAPI.onFailed = function() {
 			$('#svecLoadingImage_RBVI').sfLoading('hide');
 			ServiceAPI.onError();
 		};
-		ServiceAPI.onDeleteCurrent = SceneVideos.prototype.removeCurrentRecording;
+		ServiceAPI.onDeleteCurrent = SceneVideos.prototype.removeCurrentVideo;
 		ServiceAPI.loadVideos();
-		
 	}
 };
 
@@ -98,13 +97,11 @@ SceneVideos.prototype.showDescription = function() {
 	widgetAPI.putInnerHTML(document.getElementById("descriptionTable_VI"), data);
 };
 
-SceneVideos.prototype.removeCurrentRecording = function() {
-	/*
-	 * current = $('#svecListbox_BOUK').sfList('getIndex');
-	 * Data.Recordings.splice(current, 1); Data.Titles.splice(current, 1);
-	 * Data.max--; $('#svecListbox_BOUK').sfList({data:Data.Titles,
-	 * index:current});
-	 */
+SceneVideos.prototype.removeCurrentVideo = function() {
+	current = $('#svecListbox_BOVI').sfList('getIndex');
+	Data.Videos.splice(current, 1); Data.VideoTitles.splice(current, 1);
+	Data.max--;
+	$('#svecListbox_BOVI').sfList({data:Data.VideoTitles, index:current});
 };
 
 SceneVideos.prototype.getVideo = function() {
@@ -132,8 +129,6 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
 		SceneVideos.prototype.showDescription();
 		break;
 	case sf.key.ENTER:
-		Data.currentTitle = Data.Titles[$('#svecListbox_BOVI').sfList(
-				'getIndex')];
 		Data.currentVideo = SceneVideos.prototype.getVideo();
 		Data.streamURL = "http://" + Data.URL + ":6544/Content/GetVideo?Id="
 				+ Data.currentVideo.Id;
@@ -144,15 +139,14 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
 		sf.scene.focus('Player');
 		break;
 	case 108: // RED
+		Data.currentVideo = SceneVideos.prototype.getVideo();
 		$('#svecPopup_ok_cancel_0AVI').sfPopup({
-			text : 'Do you really want to delete '
-				+ Data.Titles[$('#svecListbox_BOVI').sfList('getIndex')] + '?',
+			text : 'Do you really want to delete ' + Data.currentVideo.Title + '?',
 			buttons : [ 'Yes', 'No' ],
 			callback : function(rlt) {
 				if (rlt == 0) {
 					$('#svecLoadingImage_RBMO').sfLoading('show');
-					ServiceAPI.deleteRecording(SceneVideos.prototype
-						.getRecording());
+					ServiceAPI.deleteVideo(Data.currentVideo);
 					$('#svecLoadingImage_RBMO').sfLoading('hide');
 				}
 			}
