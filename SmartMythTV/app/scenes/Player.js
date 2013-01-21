@@ -2,6 +2,7 @@ var pluginAPI = new Common.API.Plugin();
 var plugin;
 var audio;
 var letterbox;
+var pstate = 0; // stopped
 
 function ScenePlayer(options) {
 	this.options = options;
@@ -27,7 +28,7 @@ ScenePlayer.prototype.handleShow = function () {
 		fullScreen: true
 	});*/
 	letterbox = false;
-    plugin.OnRenderingComplete = ScenePlayer.prototype.endOfStream;
+	plugin.OnRenderingComplete = ScenePlayer.prototype.endOfStream;
 	plugin.OnCurrentPlayTime = 'OSD.updateOSD';
 	plugin.OnStreamInfoReady = 'ScenePlayer.prototype.getDuration';
 	//plugin.SetTotalBufferSize(20*1024);
@@ -35,7 +36,8 @@ ScenePlayer.prototype.handleShow = function () {
 	//plugin.SetPendingBuffer(10*1024);
 	pluginAPI.setOffScreenSaver();
 	plugin.StartPlayback();
-	
+	pstate = 1; // playing
+
 	audio = document.getElementById("pluginAudio");
 	audio.SetExternalOutMode(0);
 
@@ -112,7 +114,8 @@ ScenePlayer.prototype.handleBlur = function () {
 }*/
 
 ScenePlayer.prototype.endOfStream = function() {	
-	plugin.Stop();	
+	plugin.Stop();
+	pstate = 0; // stopped
 	ScenePlayer.prototype.doHide();
 };
 
@@ -129,63 +132,96 @@ ScenePlayer.prototype.handleKeyDown = function (keyCode) {
 		case sf.key.PAUSE:
 			OSD.showOSD(2000);
 			plugin.Pause();
+			pstate = 2; // paused
 			pluginAPI.setOnScreenSaver();
 			break;
+
 		case sf.key.PLAY:
 			pluginAPI.setOffScreenSaver();
 			OSD.showOSD(2000);
 			plugin.Resume();
+			pstate = 1; // playing
 			break;
+
 		case tvKey.KEY_RETURN:
 		case tvKey.KEY_PANEL_RETURN:
 			widgetAPI.blockNavigation(keyCode);
+			/* fall through */
 		case sf.key.STOP:
 			plugin.Stop();
+			pstate = 0; // stopped
 			//plugin.ClearScreen();
 			ScenePlayer.prototype.doHide();
 			break;
+
 		case sf.key.REW:
 			OSD.showOSD(-3000);
 			plugin.JumpBackward(5);
 			break;
+
 		case sf.key.FF:
 			OSD.showOSD(7000);
 			plugin.JumpForward(5);
 			break;
+
 		case sf.key.DOWN:
 			// Jump back 5 mins
 			OSD.showOSD(-280000);
 			plugin.JumpBackward(300);
 			plugin.Resume();
+			pstate = 1; // playing
 			break;
+
 		case sf.key.UP:
 			OSD.showOSD(280000);
 			// Jump forward 5 mins
 			plugin.JumpForward(300);
 			plugin.Resume();
+			pstate = 1; // playing
 			break;
+
 		case sf.key.LEFT:
 			OSD.showOSD(-28000);
 			plugin.JumpBackward(30);
 			plugin.Resume();
+			pstate = 1; // playing
 			break;
+
 		case sf.key.RIGHT:
 			OSD.showOSD(62000);
 			plugin.JumpForward(60);
 			plugin.Resume();
+			pstate = 1; // playing
 			break;
+
+		case sf.key.ENTER:
+			if(pstate == 1) { // playing
+				OSD.showOSD(2000);
+				plugin.Pause();
+				pstate = 2; // paused
+				pluginAPI.setOnScreenSaver();
+			} else if(pstate == 2) { // paused
+				pluginAPI.setOffScreenSaver();
+				OSD.showOSD(2000);
+				plugin.Resume();
+				pstate = 1; // playing
+			}
+			break;
+
 		case tvKey.KEY_VOL_UP:
-        case tvKey.KEY_PANEL_VOL_UP:
-            audio.SetVolumeWithKey(0);
-            break;
-        case tvKey.KEY_VOL_DOWN:
-        case tvKey.KEY_PANEL_VOL_DOWN:
+		case tvKey.KEY_PANEL_VOL_UP:
+			audio.SetVolumeWithKey(0);
+			break;
+
+		case tvKey.KEY_VOL_DOWN:
+		case tvKey.KEY_PANEL_VOL_DOWN:
 			audio.SetVolumeWithKey(1);
-            break;
+			break;
+
 		case tvKey.KEY_RED:
 			$('#svecPopup_ok_cancel_PLAY').sfPopup({
-				text:'Do you really want to delete '+Data.currentTitle+'?', 
-				buttons:['Yes', 'No'], 
+				text:'Do you really want to delete '+Data.currentTitle+'?',
+				buttons:['Yes', 'No'],
 				callback:function (rlt){
 					if(rlt==0) {
 						plugin.Stop();
@@ -197,6 +233,7 @@ ScenePlayer.prototype.handleKeyDown = function (keyCode) {
 			$('#svecPopup_ok_cancel_PLAY').sfPopup('show');
 			$('#svecPopup_ok_cancel_PLAY').sfPopup('focus');
 			break;
+
 		case tvKey.KEY_YELLOW:
 			if (letterbox) {
 				plugin.SetDisplayArea(0, 0, 960, 540);
@@ -206,10 +243,12 @@ ScenePlayer.prototype.handleKeyDown = function (keyCode) {
 				letterbox = true;
 			}
 			break;
+
 		case tvKey.KEY_BLUE:
-			sf.service.AVSetting.show(function() { 
-			
+			sf.service.AVSetting.show(function() {
+
 			});
 			break;
+
 	}
 };
