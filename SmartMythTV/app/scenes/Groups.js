@@ -57,7 +57,7 @@ SceneGroups.prototype.setHelp = function() {
 		});
 	} else {
 		$('#svecKeyHelp_G2NM').sfKeyHelp({
-			'user' : 'SmartMythTV 0.2.4',
+			'user' : Data.SMARTMYTHTVVERSION,
 			'red' : 'Delete',
 			'green' : 'Videos',
 			'yellow' : 'Recordings',

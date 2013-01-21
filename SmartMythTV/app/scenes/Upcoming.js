@@ -25,7 +25,7 @@ SceneUpcoming.prototype.setHelp = function() {
 	if (rec && rec.Status == 10) {
 		// Inactive
 		$('#svecKeyHelp_Upcoming').sfKeyHelp({
-			'user' : 'SmartMythTV 0.2.4',
+			'user' : Data.SMARTMYTHTVVERSION,
 			'red' : "Enable Recording",
 			'green' : 'Videos',
 			'yellow' : 'Groups',
@@ -37,7 +37,7 @@ SceneUpcoming.prototype.setHelp = function() {
 
 	} else if (rec && rec.Status == -1) {
 		$('#svecKeyHelp_Upcoming').sfKeyHelp({
-			'user' : 'SmartMythTV 0.2.4',
+			'user' : Data.SMARTMYTHTVVERSION,
 			'red' : "Disable Recording",
 			'green' : 'Videos',
 			'yellow' : 'Groups',
@@ -48,7 +48,7 @@ SceneUpcoming.prototype.setHelp = function() {
 		lastStatus = rec.Status;
 	} else {
 		$('#svecKeyHelp_Upcoming').sfKeyHelp({
-			'user' : 'SmartMythTV 0.2.4',
+			'user' : Data.SMARTMYTHTVVERSION,
 			'green' : 'Videos',
 			'yellow' : 'Groups',
 			'blue' : 'Recordings',
