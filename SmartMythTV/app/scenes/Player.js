@@ -54,8 +54,8 @@ ScenePlayer.prototype.handleShow = function () {
            // document.getElementById("osd").style.display = "none";
         //}
     //});
-	
-	var nnaviPlugin = document.getElementById('pluginObjectNNavi');		
+
+	var nnaviPlugin = document.getElementById('pluginObjectNNavi');
 	nnaviPlugin.SetBannerState(2);
 
 	//volume OSD
@@ -141,6 +141,13 @@ ScenePlayer.prototype.handleKeyDown = function (keyCode) {
 			OSD.showOSD(2000);
 			plugin.Resume();
 			pstate = 1; // playing
+			break;
+
+		case sf.key.RETURN:
+			sf.key.preventDefault();
+			plugin.Stop();
+			pstate = 0; // stopped
+			ScenePlayer.prototype.doHide();
 			break;
 
 		case tvKey.KEY_RETURN:
