@@ -25,7 +25,7 @@ OSD.updateOSD = function(msecs) {
 	var min=Math.floor(msecs/(1000*60)-(hour*3600000));
 	var sec=Math.floor(msecs/1000-(min*60000)-(hour*3600000));
 	//alert("Time: "+hour+":"+min+":"+sec);
-	frontPanel.DisplayVFD_Time(hour,min,sec);	
+	frontPanel.DisplayVFD_Time(hour,min,sec);
 };
 
 OSD.hideOSD = function(){
@@ -62,7 +62,7 @@ OSD.toHHMMSS = function(sec_numb) {
     var time    = hours+':'+minutes+':'+seconds;
     return time;
 };
-	
+
 String.prototype.toHHMMSS = function () {
     return OSD.toHHMMSS(parseInt(this));
 };
