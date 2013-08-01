@@ -1,93 +1,93 @@
-/*#ScenePlayer {
-	position : absolute;
-	left : 0px;
-	top : 0px;
-	width : 960px;
-	height : 540px;
-	background-color : #ffffff;
-}*/
-
-#SceneSettings #svecLabel_TIME{
-	position : absolute;
-	font-size : 14pt;
-	color : #210000;
-	left : 0px;
-	top : 0px;
-	width : 200px;
+#SceneSettings#svecLabel_TIME {
+  position : absolute;
+  font-size : 14pt;
+  color : #210000;
+  left : 0px;
+  top : 0px;
+  width : 200px
 }
 
-#ScenePlayer #svecKeyHelp_4JNF{
-	position : absolute;
-	left : 0px;
-	top : 507px;
+#ScenePlayer#svecKeyHelp_4JNF {
+  position : absolute;
+  left : 0px;
+  top : 507px
 }
 
-#time{
-    position:absolute; 
-    left:8px; top:0px;
-    width:472px; height:24px;
+#time {
+  position : absolute;
+  left : 8px;
+  top : 0px;
+  width : 472px;
+  height : 24px
 }
 
-#progressBarBG{
-    position:absolute;
-    left:4px; top:8px;
-    width:400px; height:8px;
-    background-image:url("../Images/videoBox/progressBarBG.png");
+#progressBarBG {
+  position : absolute;
+  left : 4px;
+  top : 8px;
+  width : 400px;
+  height : 8px;
+  background-image : url(../Images/videoBox/progressBarBG.png)
 }
 
-#progressBar{
-    position:absolute;
-    left:0px; top:0px;
-    width:0%; height:8px;
-    background-image:url("../Images/videoBox/progressBar.png");
+#progressBar {
+  position : absolute;
+  left : 0px;
+  top : 0px;
+  width : 0%;
+  height : 8px;
+  background-image : url(../Images/videoBox/progressBar.png)
 }
 
-#timeInfo{
-    position:absolute;
-    left:408px; top:4px;
-    width:60px; height:16px;
-    
-    text-align:center;
-    font-size:12px;
-}
-#ScenePlayer #osd_data{
-    position:absolute;
-    top:10px;
-    left:10px;
-    width:900px;
-    height:100px;
-	background-color:#000000;
-    z-index:10;
-	display:none;
-	opacity: .9;
-}
-#ScenePlayer #osd{
-    position:absolute;
-    top:541px;
-    left:0px;
-    width:960px;
-    height:48px;
-	background-color:#000000;
-    z-index:10;
-	display:none;
-	opacity: .9;
+#timeInfo {
+  position : absolute;
+  left : 408px;
+  top : 4px;
+  width : 60px;
+  height : 16px;
+  text-align : center;
+  font-size : 12px
 }
 
-#ScenePlayer #osd_bar{
-    position:absolute;
-    top:10px;
-    left:30px;
-    width:900px;
-    height:5px;
-	background-color:#999999;
-	opacity: .9;
+#ScenePlayer#osd_data {
+  position : absolute;
+  top : 10px;
+  left : 10px;
+  width : 900px;
+  height : 100px;
+  background-color : #000000;
+  z-index : 10;
+  display : none;
+  opacity : 0.90000000000000002
 }
 
-#ScenePlayer #osd_bar_elapsed{
-    position:absolute;
-    top:0px;
-    left:0px;
-    width:0px;
-    height:5px;
-	background-color:#ffffff;
+#ScenePlayer#osd {
+  position : absolute;
+  top : 541px;
+  left : 0px;
+  width : 960px;
+  height : 48px;
+  background-color : #000000;
+  z-index : 10;
+  display : none;
+  opacity : 0.90000000000000002
+}
+
+#ScenePlayer#osd_bar {
+  position : absolute;
+  top : 10px;
+  left : 30px;
+  width : 900px;
+  height : 5px;
+  background-color : #999999;
+  opacity : 0.90000000000000002
+}
+
+#ScenePlayer#osd_bar_elapsed {
+  position : absolute;
+  top : 0px;
+  left : 0px;
+  width : 0px;
+  height : 5px;
+  background-color : #ffffff
 }

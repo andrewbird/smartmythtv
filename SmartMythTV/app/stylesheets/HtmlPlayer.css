@@ -1,20 +1,20 @@
-#SceneHtmlPlayer #video{
-    position:absolute;
-    left:20px;
-    width:800px;
-    height:500px;
-    color:white;
-	background-color:#ffffff;
-    font-size:22px;
+#SceneHtmlPlayer#video {
+  position : absolute;
+  left : 20px;
+  width : 800px;
+  height : 500px;
+  color : white;
+  background-color : #ffffff;
+  font-size : 22px
 }
 
-#SceneHtmlPlayer #osd{
-    position:absolute;
-    top:541px;
-    left:0px;
-    width:960px;
-    height:148px;
-	background-color:#ffffff;
-    z-index:10;
-    display:none;
+#SceneHtmlPlayer#osd {
+  position : absolute;
+  top : 541px;
+  left : 0px;
+  width : 960px;
+  height : 148px;
+  background-color : #ffffff;
+  z-index : 10;
+  display : none
 }

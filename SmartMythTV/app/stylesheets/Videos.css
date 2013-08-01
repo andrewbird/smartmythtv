@@ -1,71 +1,72 @@
 #SceneSceneVideos {
-	position : absolute;
-	left : 0px;
-	top : 0px;
-	width : 960px;
-	height : 540px;
-	background-color : #ffffff;
+  position : absolute;
+  left : 0px;
+  top : 0px;
+  width : 960px;
+  height : 540px;
+  background-color : #ffffff
 }
 
-#SceneVideos #svecListbox_BOVI{
-	position : absolute;
-	left : 50px;
-	top : 70px;
-	width : 470px;
+#SceneVideos#svecListbox_BOVI {
+  position : absolute;
+  left : 50px;
+  top : 70px;
+  width : 470px
 }
 
-#SceneVideos #svecScrollbar_UKVI{
-	position : absolute;
-	left : 540px;
-	top : 70px;
-	height : 400px;
+#SceneVideos#svecScrollbar_UKVI {
+  position : absolute;
+  left : 540px;
+  top : 70px;
+  height : 400px
 }
 
-#SceneVideos #svecKeyHelp_O2VI{
-	position : absolute;
-	left : 0px;
-	top : 507px;
+#SceneVideos#svecKeyHelp_O2VI {
+  position : absolute;
+  left : 0px;
+  top : 507px
 }
 
-#SceneVideos #description_VI{
-	position : absolute;
-	font-size : 12pt;
-	color : #FFFFFF;
-	left : 550px;
-	top : 60px;
-	width : 400px;
-	height : 210px;
-	overflow : auto;
-}
-#SceneVideos #descriptionTable_VI{
-	position : absolute;
-	font-size : 12pt;
-	color : #FFFFFF;
-	left : 755px;
-	top : 280px;
-	width : 200px;
-	height : 150px;
-	overflow : auto;
-}
-#SceneVideos #cover_VI{
-	position : absolute;	
-	left : 550px;
-	top : 280px;
-	width : 200px;
-	height : 200px;	
+#SceneVideos#description_VI {
+  position : absolute;
+  font-size : 12pt;
+  color : #FFFFFF;
+  left : 550px;
+  top : 60px;
+  width : 400px;
+  height : 210px;
+  overflow : auto
 }
 
-#SceneVideos #svecLoadingImage_RBVI{
-	position : absolute;
-	left : 270px;
-	top : 190px;
+#SceneVideos#descriptionTable_VI {
+  position : absolute;
+  font-size : 12pt;
+  color : #FFFFFF;
+  left : 755px;
+  top : 280px;
+  width : 200px;
+  height : 150px;
+  overflow : auto
 }
 
+#SceneVideos#cover_VI {
+  position : absolute;
+  left : 550px;
+  top : 280px;
+  width : 200px;
+  height : 200px
+}
 
-#SceneVideos #VideosLogoImage{
-	position : absolute;
-	left : 800px;
-	top : 10px;
-	width : 130px;
-	height : 40px;
+#SceneVideos#svecLoadingImage_RBVI {
+  position : absolute;
+  left : 270px;
+  top : 190px
+}
+
+#SceneVideos#VideosLogoImage {
+  position : absolute;
+  left : 800px;
+  top : 10px;
+  width : 130px;
+  height : 40px
 }

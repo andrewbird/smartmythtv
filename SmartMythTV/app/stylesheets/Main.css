@@ -1,40 +1,38 @@
 #SceneMain {
-	position : absolute;
-	left : 0px;
-	top : 0px;
-	width : 960px;
-	height : 540px;
-	background-color : #ffffff;
+  position : absolute;
+  left : 0px;
+  top : 0px;
+  width : 960px;
+  height : 540px;
+  background-color : #ffffff
 }
 
-#SceneMain #svecButton_REC{
-	position : absolute;
-	left : 100px;
-	top : 130px;
-	width : 121px;
+#SceneMain#svecButton_REC {
+  position : absolute;
+  left : 100px;
+  top : 130px;
+  width : 121px
 }
 
-#SceneMain #svecButton_EXIT{
-	position : absolute;
-	left : 100px;
-	top : 190px;
-	width : 121px;
+#SceneMain#svecButton_EXIT {
+  position : absolute;
+  left : 100px;
+  top : 190px;
+  width : 121px
 }
 
-
-
-#SceneMain #svecInput_996J{
-	position : absolute;
-	left : 410px;
-	top : 110px;
-	width : 137px;
+#SceneMain#svecInput_996J {
+  position : absolute;
+  left : 410px;
+  top : 110px;
+  width : 137px
 }
 
-#SceneMain #svecLabel_RXMA{
-	position : absolute;
-	font-size : 10pt;
-	color : #210000;
-	left : 410px;
-	top : 50px;
-	width : 130px;
+#SceneMain#svecLabel_RXMA {
+  position : absolute;
+  font-size : 10pt;
+  color : #210000;
+  left : 410px;
+  top : 50px;
+  width : 130px
 }
