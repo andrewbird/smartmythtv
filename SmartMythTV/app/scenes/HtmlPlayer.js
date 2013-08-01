@@ -21,7 +21,7 @@ SceneHtmlPlayer.prototype.handleShow = function () {
 	//plugin.SetInitialBuffer(10*1024);
 	//plugin.SetPendingBuffer(10*1024);
 	//plugin.StartPlayback();
-	
+
 	audio = document.getElementById("pluginAudio");
 	audio.SetExternalOutMode(0);
 
@@ -43,8 +43,8 @@ SceneHtmlPlayer.prototype.handleShow = function () {
            // document.getElementById("osd").style.display = "none";
         //}
     //});
-	
-	var nnaviPlugin = document.getElementById('pluginObjectNNavi');		
+
+	var nnaviPlugin = document.getElementById('pluginObjectNNavi');
 	nnaviPlugin.SetBannerState(2);
 
 	var pluginAPI = new Common.API.Plugin();
@@ -77,13 +77,13 @@ SceneHtmlPlayer.prototype.handleBlur = function () {
     //sf.service.VideoPlayer.STATE_BUFFERING    = 4;
     //sf.service.VideoPlayer.STATE_SCANNING = 5;
 	var oKeyMap = {};
-	
-	//if (this.nState == sf.service.VideoPlayer.STATE_PLAYING || 
-	//this.nState == sf.service.VideoPlayer.STATE_PAUSED || 
+
+	//if (this.nState == sf.service.VideoPlayer.STATE_PLAYING ||
+	//this.nState == sf.service.VideoPlayer.STATE_PAUSED ||
 	//this.nState == sf.service.VideoPlayer.STATE_BUFFERING) {
 	//	oKeyMap.RED = 'Fullscreen';
 	//}
-	
+
 	if (sf.service.VideoPlayer.Skip.isInProgress()) {
         oKeyMap.ENTER = 'Play';
 		oKeyMap.RETURN = 'Cancel';
@@ -95,7 +95,7 @@ SceneHtmlPlayer.prototype.handleBlur = function () {
         oKeyMap.RETURN = 'Return';
 		$("#svecKeyHelp_4JNF").hide();
 	}
-	
+
 	alert("kk");
 }*/
 
@@ -142,8 +142,8 @@ SceneHtmlPlayer.prototype.handleKeyDown = function (keyCode) {
             break;
 		case tvKey.KEY_RED:
 			$('#svecPopup_ok_cancel_PLAY').sfPopup({
-				text:'Do you really want to delete '+Data.currentTitle+'?', 
-				buttons:['Yes', 'No'], 
+				text:'Do you really want to delete '+Data.currentTitle+'?',
+				buttons:['Yes', 'No'],
 				callback:function (rlt){
 					if(rlt==0) {
 						plugin.Stop();
@@ -165,8 +165,8 @@ SceneHtmlPlayer.prototype.handleKeyDown = function (keyCode) {
 			}
 			break;
 		case tvKey.KEY_BLUE:
-			sf.service.AVSetting.show(function() { 
-			
+			sf.service.AVSetting.show(function() {
+
 			});
 			break;
 	}

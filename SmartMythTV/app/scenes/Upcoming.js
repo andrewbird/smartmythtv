@@ -11,7 +11,7 @@ SceneUpcoming.prototype.initialize = function() {
 	// initialize the scene controls and styles, and initialize your variables
 	// here
 	// scene HTML and CSS will be loaded before this function is called
-	
+
 	SceneUpcoming.prototype.setHelp();
 };
 
@@ -100,7 +100,7 @@ SceneUpcoming.prototype.handleFocus = function() {
 			// Delaying the reload for 5 seconds, as my mythbackend seems to a
 			// take a while to update the schedule
 		};
-		
+
 		ServiceAPI.loadUpcoming();
 	}
 };
@@ -212,8 +212,8 @@ SceneUpcoming.prototype.showDescription = function() {
 			+ ServiceAPI.showDate(rec.StartTimeDate) + "</td></tr>";
 	data = data + "<tr><td>End</td><td>" + ServiceAPI.showDate(rec.EndTimeDate)
 			+ "</td></tr>";
-	
-	
+
+
 	if (rec.Status == -2) {
 		// Recording
 		data = data + "<tr><td colspan=2>Currently recording</td></tr>";

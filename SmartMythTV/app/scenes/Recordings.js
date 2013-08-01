@@ -14,7 +14,7 @@ SceneRecordings.prototype.initialize = function () {
 		'yellow':'Groups',
 		'blue' : 'Upcoming',
 		'enter':'Play',
-		'updown':'UpDown', 
+		'updown':'UpDown',
 		'tools':'Settings',
 		'return':'Back'
 	});
@@ -25,7 +25,7 @@ SceneRecordings.prototype.handleShow = function () {
 };
 
 SceneRecordings.prototype.handleHide = function () {
-	// this function will be called when the scene manager hide this scene  
+	// this function will be called when the scene manager hide this scene
 };
 
 SceneRecordings.prototype.handleFocus = function () {
@@ -39,7 +39,7 @@ SceneRecordings.prototype.handleFocus = function () {
 			$('#svecListbox_BOUK').sfList({data:Data.Titles, index:current});
 			$('#svecLoadingImage_RBMO').sfLoading('hide');
 		};
-		ServiceAPI.onFailed = function() {		
+		ServiceAPI.onFailed = function() {
 			$('#svecLoadingImage_RBMO').sfLoading('hide');
 			ServiceAPI.onError();
 		};
@@ -120,8 +120,8 @@ SceneRecordings.prototype.handleKeyDown = function (keyCode) {
 			break;
 		case 108: //RED
 			$('#svecPopup_ok_cancel_0AM7').sfPopup({
-				text:'Do you really want to delete '+Data.Titles[$('#svecListbox_BOUK').sfList('getIndex')]+'?', 
-				buttons:['Yes', 'No'], 
+				text:'Do you really want to delete '+Data.Titles[$('#svecListbox_BOUK').sfList('getIndex')]+'?',
+				buttons:['Yes', 'No'],
 				callback:function (rlt){
 					if(rlt==0) {
 						$('#svecLoadingImage_RBMO').sfLoading('show');

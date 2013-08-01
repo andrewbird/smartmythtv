@@ -105,7 +105,7 @@ SceneGroups.prototype.handleBlur = function() {
 };
 
 SceneGroups.prototype.handleKeyDown = function(keyCode) {
-	
+
 	switch (keyCode) {
 	case 20: // GREEN
 		sf.scene.hide('Groups');
@@ -164,7 +164,7 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
 	} else {
 		// level 1, items in the group
 		switch (keyCode) {
-		case sf.key.RETURN:		
+		case sf.key.RETURN:
 			sf.key.preventDefault();
 		case sf.key.LEFT:
 		case sf.key.BACK:

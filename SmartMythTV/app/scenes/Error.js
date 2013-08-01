@@ -1,14 +1,14 @@
 function SceneError() {
-	
+
 
 }
 
 SceneError.prototype.initialize = function () {
 	alert("SceneError.initialize()");
 	// this function will be called only once when the scene manager show this scene first time
-	// initialize the scene controls and styles, and initialize your variables here 
+	// initialize the scene controls and styles, and initialize your variables here
 	// scene HTML and CSS will be loaded before this function is called
-	
+
 	$('#svecImage_P4CH').sfImage({
 		src:'images/mythtv.png'
 	}).sfImage('show');
@@ -18,7 +18,7 @@ SceneError.prototype.initialize = function () {
 		'return':'Return'
 	});
 	$('#svecLabel_DRCH').sfLabel({text:'Error'});
-	$('#svecLabel_PLYI').sfLabel({text:'There has been an error contacting the MythTV Backend server<br>' + 
+	$('#svecLabel_PLYI').sfLabel({text:'There has been an error contacting the MythTV Backend server<br>' +
 		'Please check the server is running.<p>Server IP: '+
 		Data.URL+'<p><p>'+
 		'For further assistance please see http://sourceforge.net/p/smartmythtv<p>'+
@@ -30,12 +30,12 @@ SceneError.prototype.initialize = function () {
 
 SceneError.prototype.handleShow = function (data) {
 	alert("SceneError.handleShow()");
-	// this function will be called when the scene manager show this scene 
+	// this function will be called when the scene manager show this scene
 };
 
 SceneError.prototype.handleHide = function () {
 	alert("SceneError.handleHide()");
-	// this function will be called when the scene manager hide this scene  
+	// this function will be called when the scene manager hide this scene
 };
 
 SceneError.prototype.handleFocus = function () {
@@ -49,7 +49,7 @@ SceneError.prototype.handleBlur = function () {
 };
 
 SceneError.prototype.handleKeyDown = function (keyCode) {
-	
+
 	switch (keyCode) {
 		case sf.key.LEFT:
 			break;

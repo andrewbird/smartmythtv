@@ -1,7 +1,7 @@
 
 function onStart () {
 	Data.URL = sf.core.localData("serverip");
-	
+
 	if(Data.URL==null) {
 		sf.scene.show("Settings");
 		sf.scene.focus("Settings");
@@ -16,7 +16,7 @@ function onStart () {
 		sf.scene.show(Data.mainScene);
 		sf.scene.focus(Data.mainScene);
 	}
-	
+
 	sf.start();
 }
 function onDestroy () {

@@ -8,7 +8,7 @@ var ServiceAPI = {
 
 ServiceAPI.loadRecordings = function() {
 	XHRObj = new XMLHttpRequest();
-    
+
 	if (XHRObj) {
 		XHRObj.onreadystatechange = function() {
 			if(XHRObj.readyState==4) {
@@ -31,7 +31,7 @@ ServiceAPI.receiveRecordings = function() {
 	//var elements = JSON.parse(XHRObj.responseText);
 	var elements = eval('('+XHRObj.responseText+')'); //TODO security
 	var list = elements.ProgramList;
-	
+
 	Data.Titles = [ ];
 	var index = 0;
 	for (var i in elements.ProgramList.Programs) {
@@ -57,7 +57,7 @@ ServiceAPI.receiveRecordings = function() {
 
 ServiceAPI.loadVideos = function() {
 	XHRObj = new XMLHttpRequest();
-    
+
 	if (XHRObj) {
 		XHRObj.onreadystatechange = function() {
 			if(XHRObj.readyState==4) {
@@ -80,7 +80,7 @@ ServiceAPI.receiveVideos = function() {
 	//var elements = JSON.parse(XHRObj.responseText);
 	var elements = eval('('+XHRObj.responseText+')'); //TODO security
 	var list = elements.VideoMetadataInfoList;
-	
+
 	Data.VideoTitles = [ ];
 	var index = 0;
 	for (var i in list.VideoMetadataInfos) {
@@ -98,7 +98,7 @@ ServiceAPI.receiveVideos = function() {
 				if(list.VideoMetadataInfos[i].Artwork.ArtworkInfos[j].Type=="fanart"){
 					v.fanart=list.VideoMetadataInfos[i].Artwork.ArtworkInfos[j].URL;
 				}
-			}		 
+			}
 		}
 		v.Id = list.VideoMetadataInfos[i].Id;
 		v.length=list.VideoMetadataInfos[i].Length;
@@ -130,7 +130,7 @@ ServiceAPI.getDate = function(inTime){
 	return new Date(inTime);
 };
 
-ServiceAPI.showDate = function(date){	
+ServiceAPI.showDate = function(date){
 	return date.toLocaleString();
 };
 
@@ -168,13 +168,13 @@ ServiceAPI.changeRecordSchedule = function(recording) {
 		XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		XHRObj.send('RecordId='+recording.RecordId);
 	}
-	
+
 	ServiceAPI.onDeleteCurrent();
 };
 
 ServiceAPI.loadGroups = function() {
 	XHRObj = new XMLHttpRequest();
-    
+
 	if (XHRObj) {
 		XHRObj.onreadystatechange = function() {
 			if(XHRObj.readyState==4) {
@@ -208,12 +208,12 @@ ServiceAPI.receiveGroups = function() {
 	Data.GroupsGroupTitles=[];
 	Data.GroupsGroupCount=[];
 	Data.GroupsRecordings=[];
-	
-	
+
+
 	var index = 0;
 	for (var i in elements.ProgramList.Programs) {
 	    var pos=Data.GroupsList.indexOf(list.Programs[i].Title);
-		if(pos==-1){  //Not found		 
+		if(pos==-1){  //Not found
 		  Data.GroupsGroupCount[index]=0;
 		  Data.GroupsGroupTitles[index]=[];
 		  Data.GroupsList[index]=list.Programs[i].Title;
@@ -223,30 +223,30 @@ ServiceAPI.receiveGroups = function() {
 		}else{
 		  Data.GroupsGroupCount[pos]++;
 		}
-		
+
 		var info=list.Programs[i].SubTitle;
 		if(info==""){
 			info=ServiceAPI.showDate(ServiceAPI.getDate(list.Programs[i].StartTime));
 		}
 		var groupPos=Data.GroupsGroupCount[pos];
 		Data.GroupsGroupTitles[pos][groupPos] =info;
-				
+
 		var r=new Object();
 		Data.GroupsRecordings[pos][groupPos] = r;
 		r.Description = list.Programs[i].Description;
 		r.StartTime = list.Programs[i].Recording.StartTs;
 		r.ChanId = list.Programs[i].Channel.ChanId;
-		r.Title=list.Programs[i].Title;	
+		r.Title=list.Programs[i].Title;
 		r.SubTitle=list.Programs[i].SubTitle;
 		r.FileName=list.Programs[i].FileName;
 		r.ChannelName=list.Programs[i].Channel.ChannelName;
 		r.FileSize=list.Programs[i].FileSize;
 		r.Status=list.Programs[i].Recording.Status;
-		
-		r.StartTimeDate=ServiceAPI.getDate(list.Programs[i].StartTime);		
+
+		r.StartTimeDate=ServiceAPI.getDate(list.Programs[i].StartTime);
 		r.EndTimeDate=ServiceAPI.getDate(list.Programs[i].EndTime);
 	}
-	
+
 	XHRObj.destroy();
 	Data.loadedGroups=1;
 	ServiceAPI.onReceived();
@@ -254,7 +254,7 @@ ServiceAPI.receiveGroups = function() {
 
 ServiceAPI.loadUpcoming = function() {
 	XHRObj = new XMLHttpRequest();
-    
+
 	if (XHRObj) {
 		XHRObj.onreadystatechange = function() {
 			if(XHRObj.readyState==4) {
@@ -265,7 +265,7 @@ ServiceAPI.loadUpcoming = function() {
 				}
 			}
 		};
-		XHRObj.open("GET", "http://"+Data.URL+":6544/Dvr/GetUpcomingList?Count=30&ShowAll=true", true); 
+		XHRObj.open("GET", "http://"+Data.URL+":6544/Dvr/GetUpcomingList?Count=30&ShowAll=true", true);
 		XHRObj.setRequestHeader("Accept", "application/json");
 		XHRObj.send(null);
 	} else {
@@ -274,17 +274,17 @@ ServiceAPI.loadUpcoming = function() {
 };
 
 ServiceAPI.receiveUpcoming = function() {
-	
+
 	var elements = eval('('+XHRObj.responseText+')'); //TODO security
 	var list = elements.ProgramList;
 	alert("Receiving upcoming data");
 	Data.UpcomingList=[];
-	Data.UpcomingDetail=[];	
-	
-	
+	Data.UpcomingDetail=[];
+
+
 	var index = 0;
 	for (var i in elements.ProgramList.Programs) {
-	    	 
+
 		var status=list.Programs[i].Recording.Status;
 		var title=list.Programs[i].Title;
 		if(status==10){ //Inactive
@@ -295,29 +295,29 @@ ServiceAPI.receiveUpcoming = function() {
 			continue;   //We don't show any other statuses
 		}
 	    Data.UpcomingList[index]=title;
-		 		 
-		
+
+
 		var r=new Object();
 		Data.UpcomingDetail[index] = r;
-		r.Description = list.Programs[i].Description;		
+		r.Description = list.Programs[i].Description;
 		r.ChanId = list.Programs[i].Channel.ChanId;
-		r.Title=list.Programs[i].Title;	
+		r.Title=list.Programs[i].Title;
 		r.SubTitle=list.Programs[i].SubTitle;
 		r.FileName=list.Programs[i].FileName;
-		r.ChannelName=list.Programs[i].Channel.ChannelName;		
+		r.ChannelName=list.Programs[i].Channel.ChannelName;
 		r.RecordId=list.Programs[i].Recording.RecordId;
 		r.Status=status;
-		
-		r.StartTimeDate=ServiceAPI.getDate(list.Programs[i].StartTime);		
+
+		r.StartTimeDate=ServiceAPI.getDate(list.Programs[i].StartTime);
 		r.EndTimeDate=ServiceAPI.getDate(list.Programs[i].EndTime);
-		
-		
+
+
 		index++;
 		if(index==20){
 			break;
 		}
 	}
-	
+
 	XHRObj.destroy();
 	Data.loadedUpcoming=1;
 	ServiceAPI.onReceived();

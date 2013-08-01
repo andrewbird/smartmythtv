@@ -10,12 +10,12 @@ SceneMain.prototype.initialize = function () {
 
 SceneMain.prototype.handleShow = function (data) {
 	alert("SceneMain.handleShow()");
-	// this function will be called when the scene manager show this scene 
+	// this function will be called when the scene manager show this scene
 };
 
 SceneMain.prototype.handleHide = function () {
 	alert("SceneMain.handleHide()");
-	// this function will be called when the scene manager hide this scene  
+	// this function will be called when the scene manager hide this scene
 };
 
 SceneMain.prototype.handleFocus = function () {

@@ -91,13 +91,13 @@ ScenePlayer.prototype.handleBlur = function () {
     //sf.service.VideoPlayer.STATE_BUFFERING    = 4;
     //sf.service.VideoPlayer.STATE_SCANNING = 5;
 	var oKeyMap = {};
-	
-	//if (this.nState == sf.service.VideoPlayer.STATE_PLAYING || 
-	//this.nState == sf.service.VideoPlayer.STATE_PAUSED || 
+
+	//if (this.nState == sf.service.VideoPlayer.STATE_PLAYING ||
+	//this.nState == sf.service.VideoPlayer.STATE_PAUSED ||
 	//this.nState == sf.service.VideoPlayer.STATE_BUFFERING) {
 	//	oKeyMap.RED = 'Fullscreen';
 	//}
-	
+
 	if (sf.service.VideoPlayer.Skip.isInProgress()) {
         oKeyMap.ENTER = 'Play';
 		oKeyMap.RETURN = 'Cancel';
@@ -109,17 +109,17 @@ ScenePlayer.prototype.handleBlur = function () {
         oKeyMap.RETURN = 'Return';
 		$("#svecKeyHelp_4JNF").hide();
 	}
-	
+
 	alert("kk");
 }*/
 
-ScenePlayer.prototype.endOfStream = function() {	
+ScenePlayer.prototype.endOfStream = function() {
 	plugin.Stop();
 	pstate = 0; // stopped
 	ScenePlayer.prototype.doHide();
 };
 
-ScenePlayer.prototype.doHide = function() {	
+ScenePlayer.prototype.doHide = function() {
 	OSD.hideOSD();
 	pluginAPI.setOnScreenSaver();
 	sf.scene.hide('Player');

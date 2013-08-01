@@ -5,7 +5,7 @@ var ServiceAPI = {
 
 ServiceAPI.loadRecordings = function() {
 	XHRObj = new XMLHttpRequest();
-    
+
 	if (XHRObj) {
         XHRObj.onreadystatechange = function() {
             if(XHRObj.readyState==4) {
@@ -29,7 +29,7 @@ ServiceAPI.receiveRecordings = function() {
 	// Parse RSS
 	// Get all "item" elements
 	var items = xmlElement.getElementsByTagName("item");
-	
+
 	Data.titles = [ ];
 	Data.links = [ ];
 	Data.description = [ ];

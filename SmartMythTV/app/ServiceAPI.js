@@ -6,7 +6,7 @@ var ServiceAPI = {
 
 ServiceAPI.loadRecordings = function() {
 	XHRObj = new XMLHttpRequest();
-    
+
 	if (XHRObj) {
         XHRObj.onreadystatechange = function() {
             if(XHRObj.readyState==4) {
