@@ -14,11 +14,17 @@ OSD.initOSD = function(total) {
 OSD.updateOSD = function(msecs) {
     currenttime = msecs;
     if (osd) {
-        document.getElementById("osd_bar_elapsed").style.width = (msecs * 900 / totaltime) + "px";
+        var obar = document.getElementById("osd_bar_elapsed");
+        if (obar) {
+            obar.style.width = (msecs * 900 / totaltime) + "px";
+        }
         if (parseInt(currenttime) > parseInt(osdtimeout)) {
             OSD.hideOSD();
         }
-        document.getElementById("osd_data").style.visibility = 'visible';
+        var odata = document.getElementById("osd_data");
+        if (odata) {
+            odata.style.visibility = 'visible';
+        }
     }
     var hour = Math.floor(msecs / (3600000));
     var min = Math.floor(msecs / (1000 * 60) - (hour * 3600000));
