@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget>
-	<ThumbIcon itemtype="string">icon/default_106.png</ThumbIcon>
-	<BigThumbIcon itemtype="string">icon/default_115.png</BigThumbIcon>
-	<ListIcon itemtype="string">icon/default_85.png</ListIcon>
-	<BigListIcon itemtype="string">icon/default_95.png</BigListIcon>
-	<category itemtype="string"></category>
-	<autoUpdate itemtype="boolean">n</autoUpdate>
-	<cpname itemtype="string"></cpname>
-	<cplogo itemtype="string"></cplogo>
-	<cpauthjs itemtype="string"></cpauthjs>
-	<ver itemtype="string"></ver>
-	<mgrver itemtype="string"></mgrver>
-	<fullwidget itemtype="boolean">y</fullwidget>
-	<srcctl itemtype="boolean">y</srcctl>
-	<ticker itemtype="boolean">n</ticker>
-	<childlock itemtype="boolean">n</childlock>
-	<audiomute itemtype="boolean">n</audiomute>
-	<videomute itemtype="boolean">n</videomute>
-	<dcont itemtype="boolean">y</dcont>
-	<type itemtype="string">user</type>
-	<widgetname itemtype="string">SmartMythTV</widgetname>
-	<description itemtype="string"></description>
-	<width itemtype="number">960</width>
-	<height itemtype="number">540</height>
-	<author itemtype="group">
-		<name itemtype="string">Steffen Kächele</name>
-		<email itemtype="string"></email>
-		<link itemtype="string">http://www.sec.co.kr</link>
-		<organization itemtype="string">Samsung Electronics Co. Ltd.</organization>
-	</author>
+  <ThumbIcon itemtype="string">icon/default_106.png</ThumbIcon>
+  <BigThumbIcon itemtype="string">icon/default_115.png</BigThumbIcon>
+  <ListIcon itemtype="string">icon/default_85.png</ListIcon>
+  <BigListIcon itemtype="string">icon/default_95.png</BigListIcon>
+  <category itemtype="string"/>
+  <autoUpdate itemtype="boolean">n</autoUpdate>
+  <cpname itemtype="string"/>
+  <cplogo itemtype="string"/>
+  <cpauthjs itemtype="string"/>
+  <ver itemtype="string"/>
+  <mgrver itemtype="string"/>
+  <fullwidget itemtype="boolean">y</fullwidget>
+  <srcctl itemtype="boolean">y</srcctl>
+  <ticker itemtype="boolean">n</ticker>
+  <childlock itemtype="boolean">n</childlock>
+  <audiomute itemtype="boolean">n</audiomute>
+  <videomute itemtype="boolean">n</videomute>
+  <dcont itemtype="boolean">y</dcont>
+  <type itemtype="string">user</type>
+  <widgetname itemtype="string">SmartMythTV</widgetname>
+  <description itemtype="string"/>
+  <width itemtype="number">960</width>
+  <height itemtype="number">540</height>
+  <author itemtype="group">
+    <name itemtype="string">Steffen Kächele</name>
+    <email itemtype="string"/>
+    <link itemtype="string">http://www.sec.co.kr</link>
+    <organization itemtype="string">Samsung Electronics Co. Ltd.</organization>
+  </author>
 </widget>
