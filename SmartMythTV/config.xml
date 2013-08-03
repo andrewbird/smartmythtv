@@ -19,6 +19,7 @@
   <videomute itemtype="boolean">n</videomute>
   <dcont itemtype="boolean">y</dcont>
   <type itemtype="string">user</type>
+  <network itemtype="boolean">n</network>
   <widgetname itemtype="string">SmartMythTV</widgetname>
   <description itemtype="string"/>
   <width itemtype="number">960</width>
