@@ -34,6 +34,7 @@ ScenePlayer.prototype.handleShow = function() {
     //plugin.SetInitialBuffer(10*1024);
     //plugin.SetPendingBuffer(10*1024);
     pluginAPI.setOffScreenSaver();
+    OSD.setTitleOSD(Data.currentRecording.Title);
     plugin.StartPlayback();
     pstate = 1; // playing
 

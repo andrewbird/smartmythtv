@@ -63,7 +63,7 @@
 
 #ScenePlayer #osd {
   position : absolute;
-  top : 541px;
+  top : 521px;
   left : 0px;
   width : 960px;
   height : 48px;
@@ -90,4 +90,14 @@
   width : 0px;
   height : 5px;
   background-color : #ffffff
+}
+
+#ScenePlayer #osd_time_info {
+  position : absolute;
+  top : 20px;
+  left : 30px;
+  width : 900px;
+  height : 20px;
+  background-color : #0000FF;
+  color : #FFFFFF;
 }

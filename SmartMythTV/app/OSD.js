@@ -3,34 +3,57 @@ var osdtimeout = 0;
 var currenttime = 0;
 var totaltime = 1;
 var frontPanel;
+var mediatitle = "default";
 
 function OSD() {}
 
 OSD.initOSD = function(total) {
     totaltime = total;
+    totalmins = Math.floor(totaltime / (1000 * 60));
     frontPanel = document.getElementById("frontPanel");
 };
 
+OSD.setTitleOSD = function(title) {
+    mediatitle = title;
+};
+
+
+OSD.draw = function() {
+    var obar = document.getElementById("osd_bar_elapsed");
+    if (obar) {
+        obar.style.width = (currenttime * 900 / totaltime) + "px";
+    }
+
+/*  // not in use
+    var odata = document.getElementById("osd_data");
+    if (odata) {
+        odata.style.visibility = 'visible';
+    }
+*/
+
+    var currentmins = Math.floor(currenttime / (1000 * 60));
+
+    var otext = mediatitle + " [ " + currentmins + " / " + totalmins + " mins ]";
+
+    $('#osd_time_info').sfLabel({text: otext});
+};
+
+
 OSD.updateOSD = function(msecs) {
     currenttime = msecs;
-    if (osd) {
-        var obar = document.getElementById("osd_bar_elapsed");
-        if (obar) {
-            obar.style.width = (msecs * 900 / totaltime) + "px";
-        }
-        if (parseInt(currenttime) > parseInt(osdtimeout)) {
-            OSD.hideOSD();
-        }
-        var odata = document.getElementById("osd_data");
-        if (odata) {
-            odata.style.visibility = 'visible';
-        }
+
+//    alert(currenttime);
+
+    if (!osd) {
+        return;
     }
-    var hour = Math.floor(msecs / (3600000));
-    var min = Math.floor(msecs / (1000 * 60) - (hour * 3600000));
-    var sec = Math.floor(msecs / 1000 - (min * 60000) - (hour * 3600000));
-    //alert("Time: "+hour+":"+min+":"+sec);
-    frontPanel.DisplayVFD_Time(hour, min, sec);
+
+    if (currenttime > osdtimeout) {
+        OSD.hideOSD();
+        return;
+    }
+
+    OSD.draw();
 };
 
 OSD.hideOSD = function() {
@@ -51,13 +74,10 @@ OSD.showOSD = function(timeout) {
         $('#osd').animate({
             'top': 492
         }, 'fast', function() {
-            //if(Main.osd == 0)
-            //{
-            //  document.getElementById("osd").style.display = "none";
-            //}
+            OSD.draw();
         });
+        osdtimeout = currenttime + timeout;
     }
-    osdtimeout = parseInt(currenttime) + timeout;
 };
 
 OSD.toHHMMSS = function(sec_numb) {
