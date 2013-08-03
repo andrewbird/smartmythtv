@@ -49,7 +49,7 @@ ServiceAPI.receiveRecordings = function() {
     Data.max = list.Count;
     $('#svecListbox_BOUK').sfList({
         data: Data.Titles,
-        index: current
+        index: 0
     });
     $('#svecLoadingImage_RBMO').sfLoading('hide');
     widgetAPI.putInnerHTML(document.getElementById("description"), Data.Recordings[$('#svecListbox_BOUK').sfList('getIndex')].Description.replace(/\n/g, '<br>'));
@@ -111,7 +111,7 @@ ServiceAPI.receiveVideos = function() {
     Data.maxVideos = list.Count;
     $('#svecListbox_BOUK').sfList({
         data: Data.Titles,
-        index: current
+        index: 0
     });
     $('#svecLoadingImage_RBMO').sfLoading('hide');
     widgetAPI.putInnerHTML(document.getElementById("description"), Data.Videos[$('#svecListbox_BOVI').sfList('getIndex')].Description.replace(/\n/g, '<br>'));

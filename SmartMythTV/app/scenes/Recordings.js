@@ -22,7 +22,6 @@ SceneRecordings.prototype.initialize = function() {
         'tools': 'Settings',
         'return': 'Back'
     });
-    current = 0;
 };
 
 SceneRecordings.prototype.handleShow = function() {};
@@ -41,7 +40,7 @@ SceneRecordings.prototype.handleFocus = function() {
         ServiceAPI.onReceived = function() {
             $('#svecListbox_BOUK').sfList({
                 data: Data.Titles,
-                index: current
+                index: 0
             });
             $('#svecLoadingImage_RBMO').sfLoading('hide');
         };
@@ -64,7 +63,6 @@ SceneRecordings.prototype.receivedFailed = function() {
     r.Description = "Failed to load mythtv recordings\nStatus: " + XHRObj.status + "\nURL: " + "http://" + Data.URL + ":6544/";
     Data.Recordings[0] = r;
     Data.max = 1;
-    current = 0;
     ServiceAPI.onReceived();
     SceneRecordings.prototype.showDescription();
 };
@@ -80,7 +78,7 @@ SceneRecordings.prototype.showDescription = function() {
 };
 
 SceneRecordings.prototype.removeCurrentRecording = function() {
-    current = $('#svecListbox_BOUK').sfList('getIndex');
+    var current = $('#svecListbox_BOUK').sfList('getIndex');
     Data.Recordings.splice(current, 1);
     Data.Titles.splice(current, 1);
     Data.max--;

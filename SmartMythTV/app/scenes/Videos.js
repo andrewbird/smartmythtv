@@ -21,7 +21,6 @@ SceneVideos.prototype.initialize = function() {
         'tools': 'Settings',
         'return': 'Back'
     });
-    current = 0;
 };
 
 SceneVideos.prototype.handleShow = function() {};
@@ -40,7 +39,7 @@ SceneVideos.prototype.handleFocus = function() {
         ServiceAPI.onReceived = function() {
             $('#svecListbox_BOVI').sfList({
                 data: Data.VideoTitles,
-                index: current
+                index: 0
             });
             $('#svecLoadingImage_RBVI').sfLoading('hide');
             SceneVideos.prototype.showDescription();
@@ -96,14 +95,20 @@ SceneVideos.prototype.showDescription = function() {
 };
 
 SceneVideos.prototype.removeCurrentVideo = function() {
-    current = $('#svecListbox_BOVI').sfList('getIndex');
+    var vlist = $('#svecListbox_BOVI');
+    var current = vlist.sfList('getIndex');
     Data.Videos.splice(current, 1);
     Data.VideoTitles.splice(current, 1);
     Data.max--;
-    $('#svecListbox_BOVI').sfList({
+    vlist.sfList({
         data: Data.VideoTitles,
-        index: current
+        index: 0
     });
+    if (current < Data.max) {
+        vlist.sfList('move', current);
+    } else {
+        vlist.sfList('move', Data.max);
+    }
 };
 
 SceneVideos.prototype.getVideo = function() {
@@ -141,8 +146,9 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
             break;
         case 108: // RED
             Data.currentVideo = SceneVideos.prototype.getVideo();
+            var ttext = 'Do you really want to delete ' + Data.currentVideo.Title + '?';
             $('#svecPopup_ok_cancel_0AVI').sfPopup({
-                text: 'Do you really want to delete ' + Data.currentVideo.Title + '?',
+                text: ttext,
                 buttons: ['Yes', 'No'],
                 callback: function(rlt) {
                     if (rlt == 0) {
