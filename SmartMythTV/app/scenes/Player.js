@@ -128,24 +128,27 @@ ScenePlayer.prototype.doHide = function() {
 ScenePlayer.prototype.handleKeyDown = function(keyCode) {
     switch (keyCode) {
         case sf.key.PAUSE:
-            plugin.Pause();
-            OSD.showOSD(2000);
-            pstate = 2; // paused
-            pluginAPI.setOnScreenSaver();
+            if(plugin.Pause()) {
+                pstate = 2; // paused
+                OSD.showOSD(3000);
+                pluginAPI.setOnScreenSaver();
+            }
             break;
 
         case sf.key.PLAY:
-            pluginAPI.setOffScreenSaver();
-            plugin.Resume();
-            OSD.showOSD(2000);
-            pstate = 1; // playing
+            if(plugin.Resume()) {
+                pstate = 1; // playing
+                OSD.showOSD(3000);
+                pluginAPI.setOffScreenSaver();
+            }
             break;
 
         case sf.key.RETURN:
             sf.key.preventDefault();
-            plugin.Stop();
-            pstate = 0; // stopped
-            ScenePlayer.prototype.doHide();
+            if(plugin.Stop()) {
+                pstate = 0; // stopped
+                ScenePlayer.prototype.doHide();
+            }
             break;
 
         case tvKey.KEY_RETURN:
@@ -153,63 +156,100 @@ ScenePlayer.prototype.handleKeyDown = function(keyCode) {
             widgetAPI.blockNavigation(keyCode);
             /* fall through */
         case sf.key.STOP:
-            plugin.Stop();
-            pstate = 0; // stopped
-            //plugin.ClearScreen();
-            ScenePlayer.prototype.doHide();
+            if(plugin.Stop()) {
+                pstate = 0; // stopped
+                //plugin.ClearScreen();
+                ScenePlayer.prototype.doHide();
+            }
             break;
 
         case sf.key.REW:
-            plugin.JumpBackward(5);
-            OSD.showOSD(2000);
+            if(plugin.Pause()){
+                pstate = 2; // paused
+                if(plugin.JumpBackward(5)){
+                    OSD.showOSD(-5000 + 3000);
+                }
+                if(plugin.Resume()){
+                    pstate = 1; // playing
+                }
+            }
             break;
 
         case sf.key.FF:
-            plugin.JumpForward(5);
-            OSD.showOSD(2000);
+            if(plugin.Pause()){
+                pstate = 2; // paused
+                if(plugin.JumpForward(5)){
+                    OSD.showOSD(5000 + 3000);
+                }
+                if(plugin.Resume()){
+                    pstate = 1; // playing
+                }
+            }
             break;
 
         case sf.key.DOWN:
             // Jump back 5 mins
-            plugin.JumpBackward(300);
-            plugin.Resume();
-            OSD.showOSD(2000);
-            pstate = 1; // playing
+            if(plugin.Pause()){
+                pstate = 2; // paused
+                if(plugin.JumpBackward(300)){
+                    OSD.showOSD(-300000 + 3000);
+                }
+                if(plugin.Resume()) {
+                    pstate = 1; // playing
+                }
+            }
             break;
 
         case sf.key.UP:
             // Jump forward 5 mins
-            plugin.JumpForward(300);
-            plugin.Resume();
-            OSD.showOSD(2000);
-            pstate = 1; // playing
+            if(plugin.Pause()){
+                pstate = 2; // paused
+                if(plugin.JumpForward(300)) {
+                    OSD.showOSD(300000 + 3000);
+                }
+                if(plugin.Resume()) {
+                    pstate = 1; // playing
+                }
+            }
             break;
 
         case sf.key.LEFT:
-            plugin.JumpBackward(30);
-            OSD.showOSD(2000);
-            plugin.Resume();
-            pstate = 1; // playing
+            if(plugin.Pause()){
+                pstate = 2; // paused
+                if(plugin.JumpBackward(30)) {
+                    OSD.showOSD(-30000 + 3000);
+                }
+                if(plugin.Resume()) {
+                    pstate = 1; // playing
+                }
+            }
             break;
 
         case sf.key.RIGHT:
-            plugin.JumpForward(60);
-            plugin.Resume();
-            OSD.showOSD(2000);
-            pstate = 1; // playing
+            if(plugin.Pause()) {
+                pstate = 2; // paused
+                if(plugin.JumpForward(60)) {
+                    OSD.showOSD(60000 + 3000);
+                }
+                if(plugin.Resume()) {
+                    pstate = 1; // playing
+                }
+            }
             break;
 
         case sf.key.ENTER:
             if (pstate == 1) { // playing
-                plugin.Pause();
-                OSD.showOSD(2000);
-                pstate = 2; // paused
-                pluginAPI.setOnScreenSaver();
+                if (plugin.Pause()) {
+                    pstate = 2; // paused
+                    OSD.showOSD(3000);
+                    pluginAPI.setOnScreenSaver();
+                }
             } else if (pstate == 2) { // paused
-                pluginAPI.setOffScreenSaver();
-                plugin.Resume();
-                OSD.showOSD(2000);
-                pstate = 1; // playing
+                if(plugin.Resume()) {
+                    pstate = 1; // playing
+                    OSD.showOSD(3000);
+                    pluginAPI.setOffScreenSaver();
+                }
             }
             break;
 
