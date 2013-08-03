@@ -128,16 +128,16 @@ ScenePlayer.prototype.doHide = function() {
 ScenePlayer.prototype.handleKeyDown = function(keyCode) {
     switch (keyCode) {
         case sf.key.PAUSE:
-            OSD.showOSD(2000);
             plugin.Pause();
+            OSD.showOSD(2000);
             pstate = 2; // paused
             pluginAPI.setOnScreenSaver();
             break;
 
         case sf.key.PLAY:
             pluginAPI.setOffScreenSaver();
-            OSD.showOSD(2000);
             plugin.Resume();
+            OSD.showOSD(2000);
             pstate = 1; // playing
             break;
 
@@ -160,55 +160,55 @@ ScenePlayer.prototype.handleKeyDown = function(keyCode) {
             break;
 
         case sf.key.REW:
-            OSD.showOSD(-3000);
             plugin.JumpBackward(5);
+            OSD.showOSD(2000);
             break;
 
         case sf.key.FF:
-            OSD.showOSD(7000);
             plugin.JumpForward(5);
+            OSD.showOSD(2000);
             break;
 
         case sf.key.DOWN:
             // Jump back 5 mins
-            OSD.showOSD(-280000);
             plugin.JumpBackward(300);
             plugin.Resume();
+            OSD.showOSD(2000);
             pstate = 1; // playing
             break;
 
         case sf.key.UP:
-            OSD.showOSD(280000);
             // Jump forward 5 mins
             plugin.JumpForward(300);
             plugin.Resume();
+            OSD.showOSD(2000);
             pstate = 1; // playing
             break;
 
         case sf.key.LEFT:
-            OSD.showOSD(-28000);
             plugin.JumpBackward(30);
+            OSD.showOSD(2000);
             plugin.Resume();
             pstate = 1; // playing
             break;
 
         case sf.key.RIGHT:
-            OSD.showOSD(62000);
             plugin.JumpForward(60);
             plugin.Resume();
+            OSD.showOSD(2000);
             pstate = 1; // playing
             break;
 
         case sf.key.ENTER:
             if (pstate == 1) { // playing
-                OSD.showOSD(2000);
                 plugin.Pause();
+                OSD.showOSD(2000);
                 pstate = 2; // paused
                 pluginAPI.setOnScreenSaver();
             } else if (pstate == 2) { // paused
                 pluginAPI.setOffScreenSaver();
-                OSD.showOSD(2000);
                 plugin.Resume();
+                OSD.showOSD(2000);
                 pstate = 1; // playing
             }
             break;
