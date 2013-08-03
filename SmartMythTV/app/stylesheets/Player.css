@@ -1,4 +1,4 @@
-#SceneSettings#svecLabel_TIME {
+#SceneSettings #svecLabel_TIME {
   position : absolute;
   font-size : 14pt;
   color : #210000;
@@ -7,7 +7,7 @@
   width : 200px
 }
 
-#ScenePlayer#svecKeyHelp_4JNF {
+#ScenePlayer #svecKeyHelp_4JNF {
   position : absolute;
   left : 0px;
   top : 507px
@@ -49,7 +49,7 @@
   font-size : 12px
 }
 
-#ScenePlayer#osd_data {
+#ScenePlayer #osd_data {
   position : absolute;
   top : 10px;
   left : 10px;
@@ -61,7 +61,7 @@
   opacity : 0.90000000000000002
 }
 
-#ScenePlayer#osd {
+#ScenePlayer #osd {
   position : absolute;
   top : 541px;
   left : 0px;
@@ -73,7 +73,7 @@
   opacity : 0.90000000000000002
 }
 
-#ScenePlayer#osd_bar {
+#ScenePlayer #osd_bar {
   position : absolute;
   top : 10px;
   left : 30px;
@@ -83,7 +83,7 @@
   opacity : 0.90000000000000002
 }
 
-#ScenePlayer#osd_bar_elapsed {
+#ScenePlayer #osd_bar_elapsed {
   position : absolute;
   top : 0px;
   left : 0px;

@@ -1,33 +1,33 @@
-#SceneSceneVideos {
+#SceneVideos {
   position : absolute;
   left : 0px;
   top : 0px;
   width : 960px;
   height : 540px;
-  background-color : #ffffff
+  background-color : #000000
 }
 
-#SceneVideos#svecListbox_BOVI {
+#SceneVideos #svecListbox_BOVI {
   position : absolute;
   left : 50px;
   top : 70px;
   width : 470px
 }
 
-#SceneVideos#svecScrollbar_UKVI {
+#SceneVideos #svecScrollbar_UKVI {
   position : absolute;
   left : 540px;
   top : 70px;
   height : 400px
 }
 
-#SceneVideos#svecKeyHelp_O2VI {
+#SceneVideos #svecKeyHelp_O2VI {
   position : absolute;
   left : 0px;
   top : 507px
 }
 
-#SceneVideos#description_VI {
+#SceneVideos #description_VI {
   position : absolute;
   font-size : 12pt;
   color : #FFFFFF;
@@ -38,7 +38,7 @@
   overflow : auto
 }
 
-#SceneVideos#descriptionTable_VI {
+#SceneVideos #descriptionTable_VI {
   position : absolute;
   font-size : 12pt;
   color : #FFFFFF;
@@ -49,7 +49,7 @@
   overflow : auto
 }
 
-#SceneVideos#cover_VI {
+#SceneVideos #cover_VI {
   position : absolute;
   left : 550px;
   top : 280px;
@@ -57,13 +57,13 @@
   height : 200px
 }
 
-#SceneVideos#svecLoadingImage_RBVI {
+#SceneVideos #svecLoadingImage_RBVI {
   position : absolute;
   left : 270px;
   top : 190px
 }
 
-#SceneVideos#VideosLogoImage {
+#SceneVideos #VideosLogoImage {
   position : absolute;
   left : 800px;
   top : 10px;

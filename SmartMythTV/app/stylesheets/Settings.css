@@ -7,7 +7,7 @@
   background-color : #ffffff
 }
 
-#SceneSettings#svecLabel_WPTS {
+#SceneSettings #svecLabel_WPTS {
   position : absolute;
   font-size : 14pt;
   color : #210000;
@@ -16,28 +16,28 @@
   width : 200px
 }
 
-#SceneSettings#serverip {
+#SceneSettings #serverip {
   position : absolute;
   left : 300px;
   top : 100px;
   width : 590px
 }
 
-#SceneSettings#svecButton_OK {
+#SceneSettings #svecButton_OK {
   position : absolute;
   left : 290px;
   top : 440px;
   width : 121px
 }
 
-#SceneSettings#svecButton_CAN {
+#SceneSettings #svecButton_CAN {
   position : absolute;
   left : 490px;
   top : 440px;
   width : 121px
 }
 
-#SceneSettings#svecLabel_RTUS {
+#SceneSettings #svecLabel_RTUS {
   position : absolute;
   font-size : 10pt;
   color : #210000;
@@ -46,13 +46,13 @@
   width : 440px
 }
 
-#SceneSettings#svecCheckBox_Groups {
+#SceneSettings #svecCheckBox_Groups {
   position : absolute;
   left : 20px;
   top : 210px
 }
 
-#SceneSettings#svecButton_Groups {
+#SceneSettings #svecButton_Groups {
   position : absolute;
   font-size : 10pt;
   left : 50px;

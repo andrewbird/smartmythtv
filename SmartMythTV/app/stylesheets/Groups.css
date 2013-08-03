@@ -1,33 +1,33 @@
-#SceneSceneGroups {
+#SceneGroups {
   position : absolute;
   left : 0px;
   top : 0px;
   width : 960px;
   height : 540px;
-  background-color : #ffffff
+  background-color : #000000
 }
 
-#SceneGroups#svecListbox_GOUK {
+#SceneGroups #svecListbox_GOUK {
   position : absolute;
   left : 50px;
   top : 70px;
   width : 470px
 }
 
-#SceneGroups#svecScrollbar_GKRU {
+#SceneGroups #svecScrollbar_GKRU {
   position : absolute;
   left : 540px;
   top : 70px;
   height : 400px
 }
 
-#SceneGroups#svecKeyHelp_G2NM {
+#SceneGroups #svecKeyHelp_G2NM {
   position : absolute;
   left : 0px;
   top : 507px
 }
 
-#SceneGroups#svecDescription_GRPS {
+#SceneGroups #svecDescription_GRPS {
   position : absolute;
   font-size : 12pt;
   color : #FFFFFF;
@@ -38,13 +38,13 @@
   overflow : auto
 }
 
-#SceneGroups#svecLoadingImage_GBMO {
+#SceneGroups #svecLoadingImage_GBMO {
   position : absolute;
   left : 270px;
   top : 190px
 }
 
-#SceneGroups#svecLogoImage_GRPS {
+#SceneGroups #svecLogoImage_GRPS {
   position : absolute;
   left : 800px;
   top : 10px;
