@@ -223,8 +223,9 @@ ScenePlayer.prototype.handleKeyDown = function(keyCode) {
             break;
 
         case tvKey.KEY_RED:
+            var ttext = 'Do you really want to delete ' + Data.currentTitle + '?';
             $('#svecPopup_ok_cancel_PLAY').sfPopup({
-                text: 'Do you really want to delete ' + Data.currentTitle + '?',
+                text: ttext,
                 buttons: ['Yes', 'No'],
                 callback: function(rlt) {
                     if (rlt == 0) {
