@@ -14,18 +14,6 @@ ScenePlayer.prototype.handleShow = function() {
     plugin = document.getElementById("pluginPlayer");
     plugin.InitPlayer(Data.streamURL);
     plugin.SetDisplayArea(0, 0, 960, 540);
-    //var PlayerEmp = document.getElementById('PluginSef');
-    //PlayerEmp.Open('Player', '1.000', 'Player');
-    //PlayerEmp.Execute('InitPlayer', Data.streamURL);
-    //PlayerEmp.Execute('SetDisplayArea', 0, 0, 960, 540);
-
-    //PlayerEmp.Execute('SetStreamID', 1, 1);
-    //PlayerEmp.Execute('SetInitialBufferSize', 1000*1024);
-    //PlayerEmp.Execute('StartPlayback');
-    /*sf.service.VideoPlayer.play({
-		url: Data.streamURL,
-		fullScreen: true
-	});*/
     letterbox = false;
     plugin.OnRenderingComplete = ScenePlayer.prototype.endOfStream;
     plugin.OnCurrentPlayTime = 'OSD.updateOSD';
@@ -46,14 +34,6 @@ ScenePlayer.prototype.handleShow = function() {
     oKeyMap.RETURN = 'Cancel';
     $("#svecKeyHelp_4JNF").sfKeyHelp(oKeyMap);
     $("#svecKeyHelp_4JNF").sfKeyHelp('show');
-    //$('#osd').show();
-    //document.getElementById("osd").style.display = "block";
-    //$('#osd').animate({'top' : 392},500,function(){
-    //if(Main.osd == 0)
-    //{
-    // document.getElementById("osd").style.display = "none";
-    //}
-    //});
 
     var nnaviPlugin = document.getElementById('pluginObjectNNavi');
     nnaviPlugin.SetBannerState(2);
