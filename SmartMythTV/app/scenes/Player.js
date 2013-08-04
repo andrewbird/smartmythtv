@@ -92,43 +92,106 @@ ScenePlayer.prototype.handleBlur = function() {};
 }*/
 
 ScenePlayer.prototype.endOfStream = function() {
-    plugin.Stop();
-    pstate = 0; // stopped
-    ScenePlayer.prototype.doHide();
+    this.Stop();
 };
 
 ScenePlayer.prototype.doHide = function() {
-    OSD.hideOSD();
-    pluginAPI.setOnScreenSaver();
     sf.scene.hide('Player');
     sf.scene.show(Data.mainScene);
     sf.scene.focus(Data.mainScene);
 };
 
+ScenePlayer.prototype.JumpBackward = function(jump) {
+    if (pstate == 1) {          // playing
+        if(this.Pause()){
+            if(plugin.JumpBackward(jump)){
+                OSD.showOSD((-jump*1000) + 3000);
+            }
+            return this.Play();
+        }
+        return false;
+    } else if (pstate == 2) {   // paused
+        if(plugin.JumpBackward(jump)){
+            OSD.showOSD((-jump*1000) + 3000);
+            return true;
+        }
+        return false;
+    }
+    return false;
+};
+
+ScenePlayer.prototype.JumpForward = function(jump) {
+    if (pstate == 1) {          // playing
+        if(this.Pause()){
+            if(plugin.JumpForward(jump)){
+                OSD.showOSD((jump*1000) + 3000);
+            }
+            return this.Play();
+        }
+        return false;
+    } else if (pstate == 2) {   // paused
+        if(plugin.JumpForward(jump)){
+            OSD.showOSD((jump*1000) + 3000);
+            return true;
+        }
+        return false;
+    }
+    return false;
+};
+
+ScenePlayer.prototype.Pause = function() {
+    if(plugin.Pause()) {
+        pstate = 2;
+        OSD.showOSD(3000);
+        pluginAPI.setOnScreenSaver();
+        return true;
+    }
+    return false;
+};
+
+ScenePlayer.prototype.Play = function() {
+    if(plugin.Resume()) {
+        pstate = 1; // playing
+        OSD.showOSD(3000);
+        pluginAPI.setOffScreenSaver();
+        return true;
+    }
+    return false;
+};
+
+ScenePlayer.prototype.Stop = function() {
+    if(plugin.Stop()) {
+        pstate = 0; // stopped
+        OSD.hideOSD();
+        pluginAPI.setOnScreenSaver();
+        this.doHide();
+        return true;
+    }
+    return false;
+};
+
+ScenePlayer.prototype.Toggle = function() {
+    if (pstate == 1) {        // playing
+        return this.Pause();
+    } else if (pstate == 2) { // paused
+        return this.Play();
+    }
+    return false;
+};
+
 ScenePlayer.prototype.handleKeyDown = function(keyCode) {
     switch (keyCode) {
         case sf.key.PAUSE:
-            if(plugin.Pause()) {
-                pstate = 2; // paused
-                OSD.showOSD(3000);
-                pluginAPI.setOnScreenSaver();
-            }
+            this.Pause();
             break;
 
         case sf.key.PLAY:
-            if(plugin.Resume()) {
-                pstate = 1; // playing
-                OSD.showOSD(3000);
-                pluginAPI.setOffScreenSaver();
-            }
+            this.Play();
             break;
 
         case sf.key.RETURN:
             sf.key.preventDefault();
-            if(plugin.Stop()) {
-                pstate = 0; // stopped
-                ScenePlayer.prototype.doHide();
-            }
+            this.Stop();
             break;
 
         case tvKey.KEY_RETURN:
@@ -136,101 +199,41 @@ ScenePlayer.prototype.handleKeyDown = function(keyCode) {
             widgetAPI.blockNavigation(keyCode);
             /* fall through */
         case sf.key.STOP:
-            if(plugin.Stop()) {
-                pstate = 0; // stopped
-                //plugin.ClearScreen();
-                ScenePlayer.prototype.doHide();
-            }
+            this.Stop();
             break;
 
         case sf.key.REW:
-            if(plugin.Pause()){
-                pstate = 2; // paused
-                if(plugin.JumpBackward(5)){
-                    OSD.showOSD(-5000 + 3000);
-                }
-                if(plugin.Resume()){
-                    pstate = 1; // playing
-                }
-            }
+            // Jump back 5 secs
+            this.JumpBackward(5);
             break;
 
         case sf.key.FF:
-            if(plugin.Pause()){
-                pstate = 2; // paused
-                if(plugin.JumpForward(5)){
-                    OSD.showOSD(5000 + 3000);
-                }
-                if(plugin.Resume()){
-                    pstate = 1; // playing
-                }
-            }
+            // Jump forward 5 secs
+            this.JumpForward(5);
             break;
 
         case sf.key.DOWN:
             // Jump back 5 mins
-            if(plugin.Pause()){
-                pstate = 2; // paused
-                if(plugin.JumpBackward(300)){
-                    OSD.showOSD(-300000 + 3000);
-                }
-                if(plugin.Resume()) {
-                    pstate = 1; // playing
-                }
-            }
+            this.JumpBackward(300);
             break;
 
         case sf.key.UP:
             // Jump forward 5 mins
-            if(plugin.Pause()){
-                pstate = 2; // paused
-                if(plugin.JumpForward(300)) {
-                    OSD.showOSD(300000 + 3000);
-                }
-                if(plugin.Resume()) {
-                    pstate = 1; // playing
-                }
-            }
+            this.JumpForward(300);
             break;
 
         case sf.key.LEFT:
-            if(plugin.Pause()){
-                pstate = 2; // paused
-                if(plugin.JumpBackward(30)) {
-                    OSD.showOSD(-30000 + 3000);
-                }
-                if(plugin.Resume()) {
-                    pstate = 1; // playing
-                }
-            }
+            // Jump back 30 secs
+            this.JumpBackward(30);
             break;
 
         case sf.key.RIGHT:
-            if(plugin.Pause()) {
-                pstate = 2; // paused
-                if(plugin.JumpForward(60)) {
-                    OSD.showOSD(60000 + 3000);
-                }
-                if(plugin.Resume()) {
-                    pstate = 1; // playing
-                }
-            }
+            // Jump forward 60 secs
+            this.JumpForward(60);
             break;
 
         case sf.key.ENTER:
-            if (pstate == 1) { // playing
-                if (plugin.Pause()) {
-                    pstate = 2; // paused
-                    OSD.showOSD(3000);
-                    pluginAPI.setOnScreenSaver();
-                }
-            } else if (pstate == 2) { // paused
-                if(plugin.Resume()) {
-                    pstate = 1; // playing
-                    OSD.showOSD(3000);
-                    pluginAPI.setOffScreenSaver();
-                }
-            }
+            this.Toggle();
             break;
 
         case tvKey.KEY_VOL_UP:
