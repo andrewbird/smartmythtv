@@ -1,15 +1,20 @@
 var osdtimeout = 0;
+var osdtimer = null;
+var osdautohide = true;
 var currenttime = 0;
 var totaltime = 1;
 var frontPanel;
 var mediatitle = "default";
+var isPlaying = null;
 
 function OSD() {}
 
-OSD.initOSD = function(total) {
-    totaltime = total;
-    totalmins = Math.floor(totaltime / (1000 * 60));
+OSD.initOSD = function(msecs, isPlayingCallback) {
+    totaltime = parseInt(msecs) / 1000;
+    totalmins = Math.floor(totaltime / 60);
     frontPanel = document.getElementById("frontPanel");
+    osdautohide = true;
+    isPlaying = isPlayingCallback;
 };
 
 OSD.setTitleOSD = function(title) {
@@ -30,7 +35,7 @@ OSD.draw = function() {
     }
 */
 
-    var currentmins = Math.floor(currenttime / (1000 * 60));
+    var currentmins = Math.floor(currenttime / 60);
 
     var otext = mediatitle + " [ " + currentmins + " / " + totalmins + " mins ]";
 
@@ -38,23 +43,49 @@ OSD.draw = function() {
 };
 
 
-OSD.updateOSD = function(msecs) {
-    currenttime = msecs;
+OSD.onCurrentPlayTime = function(msecs) {
+    // the emulator value is incorrect when not playing
+    if(isPlaying && isPlaying()) {
+        currenttime = parseInt(msecs) / 1000;
+    }
+};
 
-//    alert(currenttime);
 
+OSD.adjustCurrentPlayTime = function(secs) {
+    currenttime = currenttime + secs;
+};
+
+
+OSD.onTimerTick = function() {
     var obj = $('#osd');
     if(!obj.is(':visible')) {
         return;
     }
 
-    if (currenttime > osdtimeout) {
+    var now = new Date().getTime();
+    if ((now > osdtimeout) && osdautohide) {
         OSD.hideOSD();
         return;
     }
 
     OSD.draw();
 };
+
+
+OSD.startOSD = function() {
+    osdtimer = setInterval(OSD.onTimerTick, 1000);
+};
+
+
+OSD.stopOSD = function() {
+    clearInterval(osdtimer);
+};
+
+
+OSD.autohide = function(flag) {
+    osdautohide = flag;
+};
+
 
 OSD.hideOSD = function() {
     var obj = $('#osd');
@@ -68,7 +99,11 @@ OSD.hideOSD = function() {
     }
 };
 
-OSD.showOSD = function(timeout) {
+
+OSD.showOSD = function() {
+    var now = new Date().getTime();
+    osdtimeout = now + 3000;
+
     var obj = $('#osd');
     if(!obj.is(':visible')) {
         obj.show();
@@ -79,9 +114,8 @@ OSD.showOSD = function(timeout) {
             OSD.draw();
         });
     }
-
-    osdtimeout = currenttime + timeout;
 };
+
 
 OSD.toHHMMSS = function(sec_numb) {
     var hours = Math.floor(sec_numb / 3600);

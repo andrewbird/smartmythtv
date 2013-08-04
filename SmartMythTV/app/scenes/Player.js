@@ -16,13 +16,12 @@ ScenePlayer.prototype.handleShow = function() {
     plugin.SetDisplayArea(0, 0, 960, 540);
     letterbox = false;
     plugin.OnRenderingComplete = ScenePlayer.prototype.endOfStream;
-    plugin.OnCurrentPlayTime = 'OSD.updateOSD';
+    plugin.OnCurrentPlayTime = OSD.onCurrentPlayTime;
     plugin.OnStreamInfoReady = 'ScenePlayer.prototype.getDuration';
     //plugin.SetTotalBufferSize(20*1024);
     //plugin.SetInitialBuffer(10*1024);
     //plugin.SetPendingBuffer(10*1024);
     pluginAPI.setOffScreenSaver();
-    OSD.setTitleOSD(Data.currentRecording.Title);
     plugin.StartPlayback();
     pstate = 1; // playing
 
@@ -48,7 +47,9 @@ ScenePlayer.prototype.handleShow = function() {
 };
 
 ScenePlayer.prototype.getDuration = function() {
-    OSD.initOSD(plugin.GetDuration());
+    OSD.initOSD(plugin.GetDuration(), this.IsPlaying);
+    OSD.setTitleOSD(Data.currentRecording.Title);
+    OSD.startOSD();
 };
 
 ScenePlayer.prototype.handleHide = function() {
@@ -101,18 +102,23 @@ ScenePlayer.prototype.doHide = function() {
     sf.scene.focus(Data.mainScene);
 };
 
+ScenePlayer.prototype.IsPlaying = function() {
+    return (pstate == 1);
+};
+
 ScenePlayer.prototype.JumpBackward = function(jump) {
     if (pstate == 1) {          // playing
         if(this.Pause()){
             if(plugin.JumpBackward(jump)){
-                OSD.showOSD((-jump*1000) + 3000);
+                OSD.showOSD();
             }
             return this.Play();
         }
         return false;
     } else if (pstate == 2) {   // paused
         if(plugin.JumpBackward(jump)){
-            OSD.showOSD((-jump*1000) + 3000);
+            OSD.adjustCurrentPlayTime((-jump));
+            OSD.showOSD();
             return true;
         }
         return false;
@@ -124,14 +130,15 @@ ScenePlayer.prototype.JumpForward = function(jump) {
     if (pstate == 1) {          // playing
         if(this.Pause()){
             if(plugin.JumpForward(jump)){
-                OSD.showOSD((jump*1000) + 3000);
+                OSD.showOSD();
             }
             return this.Play();
         }
         return false;
     } else if (pstate == 2) {   // paused
         if(plugin.JumpForward(jump)){
-            OSD.showOSD((jump*1000) + 3000);
+            OSD.adjustCurrentPlayTime(jump);
+            OSD.showOSD();
             return true;
         }
         return false;
@@ -142,7 +149,8 @@ ScenePlayer.prototype.JumpForward = function(jump) {
 ScenePlayer.prototype.Pause = function() {
     if(plugin.Pause()) {
         pstate = 2;
-        OSD.showOSD(3000);
+        OSD.showOSD();
+        OSD.autohide(false);
         pluginAPI.setOnScreenSaver();
         return true;
     }
@@ -152,7 +160,8 @@ ScenePlayer.prototype.Pause = function() {
 ScenePlayer.prototype.Play = function() {
     if(plugin.Resume()) {
         pstate = 1; // playing
-        OSD.showOSD(3000);
+        OSD.showOSD();
+        OSD.autohide(true);
         pluginAPI.setOffScreenSaver();
         return true;
     }
@@ -163,6 +172,7 @@ ScenePlayer.prototype.Stop = function() {
     if(plugin.Stop()) {
         pstate = 0; // stopped
         OSD.hideOSD();
+        OSD.stopOSD();
         pluginAPI.setOnScreenSaver();
         this.doHide();
         return true;
