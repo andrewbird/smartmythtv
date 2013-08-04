@@ -39,7 +39,7 @@ OSD.draw = function() {
 
     var otext = mediatitle + " [ " + currentmins + " / " + totalmins + " mins ]";
 
-    $('#osd_time_info').sfLabel({text: otext});
+    $('#osd_time_info').sfLabel({'text': otext});
 };
 
 
@@ -52,7 +52,12 @@ OSD.onCurrentPlayTime = function(msecs) {
 
 
 OSD.adjustCurrentPlayTime = function(secs) {
-    currenttime = currenttime + secs;
+    var ntime = currenttime + secs;
+    if(ntime < 0) {
+        currenttime = 0;
+    } else if(ntime <= totaltime) {
+        currenttime = ntime;
+    }
 };
 
 
