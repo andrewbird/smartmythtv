@@ -14,6 +14,24 @@ ServiceAPI.onError = function() {
 };
 
 
+ServiceAPI.getDate = function(inTime) {
+    //<StartTime>2012-09-25T09:00:00Z</StartTime>
+    return new Date(inTime);
+};
+
+
+ServiceAPI.showDate = function(date) {
+    return date.toLocaleString();
+};
+
+
+ServiceAPI.readableBytes = function(bytes) {
+    var s = ['bytes', 'kb', 'MB', 'GB', 'TB', 'PB'];
+    var e = Math.floor(Math.log(bytes) / Math.log(1024));
+    return (bytes / Math.pow(1024, Math.floor(e))).toFixed(2) + " " + s[e];
+};
+
+
 ServiceAPI.loadRecordings = function() {
     $.ajax({
         url: "http://" + Data.URL + ":6544/Dvr/GetRecordedList?Descending=true",
@@ -55,82 +73,6 @@ ServiceAPI.receiveRecordings = function(data, textStatus, jqXHR) {
 };
 
 
-ServiceAPI.loadVideos = function() {
-    $.ajax({
-        url: "http://" + Data.URL + ":6544/Video/GetVideoList?Descending=true",
-        type: "GET",
-        beforeSend: function(xhr){xhr.setRequestHeader('Accept', 'application/json');},
-        success: ServiceAPI.receiveVideos,
-        error: ServiceAPI.onFailed
-    });
-};
-
-ServiceAPI.receiveVideos = function(data, textStatus, jqXHR) {
-    var elements = $.parseJSON(jqXHR.responseText);
-    var list = elements.VideoMetadataInfoList;
-
-    Data.VideoTitles = [];
-    var index = 0;
-    for (var i in list.VideoMetadataInfos) {
-        Data.VideoTitles[index] = list.VideoMetadataInfos[i].Title;
-        var v = new Object();
-        Data.Videos[index] = v;
-        v.Title = list.VideoMetadataInfos[i].Title;
-        v.SubTitle = list.VideoMetadataInfos[i].SubTitle;
-        v.Description = list.VideoMetadataInfos[i].Description;
-        if (list.VideoMetadataInfos[i].Artwork && list.VideoMetadataInfos[i].Artwork.ArtworkInfos.length > 0) {
-            for (var j in list.VideoMetadataInfos[i].Artwork.ArtworkInfos) {
-                if (list.VideoMetadataInfos[i].Artwork.ArtworkInfos[j].Type == "coverart") {
-                    v.coverart = list.VideoMetadataInfos[i].Artwork.ArtworkInfos[j].URL;
-                }
-                if (list.VideoMetadataInfos[i].Artwork.ArtworkInfos[j].Type == "fanart") {
-                    v.fanart = list.VideoMetadataInfos[i].Artwork.ArtworkInfos[j].URL;
-                }
-            }
-        }
-        v.Id = list.VideoMetadataInfos[i].Id;
-        v.length = list.VideoMetadataInfos[i].Length;
-        index++;
-    }
-    Data.loaded = index;
-    Data.maxVideos = list.Count;
-    $('#svecListbox_BOUK').sfList({
-        data: Data.Titles,
-        index: 0
-    });
-    $('#svecLoadingImage_RBMO').sfLoading('hide');
-    widgetAPI.putInnerHTML(document.getElementById("description"), Data.Videos[$('#svecListbox_BOVI').sfList('getIndex')].Description.replace(/\n/g, '<br>'));
-
-    Data.loadedVideos = 1;
-    ServiceAPI.onReceived();
-};
-
-ServiceAPI.deleteVideo = function(video) {
-    XHRObj = new XMLHttpRequest();
-    //XHRObj.onreadystatechange = function() {
-    //	XHRObj.destroy();
-    //};
-    XHRObj.open("POST", "http://" + Data.URL + ':6544/Video/RemoveVideoFromDB', true);
-    XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    XHRObj.send('Id=' + video.Id);
-    ServiceAPI.onDeleteCurrent();
-};
-
-ServiceAPI.getDate = function(inTime) {
-    //<StartTime>2012-09-25T09:00:00Z</StartTime>
-    return new Date(inTime);
-};
-
-ServiceAPI.showDate = function(date) {
-    return date.toLocaleString();
-};
-
-ServiceAPI.readableBytes = function(bytes) {
-    var s = ['bytes', 'kb', 'MB', 'GB', 'TB', 'PB'];
-    var e = Math.floor(Math.log(bytes) / Math.log(1024));
-    return (bytes / Math.pow(1024, Math.floor(e))).toFixed(2) + " " + s[e];
-};
-
 ServiceAPI.deleteRecording = function(recording) {
     XHRObj = new XMLHttpRequest();
     //XHRObj.onreadystatechange = function() {
@@ -142,26 +84,6 @@ ServiceAPI.deleteRecording = function(recording) {
     ServiceAPI.onDeleteCurrent();
 };
 
-ServiceAPI.changeRecordSchedule = function(recording) {
-    XHRObj = new XMLHttpRequest();
-    //XHRObj.onreadystatechange = function() {
-    //	XHRObj.destroy();
-    //};
-    alert("change Record Schedule " + recording.RecordId);
-    if (recording.Status == -1) {
-        //Current active, need to disable
-        XHRObj.open("POST", "http://" + Data.URL + ':6544/Dvr/DisableRecordSchedule', true);
-        XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        XHRObj.send('RecordId=' + recording.RecordId);
-    } else if (recording.Status == 10) {
-        //Current inactive, need to enable
-        XHRObj.open("POST", "http://" + Data.URL + ':6544/Dvr/EnableRecordSchedule', true);
-        XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        XHRObj.send('RecordId=' + recording.RecordId);
-    }
-
-    ServiceAPI.onDeleteCurrent();
-};
 
 ServiceAPI.loadGroups = function() {
     $.ajax({
@@ -172,6 +94,7 @@ ServiceAPI.loadGroups = function() {
         error: ServiceAPI.onFailed
     });
 };
+
 
 ServiceAPI.receiveGroups = function(data, textStatus, jqXHR) {
     var elements = $.parseJSON(jqXHR.responseText);
@@ -280,6 +203,29 @@ ServiceAPI.receiveUpcoming = function(data, textStatus, jqXHR) {
     ServiceAPI.onReceived();
 };
 
+
+ServiceAPI.changeRecordSchedule = function(recording) {
+    XHRObj = new XMLHttpRequest();
+    //XHRObj.onreadystatechange = function() {
+    //	XHRObj.destroy();
+    //};
+    alert("change Record Schedule " + recording.RecordId);
+    if (recording.Status == -1) {
+        //Current active, need to disable
+        XHRObj.open("POST", "http://" + Data.URL + ':6544/Dvr/DisableRecordSchedule', true);
+        XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        XHRObj.send('RecordId=' + recording.RecordId);
+    } else if (recording.Status == 10) {
+        //Current inactive, need to enable
+        XHRObj.open("POST", "http://" + Data.URL + ':6544/Dvr/EnableRecordSchedule', true);
+        XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        XHRObj.send('RecordId=' + recording.RecordId);
+    }
+
+    ServiceAPI.onDeleteCurrent();
+};
+
+
 /**
  * borrowed from http://subversion.assembla.com/svn/legend/mythtv/transcode-br/bindings/perl/MythTV.pm
 And the recstatus types
@@ -304,3 +250,67 @@ our $recstatus_repeat            =   9 ;
 our $recstatus_inactive          =  10 ;
 our $recstatus_neverrecord       =  11 ;
 */
+
+
+ServiceAPI.loadVideos = function() {
+    $.ajax({
+        url: "http://" + Data.URL + ":6544/Video/GetVideoList?Descending=true",
+        type: "GET",
+        beforeSend: function(xhr){xhr.setRequestHeader('Accept', 'application/json');},
+        success: ServiceAPI.receiveVideos,
+        error: ServiceAPI.onFailed
+    });
+};
+
+ServiceAPI.receiveVideos = function(data, textStatus, jqXHR) {
+    var elements = $.parseJSON(jqXHR.responseText);
+    var list = elements.VideoMetadataInfoList;
+
+    Data.VideoTitles = [];
+    var index = 0;
+    for (var i in list.VideoMetadataInfos) {
+        Data.VideoTitles[index] = list.VideoMetadataInfos[i].Title;
+        var v = new Object();
+        Data.Videos[index] = v;
+        v.Title = list.VideoMetadataInfos[i].Title;
+        v.SubTitle = list.VideoMetadataInfos[i].SubTitle;
+        v.Description = list.VideoMetadataInfos[i].Description;
+        if (list.VideoMetadataInfos[i].Artwork && list.VideoMetadataInfos[i].Artwork.ArtworkInfos.length > 0) {
+            for (var j in list.VideoMetadataInfos[i].Artwork.ArtworkInfos) {
+                if (list.VideoMetadataInfos[i].Artwork.ArtworkInfos[j].Type == "coverart") {
+                    v.coverart = list.VideoMetadataInfos[i].Artwork.ArtworkInfos[j].URL;
+                }
+                if (list.VideoMetadataInfos[i].Artwork.ArtworkInfos[j].Type == "fanart") {
+                    v.fanart = list.VideoMetadataInfos[i].Artwork.ArtworkInfos[j].URL;
+                }
+            }
+        }
+        v.Id = list.VideoMetadataInfos[i].Id;
+        v.length = list.VideoMetadataInfos[i].Length;
+        index++;
+    }
+    Data.loaded = index;
+    Data.maxVideos = list.Count;
+    $('#svecListbox_BOUK').sfList({
+        data: Data.Titles,
+        index: 0
+    });
+    $('#svecLoadingImage_RBMO').sfLoading('hide');
+    widgetAPI.putInnerHTML(document.getElementById("description"), Data.Videos[$('#svecListbox_BOVI').sfList('getIndex')].Description.replace(/\n/g, '<br>'));
+
+    Data.loadedVideos = 1;
+    ServiceAPI.onReceived();
+};
+
+ServiceAPI.deleteVideo = function(video) {
+    XHRObj = new XMLHttpRequest();
+    //XHRObj.onreadystatechange = function() {
+    //	XHRObj.destroy();
+    //};
+    XHRObj.open("POST", "http://" + Data.URL + ':6544/Video/RemoveVideoFromDB', true);
+    XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    XHRObj.send('Id=' + video.Id);
+    ServiceAPI.onDeleteCurrent();
+};
+
+
