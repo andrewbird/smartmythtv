@@ -133,7 +133,7 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
         case 108: //RED
             var ttext = 'Do you really want to delete ' + Data.Titles[$('#svecListbox_BOUK').sfList('getIndex')] + '?';
             $('#svecPopup_ok_cancel_0AM7').sfPopup({
-                text: ttext,
+                'text': ttext,
                 buttons: ['Yes', 'No'],
                 callback: function(rlt) {
                     if (rlt == 0) {

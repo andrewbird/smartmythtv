@@ -144,7 +144,7 @@ SceneUpcoming.prototype.handleKeyDown = function(keyCode) {
                 break;
             }
             $('#svecPopup_ok_cancel_0AM8').sfPopup({
-                text: question + Data.UpcomingList[$('#svecListbox_N9NK').sfList(
+                'text': question + Data.UpcomingList[$('#svecListbox_N9NK').sfList(
                     'getIndex')] + '?',
                 buttons: ['Yes', 'No'],
                 callback: function(rlt) {

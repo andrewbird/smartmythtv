@@ -18,7 +18,7 @@ SceneSettings.prototype.initialize = function() {
         text: 'Cancel'
     });
     $('#svecLabel_RTUS').sfLabel({
-        text: 'Please enter IP to mythweb and mythbackend (e.g. 192.168.1.99)<br>' + 'Use TTX/MIX or the GREEN key for . and the RED key to delete.'
+        'text': 'Please enter IP to mythweb and mythbackend (e.g. 192.168.1.99)<br>' + 'Use TTX/MIX or the GREEN key for . and the RED key to delete.'
     });
     $('#svecCheckBox_Groups').sfCheckBox();
     if (Data.startGroups) {

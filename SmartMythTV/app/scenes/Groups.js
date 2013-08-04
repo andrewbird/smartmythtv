@@ -198,7 +198,7 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
             case sf.key.RED:
                 // Delete the selected item
                 $('#svecPopup_ok_cancel_GAM7').sfPopup({
-                    text: 'Do you really want to delete ' + SceneGroups.prototype.getRecording().Title + '?',
+                    'text': 'Do you really want to delete ' + SceneGroups.prototype.getRecording().Title + '?',
                     buttons: ['Yes', 'No'],
                     callback: function(rlt) {
                         if (rlt == 0) {
@@ -224,7 +224,7 @@ SceneGroups.prototype.Level0 = function() {
     $('#svecListbox_GOUK').sfList('clear');
     $('#svecListbox_GOUK').sfList({
         data: Data.GroupsList,
-        index: groupid
+        'index': groupid
     });
     $('#svecListbox_GOUK').sfList('focus');
     level = 0;
@@ -239,7 +239,7 @@ SceneGroups.prototype.Level1 = function() {
     $('#svecListbox_GOUK').sfList('clear');
     $('#svecListbox_GOUK').sfList({
         data: Data.GroupsGroupTitles[groupid],
-        index: itemid
+        'index': itemid
     });
     $('#svecListbox_GOUK').sfList('move', 0);
     $('#svecListbox_GOUK').sfList('focus');

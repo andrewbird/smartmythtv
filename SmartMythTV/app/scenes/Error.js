@@ -21,7 +21,7 @@ SceneError.prototype.initialize = function() {
         text: 'Error'
     });
     $('#svecLabel_PLYI').sfLabel({
-        text: 'There has been an error contacting the MythTV Backend server<br>' + 'Please check the server is running.<p>Server IP: ' + Data.URL + '<p><p>' + 'For further assistance please see http://sourceforge.net/p/smartmythtv<p>' + 'Please check your settings, or retry the connection<br>'
+        'text': 'There has been an error contacting the MythTV Backend server<br>' + 'Please check the server is running.<p>Server IP: ' + Data.URL + '<p><p>' + 'For further assistance please see http://sourceforge.net/p/smartmythtv<p>' + 'Please check your settings, or retry the connection<br>'
     });
 };
 

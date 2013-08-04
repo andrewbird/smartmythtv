@@ -148,7 +148,7 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
             Data.currentVideo = SceneVideos.prototype.getVideo();
             var ttext = 'Do you really want to delete ' + Data.currentVideo.Title + '?';
             $('#svecPopup_ok_cancel_0AVI').sfPopup({
-                text: ttext,
+                'text': ttext,
                 buttons: ['Yes', 'No'],
                 callback: function(rlt) {
                     if (rlt == 0) {
