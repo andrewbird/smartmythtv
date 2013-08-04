@@ -18,10 +18,7 @@ var Data = {
     loadedVideos: 0,
     max: 0,
     maxVideos: 0,
-    currentTitle: "",
-    currentRecording: 0,
-    currentVideo: 0,
-    streamURL: "",
+    currentStream: 0,
     startGroups: 0,
     mainScene: ""
 };

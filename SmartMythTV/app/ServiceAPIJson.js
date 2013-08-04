@@ -31,6 +31,17 @@ ServiceAPI.readableBytes = function(bytes) {
 };
 
 
+ServiceAPI.getStreamUrl = function(item) {
+    if(item.StartTime) {
+        return "http://" + Data.URL + ":6544/Content/GetRecording" +
+            "?ChanId=" + item.ChanId +
+            "&StartTime=" + item.StartTime;
+    } else {
+        return "http://" + Data.URL + ":6544/Content/GetVideo?Id=" + item.Id;
+    }
+};
+
+
 ServiceAPI.loadRecordings = function() {
     $.ajax({
         url: "http://" + Data.URL + ":6544/Dvr/GetRecordedList?Descending=true",
@@ -55,6 +66,7 @@ ServiceAPI.receiveRecordings = function(data, textStatus, jqXHR) {
         r.StartTime = list.Programs[i].Recording.StartTs;
         r.ChanId = list.Programs[i].Channel.ChanId;
         r.Title = list.Programs[i].Title;
+        r.SubTitle = list.Programs[i].SubTitle;
         r.ChannelName = list.Programs[i].Channel.ChannelName;
         index++;
     }

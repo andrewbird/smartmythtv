@@ -12,7 +12,7 @@ ScenePlayer.prototype.initialize = function() {};
 
 ScenePlayer.prototype.handleShow = function() {
     plugin = document.getElementById("pluginPlayer");
-    plugin.InitPlayer(Data.streamURL);
+    plugin.InitPlayer(ServiceAPI.getStreamUrl(Data.currentStream));
     plugin.SetDisplayArea(0, 0, 960, 540);
     letterbox = false;
     plugin.OnRenderingComplete = 'ScenePlayer.prototype.endOfStream';
@@ -48,7 +48,7 @@ ScenePlayer.prototype.handleShow = function() {
 
 ScenePlayer.prototype.getDuration = function() {
     OSD.initOSD(plugin.GetDuration(), this.IsPlaying);
-    OSD.setTitleOSD(Data.currentRecording.Title);
+    OSD.setTitleOSD(Data.currentStream.Title);
     OSD.startOSD();
 };
 
@@ -259,14 +259,18 @@ ScenePlayer.prototype.handleKeyDown = function(keyCode) {
             break;
 
         case tvKey.KEY_RED:
-            var ttext = 'Do you really want to delete ' + Data.currentTitle + '?';
+            var item = Data.currentStream;
             $('#svecPopup_ok_cancel_PLAY').sfPopup({
-                'text': ttext,
-                'buttons': ['Yes', 'No'],
-                'callback': function(rlt) {
+                'text': 'Do you really want to delete ' + item.Title + '<BR/>' + item.SubTitle + '?',
+                buttons: ['Yes', 'No'],
+                callback: function(rlt) {
                     if (rlt == 0) {
                         this.Stop();
-                        ServiceAPI.deleteRecording(Data.currentRecording);
+                        if(item.StartTime) {
+                            ServiceAPI.deleteRecording(item);
+                        } else {
+                            ServiceAPI.deleteVideo(item);
+                        }
                     }
                 }
             });

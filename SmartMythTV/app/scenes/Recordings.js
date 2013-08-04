@@ -121,9 +121,7 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
             }
             break;
         case sf.key.ENTER:
-            Data.currentTitle = Data.Titles[$('#svecListbox_BOUK').sfList('getIndex')];
-            Data.currentRecording = SceneRecordings.prototype.getRecording();
-            Data.streamURL = "http://" + Data.URL + ":6544/Content/GetRecording?ChanId=" + Data.currentRecording.ChanId + "&StartTime=" + Data.currentRecording.StartTime;
+            Data.currentStream = SceneRecordings.prototype.getRecording();
             sf.scene.hide('Recordings');
             sf.scene.show('Player', {
                 parent: "Recordings"
@@ -131,14 +129,14 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
             sf.scene.focus('Player');
             break;
         case 108: //RED
-            var ttext = 'Do you really want to delete ' + Data.Titles[$('#svecListbox_BOUK').sfList('getIndex')] + '?';
+            var item = SceneRecordings.prototype.getRecording();
             $('#svecPopup_ok_cancel_0AM7').sfPopup({
-                'text': ttext,
+                'text': 'Do you really want to delete ' + item.Title + '<BR/>' + item.SubTitle + '?',
                 buttons: ['Yes', 'No'],
                 callback: function(rlt) {
                     if (rlt == 0) {
                         $('#svecLoadingImage_RBMO').sfLoading('show');
-                        ServiceAPI.deleteRecording(SceneRecordings.prototype.getRecording());
+                        ServiceAPI.deleteRecording(item);
                         $('#svecLoadingImage_RBMO').sfLoading('hide');
                     }
                 }

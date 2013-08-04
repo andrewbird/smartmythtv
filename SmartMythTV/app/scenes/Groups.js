@@ -185,9 +185,7 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
             case sf.key.ENTER:
             case sf.key.PLAY:
                 // Play the selected item
-                Data.currentRecording = SceneGroups.prototype.getRecording();
-                Data.currentTitle = Data.currentRecording.Title;
-                Data.streamURL = "http://" + Data.URL + ":6544/Content/GetRecording?ChanId=" + Data.currentRecording.ChanId + "&StartTime=" + Data.currentRecording.StartTime;
+                Data.currentStream = SceneGroups.prototype.getRecording();
                 sf.scene.hide('Groups');
                 sf.scene.show('Player', {
                     parent: "Groups"
@@ -197,15 +195,14 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
 
             case sf.key.RED:
                 // Delete the selected item
+                var item = SceneGroups.prototype.getRecording();
                 $('#svecPopup_ok_cancel_GAM7').sfPopup({
-                    'text': 'Do you really want to delete ' + SceneGroups.prototype.getRecording().Title + '?',
+                    'text': 'Do you really want to delete ' + item.Title + '<BR/>' + item.SubTitle + '?',
                     buttons: ['Yes', 'No'],
                     callback: function(rlt) {
                         if (rlt == 0) {
                             $('#svecLoadingImage_GBMO').sfLoading('show');
-                            ServiceAPI
-                                .deleteRecording(SceneGroups.prototype
-                                    .getRecording());
+                            ServiceAPI.deleteRecording(item);
                             $('#svecLoadingImage_GBMO').sfLoading('hide');
 
                         }
@@ -214,7 +211,6 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
                 $('#svecPopup_ok_cancel_GAM7').sfPopup('show');
                 $('#svecPopup_ok_cancel_GAM7').sfPopup('focus');
                 break;
-
         }
     }
 
@@ -277,9 +273,7 @@ SceneGroups.prototype.showDescription = function() {
 };
 
 // Find the current Recording
-
 SceneGroups.prototype.getRecording = function() {
-
     var item = $('#svecListbox_GOUK').sfList('getIndex');
     var fileName = Data.GroupsRecordings[groupid][item].FileName;
     alert("GetRecording returning groupid=" + groupid + " item=" + item + " Filename=" + fileName);
@@ -300,7 +294,6 @@ SceneGroups.prototype.removeCurrentRecording = function() {
         }
         SceneGroups.prototype.Level0();
     } else {
-
         // Just remove the item from the level 1 list
         Data.GroupsGroupTitles[groupid].splice(itemid, 1);
         Data.GroupsGroupCount[groupid]--;
@@ -308,5 +301,4 @@ SceneGroups.prototype.removeCurrentRecording = function() {
         SceneGroups.prototype.Level1();
         itemid--;
     }
-
 };

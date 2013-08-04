@@ -136,8 +136,7 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
             SceneVideos.prototype.showDescription();
             break;
         case sf.key.ENTER:
-            Data.currentVideo = SceneVideos.prototype.getVideo();
-            Data.streamURL = "http://" + Data.URL + ":6544/Content/GetVideo?Id=" + Data.currentVideo.Id;
+            Data.currentStream = SceneVideos.prototype.getVideo();
             sf.scene.hide('Videos');
             sf.scene.show('Player', {
                 parent: "Videos"
@@ -145,15 +144,14 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
             sf.scene.focus('Player');
             break;
         case 108: // RED
-            Data.currentVideo = SceneVideos.prototype.getVideo();
-            var ttext = 'Do you really want to delete ' + Data.currentVideo.Title + '?';
+            var item = SceneVideos.prototype.getVideo();
             $('#svecPopup_ok_cancel_0AVI').sfPopup({
-                'text': ttext,
+                'text': 'Do you really want to delete ' + item.Title + '<BR/>' + item.SubTitle + '?',
                 buttons: ['Yes', 'No'],
                 callback: function(rlt) {
                     if (rlt == 0) {
                         $('#svecLoadingImage_RBMO').sfLoading('show');
-                        ServiceAPI.deleteVideo(Data.currentVideo);
+                        ServiceAPI.deleteVideo(item);
                         $('#svecLoadingImage_RBMO').sfLoading('hide');
                     }
                 }
