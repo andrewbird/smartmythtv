@@ -1,5 +1,4 @@
 var ServiceAPI = {
-    XHRObj: null,
     onReceived: null,
     onDeleteCurrent: null,
     onUpdateUpcoming: null,
@@ -74,14 +73,13 @@ ServiceAPI.receiveRecordings = function(data, textStatus, jqXHR) {
 
 
 ServiceAPI.deleteRecording = function(recording) {
-    XHRObj = new XMLHttpRequest();
-    //XHRObj.onreadystatechange = function() {
-    //	XHRObj.destroy();
-    //};
-    XHRObj.open("POST", "http://" + Data.URL + ':6544/Dvr/RemoveRecorded', true);
-    XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    XHRObj.send('ChanId=' + recording.ChanId + '&StartTime=' + recording.StartTime);
-    ServiceAPI.onDeleteCurrent();
+    $.ajax({
+        url: "http://" + Data.URL + ':6544/Dvr/RemoveRecorded',
+        type: "POST",
+        data: {ChanId: recording.ChanId, StartTime: recording.StartTime},
+        success: ServiceAPI.onDeleteCurrent,
+        error: ServiceAPI.onFailed
+    });
 };
 
 
@@ -205,24 +203,25 @@ ServiceAPI.receiveUpcoming = function(data, textStatus, jqXHR) {
 
 
 ServiceAPI.changeRecordSchedule = function(recording) {
-    XHRObj = new XMLHttpRequest();
-    //XHRObj.onreadystatechange = function() {
-    //	XHRObj.destroy();
-    //};
+    var url;
+
     alert("change Record Schedule " + recording.RecordId);
+
     if (recording.Status == -1) {
         //Current active, need to disable
-        XHRObj.open("POST", "http://" + Data.URL + ':6544/Dvr/DisableRecordSchedule', true);
-        XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        XHRObj.send('RecordId=' + recording.RecordId);
-    } else if (recording.Status == 10) {
+        url = "http://" + Data.URL + ':6544/Dvr/DisableRecordSchedule';
+    } else {
         //Current inactive, need to enable
-        XHRObj.open("POST", "http://" + Data.URL + ':6544/Dvr/EnableRecordSchedule', true);
-        XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        XHRObj.send('RecordId=' + recording.RecordId);
+        url = "http://" + Data.URL + ':6544/Dvr/EnableRecordSchedule';
     }
 
-    ServiceAPI.onDeleteCurrent();
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: {RecordId: recording.RecordId},
+        success: ServiceAPI.onDeleteCurrent,
+        error: ServiceAPI.onFailed
+    });
 };
 
 
@@ -303,14 +302,11 @@ ServiceAPI.receiveVideos = function(data, textStatus, jqXHR) {
 };
 
 ServiceAPI.deleteVideo = function(video) {
-    XHRObj = new XMLHttpRequest();
-    //XHRObj.onreadystatechange = function() {
-    //	XHRObj.destroy();
-    //};
-    XHRObj.open("POST", "http://" + Data.URL + ':6544/Video/RemoveVideoFromDB', true);
-    XHRObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    XHRObj.send('Id=' + video.Id);
-    ServiceAPI.onDeleteCurrent();
+    $.ajax({
+        url: "http://" + Data.URL + ':6544/Video/RemoveVideoFromDB',
+        type: "POST",
+        data: {Id: video.Id},
+        success: ServiceAPI.onDeleteCurrent,
+        error: ServiceAPI.onFailed
+    });
 };
-
-
