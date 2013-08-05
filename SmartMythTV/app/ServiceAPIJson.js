@@ -115,15 +115,12 @@ ServiceAPI.receiveGroups = function(data, textStatus, jqXHR) {
     Data.GroupsMemberTitles = [];
     Data.GroupsRecordings = [];
 
-    var index = 0;
     for (var i in elements.ProgramList.Programs) {
         var pos = Data.GroupsGroupTitles.indexOf(list.Programs[i].Title);
-        if (pos == -1) { //Not found
-            Data.GroupsGroupTitles[index] = list.Programs[i].Title;
-            Data.GroupsMemberTitles[index] = [];
-            Data.GroupsRecordings[index] = [];
-            pos = index;
-            index++;
+        if (pos == -1) { // Not found
+            pos = Data.GroupsGroupTitles.push(list.Programs[i].Title) - 1;
+            Data.GroupsMemberTitles.push([]);
+            Data.GroupsRecordings.push([]);
         }
 
         var info = list.Programs[i].SubTitle;
