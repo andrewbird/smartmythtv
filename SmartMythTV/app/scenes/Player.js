@@ -260,12 +260,13 @@ ScenePlayer.prototype.handleKeyDown = function(keyCode) {
 
         case tvKey.KEY_RED:
             var item = Data.currentStream;
+            var obj = this;
             $('#svecPopup_ok_cancel_PLAY').sfPopup({
                 'text': 'Do you really want to delete ' + item.Title + '<BR/>' + item.SubTitle + '?',
                 buttons: ['Yes', 'No'],
                 callback: function(rlt) {
                     if (rlt == 0) {
-                        this.Stop();
+                        obj.Stop();
                         if(item.StartTime) {
                             ServiceAPI.deleteRecording(item);
                         } else {
