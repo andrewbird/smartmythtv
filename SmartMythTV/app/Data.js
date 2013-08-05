@@ -3,7 +3,7 @@ var Data = {
     SMARTMYTHTVVERSION: "SmartMythTV 0.4.2",
     Titles: [],
     GroupsList: [],
-    GroupsGroupTitles: [],
+    GroupsMemberTitles: [],
     GroupsRecordings: [],
     UpcomingList: [],
     UpcomingDetail: [],

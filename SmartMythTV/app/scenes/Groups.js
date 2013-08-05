@@ -233,7 +233,7 @@ SceneGroups.prototype.Level1 = function() {
     alert("Going to groupid:" + groupid);
     $('#svecListbox_GOUK').sfList('clear');
     $('#svecListbox_GOUK').sfList({
-        data: Data.GroupsGroupTitles[groupid],
+        data: Data.GroupsMemberTitles[groupid],
         'index': itemid
     });
     $('#svecListbox_GOUK').sfList('move', 0);
@@ -280,10 +280,10 @@ SceneGroups.prototype.getRecording = function() {
 };
 
 SceneGroups.prototype.removeCurrentRecording = function() {
-    if (Data.GroupsGroupTitles[groupid].length == 1) {
+    if (Data.GroupsMemberTitles[groupid].length == 1) {
         // Last one in this group, so remove the group from level0
         Data.GroupsList.splice(groupid, 1);
-        Data.GroupsGroupTitles.splice(groupid, 1);
+        Data.GroupsMemberTitles.splice(groupid, 1);
         Data.GroupsRecordings.splice(groupid, 1);
         itemid = 0;
         if (groupid > 0) {
@@ -292,7 +292,7 @@ SceneGroups.prototype.removeCurrentRecording = function() {
         SceneGroups.prototype.Level0();
     } else {
         // Just remove the item from the level 1 list
-        Data.GroupsGroupTitles[groupid].splice(itemid, 1);
+        Data.GroupsMemberTitles[groupid].splice(itemid, 1);
         Data.GroupsRecordings[groupid].splice(itemid, 1);
         SceneGroups.prototype.Level1();
         itemid--;

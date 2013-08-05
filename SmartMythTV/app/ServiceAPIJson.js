@@ -112,15 +112,15 @@ ServiceAPI.receiveGroups = function(data, textStatus, jqXHR) {
     var list = elements.ProgramList;
 
     Data.GroupsList = [];
-    Data.GroupsGroupTitles = [];
+    Data.GroupsMemberTitles = [];
     Data.GroupsRecordings = [];
 
     var index = 0;
     for (var i in elements.ProgramList.Programs) {
         var pos = Data.GroupsList.indexOf(list.Programs[i].Title);
         if (pos == -1) { //Not found
-            Data.GroupsGroupTitles[index] = [];
             Data.GroupsList[index] = list.Programs[i].Title;
+            Data.GroupsMemberTitles[index] = [];
             Data.GroupsRecordings[index] = [];
             pos = index;
             index++;
@@ -130,7 +130,7 @@ ServiceAPI.receiveGroups = function(data, textStatus, jqXHR) {
         if (info == "") {
             info = ServiceAPI.showDate(ServiceAPI.getDate(list.Programs[i].StartTime));
         }
-        Data.GroupsGroupTitles[pos].push(info);
+        Data.GroupsMemberTitles[pos].push(info);
 
         var r = new Object();
         Data.GroupsRecordings[pos].push(r);
