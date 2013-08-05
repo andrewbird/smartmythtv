@@ -15,60 +15,64 @@ SceneGroups.prototype.initialize = function() {
         page: 0
     });
     if (Data.loadedGroups == 0) {
-        if (Data.URL == null) {
-            Data.URL = sf.core.localData("serverip");
-        }
-        $('#svecLoadingImage_GBMO').sfLoading('show');
-
-        ServiceAPI.onReceived = function() {
-            $('#svecListbox_Groups').sfList({
-                data: Data.GroupsGroupTitles,
-                index: 0
-            });
-            SceneGroups.prototype.Level0();
-            $('#svecLoadingImage_GBMO').sfLoading('hide');
-        };
-
-        ServiceAPI.onFailed = function() {
-            widgetAPI.putInnerHTML(document
-                .getElementById("svecDescription_GRPS"),
-                "Failed to load data from MythTv backend<br>Status: " + XHRObj.status + "<br>URL: " + "http://" + Data.URL + ":6544/");
-            $('#svecLoadingImage_GBMO').sfLoading('hide');
-        };
-
-        ServiceAPI.loadGroups();
+        this.loadData();
     }
 };
+
+
+SceneGroups.prototype.loadData = function() {
+    if (Data.URL == null) {
+        Data.URL = sf.core.localData("serverip");
+    }
+    $('#svecLoadingImage_GBMO').sfLoading('show');
+
+    ServiceAPI.onReceived = function() {
+        $('#svecListbox_Groups').sfList({
+            data: Data.GroupsGroupTitles,
+            index: 0
+        });
+        SceneGroups.prototype.Level0();
+        $('#svecLoadingImage_GBMO').sfLoading('hide');
+    };
+
+    ServiceAPI.onFailed = function() {
+        widgetAPI.putInnerHTML(document
+            .getElementById("svecDescription_GRPS"),
+            "Failed to load data from MythTv backend");
+        $('#svecLoadingImage_GBMO').sfLoading('hide');
+    };
+
+    ServiceAPI.loadGroups();
+};
+
 
 SceneGroups.prototype.setHelp = function() {
-    if (level == 0) {
-        $('#svecKeyHelp_G2NM').sfKeyHelp({
-            'user': Data.SMARTMYTHTVVERSION,
-            'green': 'Videos',
-            'NO1': 'Refresh',
-            'yellow': 'Recordings',
-            'blue': 'Upcoming',
-            'enter': 'Select',
-            'tools': 'Settings',
-            'return': 'Back'
-        });
-    } else {
-        $('#svecKeyHelp_G2NM').sfKeyHelp({
-            'user': Data.SMARTMYTHTVVERSION,
-            'red': 'Delete',
-            'green': 'Videos',
-            'yellow': 'Recordings',
-            'blue': 'Upcoming',
-            'enter': 'Play',
-            'return': 'Back'
-        });
+    var keys = {};
+    keys['user'] = Data.SMARTMYTHTVVERSION;
+    keys['info'] = 'Refresh';
+    if (level == 1) {
+        keys['red'] = 'Delete';
     }
+    keys['green'] = 'Videos';
+    keys['yellow'] = 'Recordings';
+    keys['blue'] = 'Upcoming';
+    if (level == 0) {
+        keys['enter'] = 'Select';
+        keys['tools'] = 'Settings';
+    } else {
+        keys['enter'] = 'Play';
+        keys['return'] = 'Back';
+    }
+
+    $('#svecKeyHelp_G2NM').sfKeyHelp(keys);
 };
+
 SceneGroups.prototype.handleShow = function() {};
 
 SceneGroups.prototype.handleHide = function() {
     // this function will be called when the scene manager hide this scene
 };
+
 SceneGroups.prototype.handleFocus = function() {
     Data.mainScene = "Groups";
     if (Data.loadedGroups == 0) {
@@ -122,10 +126,8 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
             sf.scene.show('Upcoming');
             sf.scene.focus('Upcoming');
             return;
-        case sf.key.N1:
-            $('#svecLoadingImage_GBMO').sfLoading('show');
-            ServiceAPI.loadGroups();
-            $('#svecLoadingImage_GBMO').sfLoading('hide');
+        case sf.key.INFO:
+            this.loadData();
             return;
     };
 
