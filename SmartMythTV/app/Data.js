@@ -4,7 +4,6 @@ var Data = {
     Titles: [],
     GroupsList: [],
     GroupsGroupTitles: [],
-    GroupsGroupCount: [],
     GroupsRecordings: [],
     UpcomingList: [],
     UpcomingDetail: [],

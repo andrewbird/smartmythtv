@@ -106,38 +106,34 @@ ServiceAPI.loadGroups = function() {
 };
 
 
+
 ServiceAPI.receiveGroups = function(data, textStatus, jqXHR) {
     var elements = $.parseJSON(jqXHR.responseText);
     var list = elements.ProgramList;
 
     Data.GroupsList = [];
     Data.GroupsGroupTitles = [];
-    Data.GroupsGroupCount = [];
     Data.GroupsRecordings = [];
 
     var index = 0;
     for (var i in elements.ProgramList.Programs) {
         var pos = Data.GroupsList.indexOf(list.Programs[i].Title);
         if (pos == -1) { //Not found
-            Data.GroupsGroupCount[index] = 0;
             Data.GroupsGroupTitles[index] = [];
             Data.GroupsList[index] = list.Programs[i].Title;
             Data.GroupsRecordings[index] = [];
             pos = index;
             index++;
-        } else {
-            Data.GroupsGroupCount[pos]++;
         }
 
         var info = list.Programs[i].SubTitle;
         if (info == "") {
             info = ServiceAPI.showDate(ServiceAPI.getDate(list.Programs[i].StartTime));
         }
-        var groupPos = Data.GroupsGroupCount[pos];
-        Data.GroupsGroupTitles[pos][groupPos] = info;
+        Data.GroupsGroupTitles[pos].push(info);
 
         var r = new Object();
-        Data.GroupsRecordings[pos][groupPos] = r;
+        Data.GroupsRecordings[pos].push(r);
         r.Description = list.Programs[i].Description;
         r.StartTime = list.Programs[i].Recording.StartTs;
         r.ChanId = list.Programs[i].Channel.ChanId;
