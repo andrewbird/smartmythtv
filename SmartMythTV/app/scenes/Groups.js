@@ -21,7 +21,7 @@ SceneGroups.prototype.initialize = function() {
         $('#svecLoadingImage_GBMO').sfLoading('show');
         ServiceAPI.onReceived = function() {
             $('#svecListbox_GOUK').sfList({
-                data: Data.GroupsList,
+                data: Data.GroupsGroupTitles,
                 index: 0
             });
             groupid = 0;
@@ -79,7 +79,7 @@ SceneGroups.prototype.handleFocus = function() {
         $('#svecLoadingImage_GBMO').sfLoading('show');
         ServiceAPI.onReceived = function() {
             $('#svecListbox_GOUK').sfList({
-                data: Data.GroupsList,
+                data: Data.GroupsGroupTitles,
                 index: 0
             });
             groupid = 0;
@@ -219,7 +219,7 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
 SceneGroups.prototype.Level0 = function() {
     $('#svecListbox_GOUK').sfList('clear');
     $('#svecListbox_GOUK').sfList({
-        data: Data.GroupsList,
+        data: Data.GroupsGroupTitles,
         'index': groupid
     });
     $('#svecListbox_GOUK').sfList('focus');
@@ -282,7 +282,7 @@ SceneGroups.prototype.getRecording = function() {
 SceneGroups.prototype.removeCurrentRecording = function() {
     if (Data.GroupsMemberTitles[groupid].length == 1) {
         // Last one in this group, so remove the group from level0
-        Data.GroupsList.splice(groupid, 1);
+        Data.GroupsGroupTitles.splice(groupid, 1);
         Data.GroupsMemberTitles.splice(groupid, 1);
         Data.GroupsRecordings.splice(groupid, 1);
         itemid = 0;
