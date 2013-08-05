@@ -3,32 +3,32 @@ function SceneGroups(options) {
 }
 var widgetAPI = new Common.API.Widget(); // Create Common module
 var level = 0;
-var groupid = 0;
-var itemid = 0;
 
 SceneGroups.prototype.initialize = function() {
-    $('#svecListbox_GOUK').sfList({
+    $('#svecListbox_Groups').sfList({
+        itemsPerPage: 10
+    });
+    $('#svecListbox_Members').sfList({
         itemsPerPage: 10
     });
     $('#svecScrollbar_GKRU').sfScroll({
         page: 0
     });
-    level = 0;
     if (Data.loadedGroups == 0) {
         if (Data.URL == null) {
             Data.URL = sf.core.localData("serverip");
         }
         $('#svecLoadingImage_GBMO').sfLoading('show');
+
         ServiceAPI.onReceived = function() {
-            $('#svecListbox_GOUK').sfList({
+            $('#svecListbox_Groups').sfList({
                 data: Data.GroupsGroupTitles,
                 index: 0
             });
-            groupid = 0;
-            itemid = 0;
-            $('#svecListbox_GOUK').sfList('focus');
+            SceneGroups.prototype.Level0();
             $('#svecLoadingImage_GBMO').sfLoading('hide');
         };
+
         ServiceAPI.onFailed = function() {
             widgetAPI.putInnerHTML(document
                 .getElementById("svecDescription_GRPS"),
@@ -38,7 +38,6 @@ SceneGroups.prototype.initialize = function() {
 
         ServiceAPI.loadGroups();
     }
-    SceneGroups.prototype.Level0();
 };
 
 SceneGroups.prototype.setHelp = function() {
@@ -77,16 +76,16 @@ SceneGroups.prototype.handleFocus = function() {
             Data.URL = sf.core.localData("serverip");
         }
         $('#svecLoadingImage_GBMO').sfLoading('show');
+
         ServiceAPI.onReceived = function() {
-            $('#svecListbox_GOUK').sfList({
+            $('#svecListbox_Groups').sfList({
                 data: Data.GroupsGroupTitles,
                 index: 0
             });
-            groupid = 0;
-            itemid = 0;
-            $('#svecListbox_GOUK').sfList('focus');
+            $('#svecListbox_Groups').sfList('focus');
             $('#svecLoadingImage_GBMO').sfLoading('hide');
         };
+
         ServiceAPI.onFailed = function() {
             $('#svecLoadingImage_GBMO').sfLoading('hide');
             ServiceAPI.onError();
@@ -139,23 +138,20 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
             case sf.key.PLAY:
                 // Select a level 0 item from Group, now change the list to be All
                 // the titles in that group and move to level 1
-                itemid = 0;
                 SceneGroups.prototype.Level1();
                 break;
             case sf.key.UP:
                 // Show previous item in level 0 list
                 $('#svecScrollbar_GKRU').sfScroll('prev');
-                $('#svecListbox_GOUK').sfList('prev');
-                groupid = $('#svecListbox_GOUK').sfList('getIndex');
+                $('#svecListbox_Groups').sfList('prev');
                 break;
             case sf.key.DOWN:
                 // Show next item in level 0 list
                 $('#svecScrollbar_GKRU').sfScroll('next');
-                $('#svecListbox_GOUK').sfList('next');
-                groupid = $('#svecListbox_GOUK').sfList('getIndex');
+                $('#svecListbox_Groups').sfList('next');
                 break;
-
         }
+
     } else {
         // level 1, items in the group
         switch (keyCode) {
@@ -169,15 +165,13 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
 
             case sf.key.UP:
                 $('#svecScrollbar_GKRU').sfScroll('prev');
-                $('#svecListbox_GOUK').sfList('prev');
-                itemid = $('#svecListbox_GOUK').sfList('getIndex');
+                $('#svecListbox_Members').sfList('prev');
                 SceneGroups.prototype.showDescription();
                 break;
 
             case sf.key.DOWN:
                 $('#svecScrollbar_GKRU').sfScroll('next');
-                $('#svecListbox_GOUK').sfList('next');
-                itemid = $('#svecListbox_GOUK').sfList('getIndex');
+                $('#svecListbox_Members').sfList('next');
                 SceneGroups.prototype.showDescription();
                 break;
 
@@ -213,38 +207,41 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
                 break;
         }
     }
-
 };
 
 SceneGroups.prototype.Level0 = function() {
-    $('#svecListbox_GOUK').sfList('clear');
-    $('#svecListbox_GOUK').sfList({
-        data: Data.GroupsGroupTitles,
-        'index': groupid
-    });
-    $('#svecListbox_GOUK').sfList('focus');
+    $('#svecListbox_Members').sfList('hide');
+    $('#svecListbox_Groups').sfList('show');
+    $('#svecListbox_Groups').sfList('focus');
+
     level = 0;
     SceneGroups.prototype.setHelp();
+
     $('#svecDescription_GRPS').sfLabel('destroy');
     widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"), "");
 };
 
 SceneGroups.prototype.Level1 = function() {
-    alert("Going to groupid:" + groupid);
-    $('#svecListbox_GOUK').sfList('clear');
-    $('#svecListbox_GOUK').sfList({
-        data: Data.GroupsMemberTitles[groupid],
-        'index': itemid
+    var gitem = $('#svecListbox_Groups').sfList('getIndex');
+    alert("Going to groupid:" + gitem);
+
+    $('#svecListbox_Groups').sfList('hide');
+
+    $('#svecListbox_Members').sfList('clear');
+    $('#svecListbox_Members').sfList({
+        data: Data.GroupsMemberTitles[gitem],
+        'index': 0
     });
-    $('#svecListbox_GOUK').sfList('move', 0);
-    $('#svecListbox_GOUK').sfList('focus');
-    SceneGroups.prototype.showDescription();
+    $('#svecListbox_Members').sfList('show');
+    $('#svecListbox_Members').sfList('focus');
+
     level = 1;
     SceneGroups.prototype.setHelp();
+
     $('#svecScrollbar_GKRU').sfScroll({
         page: 0
     });
-
+    SceneGroups.prototype.showDescription();
 };
 
 // Fill the Description area with details of the selected Recording
@@ -273,28 +270,36 @@ SceneGroups.prototype.showDescription = function() {
 
 // Find the current Recording
 SceneGroups.prototype.getRecording = function() {
-    var item = $('#svecListbox_GOUK').sfList('getIndex');
-    var fileName = Data.GroupsRecordings[groupid][item].FileName;
-    alert("GetRecording returning groupid=" + groupid + " item=" + item + " Filename=" + fileName);
-    return Data.GroupsRecordings[groupid][item];
+    var gitem = $('#svecListbox_Groups').sfList('getIndex');
+    var ritem = $('#svecListbox_Members').sfList('getIndex');
+    var rec = Data.GroupsRecordings[gitem][ritem];
+    if(rec) {
+        alert("GetRecording returning groupid=" + gitem + " ritem=" + ritem + " Filename=" + rec.FileName);
+    } else {
+        alert("GetRecording returning groupid=" + gitem + " ritem=" + ritem + " - Not found");
+    }
+    return rec;
 };
 
 SceneGroups.prototype.removeCurrentRecording = function() {
-    if (Data.GroupsMemberTitles[groupid].length == 1) {
+    var gitem = $('#svecListbox_Groups').sfList('getIndex');
+    var ritem = $('#svecListbox_Members').sfList('getIndex');
+
+    // Remove the item from the level 1 list
+    Data.GroupsMemberTitles[gitem].splice(ritem, 1);
+    Data.GroupsRecordings[gitem].splice(ritem, 1);
+
+    if (Data.GroupsMemberTitles[gitem].length == 0) {
         // Last one in this group, so remove the group from level0
-        Data.GroupsGroupTitles.splice(groupid, 1);
-        Data.GroupsMemberTitles.splice(groupid, 1);
-        Data.GroupsRecordings.splice(groupid, 1);
-        itemid = 0;
-        if (groupid > 0) {
-            groupid--;
-        }
+        Data.GroupsMemberTitles.splice(gitem, 1);
+        Data.GroupsRecordings.splice(gitem, 1);
+        Data.GroupsGroupTitles.splice(gitem, 1);
+        $('#svecListbox_Groups').sfList({
+            data: Data.GroupsGroupTitles,
+            index: 0
+        });
         SceneGroups.prototype.Level0();
     } else {
-        // Just remove the item from the level 1 list
-        Data.GroupsMemberTitles[groupid].splice(itemid, 1);
-        Data.GroupsRecordings[groupid].splice(itemid, 1);
         SceneGroups.prototype.Level1();
-        itemid--;
     }
 };

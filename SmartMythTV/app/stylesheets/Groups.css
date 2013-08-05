@@ -7,7 +7,14 @@
   background-color : #000000
 }
 
-#SceneGroups #svecListbox_GOUK {
+#SceneGroups #svecListbox_Groups {
+  position : absolute;
+  left : 50px;
+  top : 70px;
+  width : 470px
+}
+
+#SceneGroups #svecListbox_Members {
   position : absolute;
   left : 50px;
   top : 70px;
