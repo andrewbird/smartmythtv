@@ -126,7 +126,6 @@ SceneSettings.prototype.handleKeyDown = function(keyCode) {
                     } else {
                         Data.mainScene = "Recordings";
                     }
-                    Data.max = 0; //reload data
                     sf.scene.hide('Settings');
                     sf.scene.show(Data.mainScene);
                     sf.scene.focus(Data.mainScene);

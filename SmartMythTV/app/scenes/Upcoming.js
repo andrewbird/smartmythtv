@@ -1,7 +1,6 @@
 function SceneUpcoming() {
 
 }
-var itemid = 0;
 var lastStatus = 99;
 
 SceneUpcoming.prototype.initialize = function() {
@@ -12,11 +11,11 @@ SceneUpcoming.prototype.initialize = function() {
     // here
     // scene HTML and CSS will be loaded before this function is called
 
-    SceneUpcoming.prototype.setHelp();
+    this.setHelp();
 };
 
 SceneUpcoming.prototype.setHelp = function() {
-    var rec = SceneUpcoming.prototype.getRecording();
+    var rec = this.getRecording();
     if (rec && lastStatus == rec.Status) {
         // Same status, no need to redraw
         return;
@@ -71,37 +70,36 @@ SceneUpcoming.prototype.handleHide = function() {
 SceneUpcoming.prototype.handleFocus = function() {
     Data.mainScene = "Upcoming";
     if (Data.loadedUpcoming == 0) {
-        if (Data.URL == null) {
-            Data.URL = sf.core.localData("serverip");
-        }
         $('#svecLoadingImage_Upcoming').sfLoading('show');
-        ServiceAPI.onReceived = function() {
-            alert("onReceived upcoming");
-            $('#svecListbox_N9NK').sfList({
-                data: Data.UpcomingList,
-                itemsPerPage: 10,
-                index: 0
-            });
-            SceneUpcoming.prototype.showDescription();
-            itemid = 0;
-            $('#svecListbox_N9NK').sfList('focus');
-            $('#svecLoadingImage_Upcoming').sfLoading('hide');
-            lastStatus = 99;
-        };
-        ServiceAPI.onFailed = function() {
-            $('#svecLoadingImage_Upcoming').sfLoading('hide');
-            ServiceAPI.onError();
-        };
+
         ServiceAPI.onDeleteCurrent = function() {
             alert("onDeleteCurrent upcoming");
-            setTimeout(ServiceAPI.loadUpcoming, (5 * 1000));
+            //setTimeout(ServiceAPI.loadUpcoming, (5 * 1000));
             // Reload the data again as deleting one rule may remove multiple
             // items
             // Delaying the reload for 5 seconds, as my mythbackend seems to a
             // take a while to update the schedule
         };
 
-        ServiceAPI.loadUpcoming();
+        ServiceAPI.loadUpcoming(this,
+            function() {
+                alert("onReceived upcoming");
+                $('#svecListbox_N9NK').sfList({
+                    data: Data.UpcomingList,
+                    itemsPerPage: 10,
+                    index: 0
+                });
+                this.showDescription();
+                $('#svecListbox_N9NK').sfList('focus');
+                $('#svecLoadingImage_Upcoming').sfLoading('hide');
+                lastStatus = 99;
+            },
+
+            function() {
+                $('#svecLoadingImage_Upcoming').sfLoading('hide');
+                ServiceAPI.onError();
+            }
+        );
     }
 };
 
@@ -121,13 +119,11 @@ SceneUpcoming.prototype.handleKeyDown = function(keyCode) {
             break;
         case sf.key.UP:
             $('#svecListbox_N9NK').sfList('prev');
-            itemid = $('#svecListbox_N9NK').sfList('getIndex');
-            SceneUpcoming.prototype.showDescription();
+            this.showDescription();
             break;
         case sf.key.DOWN:
             $('#svecListbox_N9NK').sfList('next');
-            itemid = $('#svecListbox_N9NK').sfList('getIndex');
-            SceneUpcoming.prototype.showDescription();
+            this.showDescription();
             break;
         case sf.key.ENTER:
             break;
@@ -187,42 +183,17 @@ SceneUpcoming.prototype.handleKeyDown = function(keyCode) {
             return;
     };
 };
-SceneUpcoming.prototype.getRecording = function() {
 
+SceneUpcoming.prototype.getRecording = function() {
     var item = $('#svecListbox_N9NK').sfList('getIndex');
     return Data.UpcomingDetail[item];
 };
+
 // Fill the Description area with details of the selected Recording
 SceneUpcoming.prototype.showDescription = function() {
-    var rec = SceneUpcoming.prototype.getRecording();
+    var rec = this.getRecording();
 
-    var data = "<table border>";
-    if (rec.ChannelName) {
-        data = data + "<tr><td>Channel</td><td>" + rec.ChannelName + "</td></tr>";
-    }
-    data = data + "<tr><td>Title</td><td>" + rec.Title + "</td></tr>";
-    if (rec.SubTitle != "") {
-        data = data + "<tr><td>SubTitle</td><td>" + rec.SubTitle + "</td></tr>";
-    }
-    data = data + "<tr><td>Start</td><td>" + ServiceAPI.showDate(rec.StartTimeDate) + "</td></tr>";
-    data = data + "<tr><td>End</td><td>" + ServiceAPI.showDate(rec.EndTimeDate) + "</td></tr>";
+    widgetAPI.putInnerHTML(document.getElementById("descriptionUpcoming"), rec.toHtmlTable());
 
-
-    if (rec.Status == -2) {
-        // Recording
-        data = data + "<tr><td colspan=2>Currently recording</td></tr>";
-    } else if (rec.Status == 10) {
-        // Inactive
-        data = data + "<tr><td colspan=2><FONT COLOR='4682BE'>Inactive</FONT></td></tr>";
-    } else if (rec.Status == 7) {
-        // Conflict
-        data = data + "<tr><td colspan=2><FONT COLOR='FF0000'>Conflict</FONT></td></tr>";
-    }
-    data = data + "</table>";
-    data = data + rec.Description.replace(/\n/g, '<br>');
-    data = data + "</table>";
-    // $('#descriptionUpcoming').sfLabel({text:data});
-    widgetAPI
-        .putInnerHTML(document.getElementById("descriptionUpcoming"), data);
-    SceneUpcoming.prototype.setHelp();
+    this.setHelp();
 };

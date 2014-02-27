@@ -15,8 +15,6 @@ var Data = {
     loadedUpcoming: 0,
     loadedRecordings: 0,
     loadedVideos: 0,
-    max: 0,
-    maxVideos: 0,
     currentStream: 0,
     mainScene: ""
 };

@@ -27,7 +27,7 @@ function onStart() {
 }
 
 function onDestroy() {
-    //stop your XHR or Ajax operation and put codes to distroy your application here
+    //stop your XHR or Ajax operation and put codes to destroy your application here
 }
 
 alert("init.js loaded.");

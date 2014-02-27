@@ -24,6 +24,37 @@ SceneRecordings.prototype.initialize = function() {
     });
 };
 
+SceneRecordings.prototype.getRecording = function() {
+    return Data.Recordings[$('#svecListbox_BOUK').sfList('getIndex')];
+};
+
+SceneRecordings.prototype.showDescription = function() {
+    var rec = this.getRecording();
+
+    widgetAPI.putInnerHTML(document.getElementById("description"), rec.toHtmlTable());
+};
+
+SceneRecordings.prototype.loadData = function() {
+    $('#svecLoadingImage_RBMO').sfLoading('show');
+    ServiceAPI.loadRecordings(this,
+        function() {
+            $('#svecListbox_BOUK').sfList({
+                data: Data.Titles,
+                index: 0
+            });
+            $('#svecLoadingImage_RBMO').sfLoading('hide');
+
+            // display
+            this.showDescription();
+        },
+
+        function() {
+            $('#svecLoadingImage_RBMO').sfLoading('hide');
+            ServiceAPI.onError();
+        }
+    );
+};
+
 SceneRecordings.prototype.handleShow = function() {};
 
 SceneRecordings.prototype.handleHide = function() {
@@ -33,23 +64,7 @@ SceneRecordings.prototype.handleHide = function() {
 SceneRecordings.prototype.handleFocus = function() {
     Data.mainScene = "Recordings";
     if (Data.loadedRecordings == 0) {
-        if (Data.URL == null) {
-            Data.URL = sf.core.localData("serverip");
-        }
-        $('#svecLoadingImage_RBMO').sfLoading('show');
-        ServiceAPI.onReceived = function() {
-            $('#svecListbox_BOUK').sfList({
-                data: Data.Titles,
-                index: 0
-            });
-            $('#svecLoadingImage_RBMO').sfLoading('hide');
-        };
-        ServiceAPI.onFailed = function() {
-            $('#svecLoadingImage_RBMO').sfLoading('hide');
-            ServiceAPI.onError();
-        };
-        ServiceAPI.onDeleteCurrent = SceneRecordings.prototype.removeCurrentRecording;
-        ServiceAPI.loadRecordings();
+        this.loadData();
     }
 };
 
@@ -62,41 +77,14 @@ SceneRecordings.prototype.receivedFailed = function() {
     var r = new Object();
     r.Description = "Failed to load mythtv recordings\nStatus: " + XHRObj.status + "\nURL: " + Data.URL + "/";
     Data.Recordings[0] = r;
-    Data.max = 1;
     ServiceAPI.onReceived();
-    SceneRecordings.prototype.showDescription();
+    this.showDescription();
 };
 
 function toText(value) {
     return (value < 10 ? "0" : "") + value;
 }
 
-SceneRecordings.prototype.showDescription = function() {
-    widgetAPI.putInnerHTML(document.getElementById("description"),
-        SceneRecordings.prototype.getRecording().Description.replace(/\n/g, '<br>')
-    );
-};
-
-SceneRecordings.prototype.removeCurrentRecording = function() {
-    var vlist = $('#svecListbox_BOUK');
-    var current = vlist.sfList('getIndex');
-    Data.Recordings.splice(current, 1);
-    Data.Titles.splice(current, 1);
-    Data.max--;
-    vlist.sfList({
-        data: Data.Titles,
-        index: 0
-    });
-    if (current < Data.max) {
-        vlist.sfList('move', current);
-    } else {
-        vlist.sfList('move', Data.max);
-    }
-};
-
-SceneRecordings.prototype.getRecording = function() {
-    return Data.Recordings[$('#svecListbox_BOUK').sfList('getIndex')];
-};
 
 SceneRecordings.prototype.handleKeyDown = function(keyCode) {
     switch (keyCode) {
@@ -106,22 +94,16 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
             break;
         case sf.key.UP:
             $('#svecScrollbar_UKRU').sfScroll('prev');
-            var idx = $('#svecListbox_BOUK').sfList('getIndex');
-            if (idx != 0) {
-                $('#svecListbox_BOUK').sfList('prev');
-                SceneRecordings.prototype.showDescription();
-            }
+            $('#svecListbox_BOUK').sfList('prev');
+            this.showDescription();
             break;
         case sf.key.DOWN:
             $('#svecScrollbar_UKRU').sfScroll('next');
-            var idx = $('#svecListbox_BOUK').sfList('getIndex');
-            if (idx != Data.max) {
-                $('#svecListbox_BOUK').sfList('next');
-                SceneRecordings.prototype.showDescription();
-            }
+            $('#svecListbox_BOUK').sfList('next');
+            this.showDescription();
             break;
         case sf.key.ENTER:
-            Data.currentStream = SceneRecordings.prototype.getRecording();
+            Data.currentStream = this.getRecording();
             sf.scene.hide('Recordings');
             sf.scene.show('Player', {
                 parent: "Recordings"
@@ -129,15 +111,18 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
             sf.scene.focus('Player');
             break;
         case 108: //RED
-            var item = SceneRecordings.prototype.getRecording();
+            var item = this.getRecording();
             $('#svecPopup_ok_cancel_0AM7').sfPopup({
                 'text': 'Do you really want to delete ' + item.Title + '<BR/>' + item.SubTitle + '?',
                 buttons: ['Yes', 'No'],
                 callback: function(rlt) {
                     if (rlt == 0) {
                         $('#svecLoadingImage_RBMO').sfLoading('show');
-                        ServiceAPI.deleteRecording(item);
-                        $('#svecLoadingImage_RBMO').sfLoading('hide');
+                        ServiceAPI.deleteRecording(
+                            sf.scene.get('Recordings'),
+                            sf.scene.get('Recordings').onDeleteRecording,
+                            ServiceAPI.onError,
+                            item);
                     }
                 }
             });
@@ -165,4 +150,21 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
             sf.scene.focus('Upcoming');
             return;
     }
+};
+
+
+SceneRecordings.prototype.onDeleteRecording = function() {
+    var vlist = $('#svecListbox_BOUK');
+    var current = vlist.sfList('getIndex');
+    Data.Recordings.splice(current, 1);
+    Data.Titles.splice(current, 1);
+    vlist.sfList({
+        data: Data.Titles,
+        index: 0
+    });
+    if (current < vlist.Count) {
+        vlist.sfList('move', current);
+    }
+    this.showDescription();
+    $('#svecLoadingImage_RBMO').sfLoading('hide');
 };

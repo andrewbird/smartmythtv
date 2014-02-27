@@ -37,6 +37,10 @@ ScenePlayer.prototype.handleShow = function() {
     var nnaviPlugin = document.getElementById('pluginObjectNNavi');
     nnaviPlugin.SetBannerState(2);
 
+    /*
+      unregistKey instructs the application to ignore the keypress and so it
+      gets passed to the TV itself.
+    */
     //volume OSD
     pluginAPI.unregistKey(tvKey.KEY_VOL_UP);
     pluginAPI.unregistKey(tvKey.KEY_VOL_DOWN);

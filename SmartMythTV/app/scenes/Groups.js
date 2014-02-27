@@ -21,28 +21,26 @@ SceneGroups.prototype.initialize = function() {
 
 
 SceneGroups.prototype.loadData = function() {
-    if (Data.URL == null) {
-        Data.URL = sf.core.localData("serverip");
-    }
     $('#svecLoadingImage_GBMO').sfLoading('show');
 
-    ServiceAPI.onReceived = function() {
-        $('#svecListbox_Groups').sfList({
-            data: Data.GroupsGroupTitles,
-            index: 0
-        });
-        SceneGroups.prototype.Level0();
-        $('#svecLoadingImage_GBMO').sfLoading('hide');
-    };
+    ServiceAPI.loadGroups(this,
+        function() {
+            $('#svecListbox_Groups').sfList({
+                data: Data.GroupsGroupTitles,
+                index: 0
+            });
+            this.Level0();
+            $('#svecLoadingImage_GBMO').sfLoading('hide');
+        },
 
-    ServiceAPI.onFailed = function() {
-        widgetAPI.putInnerHTML(document
-            .getElementById("svecDescription_GRPS"),
-            "Failed to load data from MythTv backend");
-        $('#svecLoadingImage_GBMO').sfLoading('hide');
-    };
+        function() {
+            widgetAPI.putInnerHTML(document
+                .getElementById("svecDescription_GRPS"),
+                "Failed to load data from MythTv backend");
+            $('#svecLoadingImage_GBMO').sfLoading('hide');
+        }
+    );
 
-    ServiceAPI.loadGroups();
 };
 
 
@@ -75,30 +73,7 @@ SceneGroups.prototype.handleHide = function() {
 
 SceneGroups.prototype.handleFocus = function() {
     Data.mainScene = "Groups";
-    if (Data.loadedGroups == 0) {
-        if (Data.URL == null) {
-            Data.URL = sf.core.localData("serverip");
-        }
-        $('#svecLoadingImage_GBMO').sfLoading('show');
-
-        ServiceAPI.onReceived = function() {
-            $('#svecListbox_Groups').sfList({
-                data: Data.GroupsGroupTitles,
-                index: 0
-            });
-            $('#svecListbox_Groups').sfList('focus');
-            $('#svecLoadingImage_GBMO').sfLoading('hide');
-        };
-
-        ServiceAPI.onFailed = function() {
-            $('#svecLoadingImage_GBMO').sfLoading('hide');
-            ServiceAPI.onError();
-        };
-
-        ServiceAPI.loadGroups();
-    }
-    SceneGroups.prototype.Level0();
-    ServiceAPI.onDeleteCurrent = SceneGroups.prototype.removeCurrentRecording;
+    SceneGroups.prototype.loadData();
 };
 
 SceneGroups.prototype.handleBlur = function() {};
@@ -181,7 +156,7 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
             case sf.key.ENTER:
             case sf.key.PLAY:
                 // Play the selected item
-                Data.currentStream = SceneGroups.prototype.getRecording();
+                Data.currentStream = this.getRecording();
                 sf.scene.hide('Groups');
                 sf.scene.show('Player', {
                     parent: "Groups"
@@ -191,16 +166,18 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
 
             case sf.key.RED:
                 // Delete the selected item
-                var item = SceneGroups.prototype.getRecording();
+                var item = this.getRecording();
                 $('#svecPopup_ok_cancel_GAM7').sfPopup({
                     'text': 'Do you really want to delete ' + item.Title + '<BR/>' + item.SubTitle + '?',
                     buttons: ['Yes', 'No'],
                     callback: function(rlt) {
                         if (rlt == 0) {
                             $('#svecLoadingImage_GBMO').sfLoading('show');
-                            ServiceAPI.deleteRecording(item);
-                            $('#svecLoadingImage_GBMO').sfLoading('hide');
-
+                            ServiceAPI.deleteRecording(
+                                sf.scene.get('Groups'),                         // context
+                                sf.scene.get('Groups').onDeleteRecording,       // callback
+                                ServiceAPI.onError,                             // errback
+                                item);
                         }
                     }
                 });
@@ -217,7 +194,7 @@ SceneGroups.prototype.Level0 = function() {
     $('#svecListbox_Groups').sfList('focus');
 
     level = 0;
-    SceneGroups.prototype.setHelp();
+    this.setHelp();
 
     $('#svecDescription_GRPS').sfLabel('destroy');
     widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"), "");
@@ -238,36 +215,19 @@ SceneGroups.prototype.Level1 = function() {
     $('#svecListbox_Members').sfList('focus');
 
     level = 1;
-    SceneGroups.prototype.setHelp();
+    this.setHelp();
 
     $('#svecScrollbar_GKRU').sfScroll({
         page: 0
     });
-    SceneGroups.prototype.showDescription();
+    this.showDescription();
 };
 
 // Fill the Description area with details of the selected Recording
 SceneGroups.prototype.showDescription = function() {
-    var rec = SceneGroups.prototype.getRecording();
+    var rec = this.getRecording();
 
-    var data = "<table border><tr><td>Channel</td><td>" + rec.ChannelName + "</td></tr>";
-    data = data + "<tr><td>Size</td><td>" + ServiceAPI.readableBytes(rec.FileSize) + "</td></tr>";
-    data = data + "<tr><td>Title</td><td>" + rec.Title + "</td></tr>";
-    if (rec.SubTitle != "") {
-        data = data + "<tr><td>SubTitle</td><td>" + rec.SubTitle + "</td></tr>";
-    }
-    data = data + "<tr><td>Start</td><td>" + ServiceAPI.showDate(rec.StartTimeDate) + "</td></tr>";
-    data = data + "<tr><td>End</td><td>" + ServiceAPI.showDate(rec.EndTimeDate) + "</td></tr>";
-    if (rec.Status == -2) {
-        // Recording
-        data = data + "<tr><td colspan=2>Currently recording</td></tr>";
-    }
-    data = data + "</table>";
-    data = data + rec.Description.replace(/\n/g, '<br>');
-    data = data + "</table>";
-    // $('#svecDescription_GRPS').sfLabel({text:data});
-    widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"),
-        data);
+    widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"), rec.toHtmlTable());
 };
 
 // Find the current Recording
@@ -283,7 +243,8 @@ SceneGroups.prototype.getRecording = function() {
     return rec;
 };
 
-SceneGroups.prototype.removeCurrentRecording = function() {
+// callback
+SceneGroups.prototype.onDeleteRecording = function() {
     var gitem = $('#svecListbox_Groups').sfList('getIndex');
     var ritem = $('#svecListbox_Members').sfList('getIndex');
 
@@ -300,8 +261,9 @@ SceneGroups.prototype.removeCurrentRecording = function() {
             data: Data.GroupsGroupTitles,
             index: 0
         });
-        SceneGroups.prototype.Level0();
+        this.Level0();
     } else {
-        SceneGroups.prototype.Level1();
+        this.Level1();
     }
+    $('#svecLoadingImage_GBMO').sfLoading('hide');
 };
