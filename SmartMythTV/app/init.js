@@ -1,12 +1,21 @@
 function onStart() {
-    Data.URL = sf.core.localData("serverip");
+    var id = sf.env.getModelID();
+    var ip = sf.core.localData("serverip");
+    if (ip === null) {
+        if (id === "SDK") {
+            Data.URL = "http://192.168.3.45:6544";
+            Data.startGroups = true;
+            Data.mainScene = "Groups";
 
-    if (Data.URL == null) {
-        sf.scene.show("Settings");
-        sf.scene.focus("Settings");
+            sf.scene.show(Data.mainScene);
+            sf.scene.focus(Data.mainScene);
+        } else {
+            sf.scene.show("Settings");
+            sf.scene.focus("Settings");
+        }
     } else {
+        Data.URL = "http://" + ip + ":6544";
         Data.startGroups = sf.core.localData("startgroups");
-        alert("StartGroups:" + Data.startGroups);
         if (Data.startGroups) {
             Data.mainScene = "Groups";
         } else {

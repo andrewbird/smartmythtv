@@ -82,7 +82,7 @@ SceneVideos.prototype.showDescription = function() {
 
 
     if (vid.coverart) {
-        var cover = "<img src=\"http://" + Data.URL + ":6544" + vid.coverart + "\" height=200>";
+        var cover = "<img src=\"" + Data.URL + vid.coverart + "\" height=200>";
         //		$('#cover_VI').sfImage({src:"http://" + Data.URL + ":6544"+vid.coverart});
         //		$('#cover_VI').sfImage('show');
         widgetAPI.putInnerHTML(document.getElementById("cover_VI"), cover);

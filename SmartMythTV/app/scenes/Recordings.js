@@ -60,7 +60,7 @@ SceneRecordings.prototype.receivedFailed = function() {
     Data.Recordings = [];
     Data.Titles[0] = "Failed to load mythtv recordings";
     var r = new Object();
-    r.Description = "Failed to load mythtv recordings\nStatus: " + XHRObj.status + "\nURL: " + "http://" + Data.URL + ":6544/";
+    r.Description = "Failed to load mythtv recordings\nStatus: " + XHRObj.status + "\nURL: " + Data.URL + "/";
     Data.Recordings[0] = r;
     Data.max = 1;
     ServiceAPI.onReceived();

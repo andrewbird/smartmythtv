@@ -36,7 +36,7 @@ SceneSettings.prototype.handleShow = function() {};
 SceneSettings.prototype.handleHide = function() {};
 
 SceneSettings.prototype.handleFocus = function() {
-    document.getElementById("serverip").value = Data.URL;
+    document.getElementById("serverip").value = sf.core.localData("serverip");
     startGroups = Data.startGroups;
 };
 
@@ -90,15 +90,15 @@ SceneSettings.prototype.handleKeyDown = function(keyCode) {
                 case 1: //ok
                     sf.core.localData('serverip', document.getElementById("serverip").value);
                     sf.core.localData('startgroups', Data.startGroups);
+                    //no break
+                case 2: //cancel
+                    Data.URL = "http://" + sf.core.localData("serverip") + ":6544";
                     if (Data.startGroups) {
                         Data.mainScene = "Groups";
                     } else {
                         Data.mainScene = "Recordings";
                     }
-                    Data.URL = document.getElementById("serverip").value;
                     Data.max = 0; //reload data
-                    //no break
-                case 2: //cancel
                     sf.scene.hide('Settings');
                     sf.scene.show(Data.mainScene);
                     sf.scene.focus(Data.mainScene);

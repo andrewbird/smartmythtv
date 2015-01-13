@@ -33,18 +33,18 @@ ServiceAPI.readableBytes = function(bytes) {
 
 ServiceAPI.getStreamUrl = function(item) {
     if(item.StartTime) {
-        return "http://" + Data.URL + ":6544/Content/GetRecording" +
+        return Data.URL + "/Content/GetRecording" +
             "?ChanId=" + item.ChanId +
             "&StartTime=" + item.StartTime;
     } else {
-        return "http://" + Data.URL + ":6544/Content/GetVideo?Id=" + item.Id;
+        return Data.URL + "/Content/GetVideo?Id=" + item.Id;
     }
 };
 
 
 ServiceAPI.loadRecordings = function() {
     $.ajax({
-        url: "http://" + Data.URL + ":6544/Dvr/GetRecordedList?Descending=true",
+        url: Data.URL + "/Dvr/GetRecordedList?Descending=true",
         type: "GET",
         beforeSend: function(xhr){xhr.setRequestHeader('Accept', 'application/json');},
         success: ServiceAPI.receiveRecordings,
@@ -86,7 +86,7 @@ ServiceAPI.receiveRecordings = function(data, textStatus, jqXHR) {
 
 ServiceAPI.deleteRecording = function(recording) {
     $.ajax({
-        url: "http://" + Data.URL + ':6544/Dvr/RemoveRecorded',
+        url: Data.URL + '/Dvr/RemoveRecorded',
         type: "POST",
         data: {ChanId: recording.ChanId, StartTime: recording.StartTime},
         success: ServiceAPI.onDeleteCurrent,
@@ -97,7 +97,7 @@ ServiceAPI.deleteRecording = function(recording) {
 
 ServiceAPI.loadGroups = function() {
     $.ajax({
-        url: "http://" + Data.URL + ":6544/Dvr/GetRecordedList?Descending=true",
+        url: Data.URL + "/Dvr/GetRecordedList?Descending=true",
         type: "GET",
         beforeSend: function(xhr){xhr.setRequestHeader('Accept', 'application/json');},
         success: ServiceAPI.receiveGroups,
@@ -152,7 +152,7 @@ ServiceAPI.receiveGroups = function(data, textStatus, jqXHR) {
 
 ServiceAPI.loadUpcoming = function() {
     $.ajax({
-        url: "http://" + Data.URL + ":6544/Dvr/GetUpcomingList?Count=30&ShowAll=true",
+        url: Data.URL + "/Dvr/GetUpcomingList?Count=30&ShowAll=true",
         type: "GET",
         beforeSend: function(xhr){xhr.setRequestHeader('Accept', 'application/json');},
         success: ServiceAPI.receiveUpcoming,
@@ -214,10 +214,10 @@ ServiceAPI.changeRecordSchedule = function(recording) {
 
     if (recording.Status == -1) {
         //Current active, need to disable
-        url = "http://" + Data.URL + ':6544/Dvr/DisableRecordSchedule';
+        url = Data.URL + '/Dvr/DisableRecordSchedule';
     } else {
         //Current inactive, need to enable
-        url = "http://" + Data.URL + ':6544/Dvr/EnableRecordSchedule';
+        url = Data.URL + '/Dvr/EnableRecordSchedule';
     }
 
     $.ajax({
@@ -258,7 +258,7 @@ our $recstatus_neverrecord       =  11 ;
 
 ServiceAPI.loadVideos = function() {
     $.ajax({
-        url: "http://" + Data.URL + ":6544/Video/GetVideoList?Descending=true",
+        url: Data.URL + "/Video/GetVideoList?Descending=true",
         type: "GET",
         beforeSend: function(xhr){xhr.setRequestHeader('Accept', 'application/json');},
         success: ServiceAPI.receiveVideos,
@@ -308,7 +308,7 @@ ServiceAPI.receiveVideos = function(data, textStatus, jqXHR) {
 
 ServiceAPI.deleteVideo = function(video) {
     $.ajax({
-        url: "http://" + Data.URL + ':6544/Video/RemoveVideoFromDB',
+        url: Data.URL + '/Video/RemoveVideoFromDB',
         type: "POST",
         data: {Id: video.Id},
         success: ServiceAPI.onDeleteCurrent,
