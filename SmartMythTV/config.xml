@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget>
+<widget xmlns="http://www.samsung.com/">
   <ThumbIcon itemtype="string">icon/default_106.png</ThumbIcon>
   <BigThumbIcon itemtype="string">icon/default_115.png</BigThumbIcon>
   <ListIcon itemtype="string">icon/default_85.png</ListIcon>
@@ -27,7 +27,7 @@
   <author itemtype="group">
     <name itemtype="string">Andrew Bird</name>
     <email itemtype="string"/>
-    <link itemtype="string">http://max.spheresystems.co.uk</link>
+    <link itemtype="string">http://oliver.spheresystems.co.uk</link>
     <organization itemtype="string">Complete lack of</organization>
   </author>
 </widget>
