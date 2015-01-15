@@ -9,23 +9,43 @@ function SceneSettings(options) {
 
 SceneSettings.prototype.initialize = function() {
     $('#svecLabel_WPTS').sfLabel({
-        text: 'URL to mythweb: '
+        text: 'Mythbackend IP: '
     });
+    $('#svecText_IP').focus(
+    function(){
+        $(this).css('border-color','#64bbf4');
+        $(this).css('background-color','#64bbf4');
+        $('#serverip').css('background-color','#64bbf4');
+    }).blur(
+    function(){
+        $(this).css('border-color','#999999');
+        $(this).css('background-color','#999999');
+        $('#serverip').css('background-color','#999999');
+    });
+    $('#svecLabel_RTUS').sfLabel({
+        'text': 'Please enter IP to mythbackend (e.g. 192.168.1.99)<br>' + 'Use TTX/MIX or the GREEN key for . and the RED key to delete.'
+    });
+
+    $('#svecLabel_Groups').sfLabel({
+        text: 'Start in view: '
+    });
+    $('#svecToggleButton_Groups').sfToggleButton({
+        text: {
+          on: 'Groups',
+          off: 'Recordings'
+        },
+        isOn: sf.core.localData('startgroups')
+    });
+
     $('#svecButton_OK').sfButton({
         text: 'Ok'
     });
+
     $('#svecButton_CAN').sfButton({
         text: 'Cancel'
     });
-    $('#svecLabel_RTUS').sfLabel({
-        'text': 'Please enter IP to mythweb and mythbackend (e.g. 192.168.1.99)<br>' + 'Use TTX/MIX or the GREEN key for . and the RED key to delete.'
-    });
-    $('#svecCheckBox_Groups').sfCheckBox();
-    $('#svecButton_Groups').sfButton({
-        text: 'Start in Groups View'
-    });
-    idx = 1;
-    changestate(idx, 'focus');
+
+    idx = 0;
 };
 
 SceneSettings.prototype.handleShow = function() {};
@@ -34,28 +54,32 @@ SceneSettings.prototype.handleHide = function() {};
 
 SceneSettings.prototype.handleFocus = function() {
     document.getElementById("serverip").value = sf.core.localData("serverip");
-    if (sf.core.localData('startgroups')) {
-        $('#svecCheckBox_Groups').sfCheckBox('check');
-    } else {
-        $('#svecCheckBox_Groups').sfCheckBox('uncheck');
+    if(sf.core.localData('startgroups') != $('#svecToggleButton_Groups').sfToggleButton('isOn')) {
+        $('#svecToggleButton_Groups').sfToggleButton('toggle');
     }
+
+    if (idx != 0) {
+        changestate(idx, 'blur');
+        idx = 0;
+    }
+    changestate(idx, 'focus');
 };
 
 SceneSettings.prototype.handleBlur = function() {};
 
 changestate = function(idx, action) {
     switch (idx) {
-        /*case 0:
-			$('#svecInput_URL').sfTextInput(action).sfTextInput("setKeypadPos",650,150,9);
-			break;*/
+        case 0:
+            $('#svecText_IP').trigger(action);
+            break;
         case 1:
-            $('#svecButton_OK').sfButton(action);
+            $('#svecToggleButton_Groups').sfToggleButton(action);
             break;
         case 2:
-            $('#svecButton_CAN').sfButton(action);
+            $('#svecButton_OK').sfButton(action);
             break;
         case 3:
-            $('#svecButton_Groups').sfButton(action);
+            $('#svecButton_CAN').sfButton(action);
             break;
     }
 };
@@ -88,11 +112,14 @@ SceneSettings.prototype.handleKeyDown = function(keyCode) {
             break;
         case sf.key.ENTER:
             switch (idx) {
-                case 1: //ok
+                case 1: // togglebutton
+                    $('#svecToggleButton_Groups').sfToggleButton('toggle');
+                    break;
+                case 2: //ok
                     sf.core.localData('serverip', document.getElementById("serverip").value);
-                    sf.core.localData('startgroups', $('#svecCheckBox_Groups').sfCheckBox('getChecked'));
+                    sf.core.localData('startgroups', $('#svecToggleButton_Groups').sfToggleButton('isOn'));
                     //no break
-                case 2: //cancel
+                case 3: //cancel
                     Data.URL = "http://" + sf.core.localData("serverip") + ":6544";
                     if (sf.core.localData('startgroups')) {
                         Data.mainScene = "Groups";
@@ -103,13 +130,6 @@ SceneSettings.prototype.handleKeyDown = function(keyCode) {
                     sf.scene.hide('Settings');
                     sf.scene.show(Data.mainScene);
                     sf.scene.focus(Data.mainScene);
-                    break;
-                case 3: //groups
-                    if ($('#svecCheckBox_Groups').sfCheckBox('getChecked')) {
-                        $('#svecCheckBox_Groups').sfCheckBox('uncheck');
-                    } else {
-                        $('#svecCheckBox_Groups').sfCheckBox('check');
-                    }
                     break;
             }
             break;

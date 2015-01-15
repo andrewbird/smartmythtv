@@ -16,11 +16,52 @@
   width : 200px
 }
 
-#SceneSettings #serverip {
+#SceneSettings #svecText_IP {
+  border: 3px solid;
+  border-radius: 8px;
+  padding: 3px;
+  color: #ffffff;
+  padding-left:10px;
   position : absolute;
   left : 300px;
   top : 100px;
-  width : 590px
+  width : 280px
+}
+#SceneSettings #serverip {
+  border: none;
+  color: #ffffff;
+  font-size : 14pt
+}
+
+#SceneSettings #svecLabel_RTUS {
+  position : absolute;
+  font-size : 10pt;
+  color : #210000;
+  left : 320px;
+  top : 140px;
+  width : 440px;
+  margin-top: 5px
+}
+
+#SceneSettings #svecLabel_Groups {
+  position : absolute;
+  font-size : 14pt;
+  color : #210000;
+  left : 50px;
+  top : 210px;
+  width : 200px
+}
+
+#SceneSettings #svecToggleButton_Groups {
+  position : absolute;
+  font-size : 10pt;
+  left : 300px;
+  top : 210px;
+  width : 300px
+}
+
+#SceneSettings #svecToggleButton_Groups .sf-ui-button-c {
+  width : 100px
 }
 
 #SceneSettings #svecButton_OK {
@@ -35,27 +76,4 @@
   left : 490px;
   top : 440px;
   width : 121px
-}
-
-#SceneSettings #svecLabel_RTUS {
-  position : absolute;
-  font-size : 10pt;
-  color : #210000;
-  left : 320px;
-  top : 140px;
-  width : 440px
-}
-
-#SceneSettings #svecCheckBox_Groups {
-  position : absolute;
-  left : 20px;
-  top : 210px
-}
-
-#SceneSettings #svecButton_Groups {
-  position : absolute;
-  font-size : 10pt;
-  left : 50px;
-  top : 210px;
-  width : 250px
 }
