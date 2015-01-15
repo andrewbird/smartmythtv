@@ -18,6 +18,5 @@ var Data = {
     max: 0,
     maxVideos: 0,
     currentStream: 0,
-    startGroups: 0,
     mainScene: ""
 };

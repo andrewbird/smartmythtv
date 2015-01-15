@@ -4,7 +4,6 @@ function onStart() {
     if (ip === null) {
         if (id === "SDK") {
             Data.URL = "http://192.168.3.45:6544";
-            Data.startGroups = true;
             Data.mainScene = "Groups";
 
             sf.scene.show(Data.mainScene);
@@ -15,8 +14,7 @@ function onStart() {
         }
     } else {
         Data.URL = "http://" + ip + ":6544";
-        Data.startGroups = sf.core.localData("startgroups");
-        if (Data.startGroups) {
+        if (sf.core.localData("startgroups")) {
             Data.mainScene = "Groups";
         } else {
             Data.mainScene = "Recordings";

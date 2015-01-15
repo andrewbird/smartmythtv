@@ -21,9 +21,6 @@ SceneSettings.prototype.initialize = function() {
         'text': 'Please enter IP to mythweb and mythbackend (e.g. 192.168.1.99)<br>' + 'Use TTX/MIX or the GREEN key for . and the RED key to delete.'
     });
     $('#svecCheckBox_Groups').sfCheckBox();
-    if (Data.startGroups) {
-        $('#svecCheckBox_Groups').sfCheckBox('check');
-    }
     $('#svecButton_Groups').sfButton({
         text: 'Start in Groups View'
     });
@@ -37,7 +34,11 @@ SceneSettings.prototype.handleHide = function() {};
 
 SceneSettings.prototype.handleFocus = function() {
     document.getElementById("serverip").value = sf.core.localData("serverip");
-    startGroups = Data.startGroups;
+    if (sf.core.localData('startgroups')) {
+        $('#svecCheckBox_Groups').sfCheckBox('check');
+    } else {
+        $('#svecCheckBox_Groups').sfCheckBox('uncheck');
+    }
 };
 
 SceneSettings.prototype.handleBlur = function() {};
@@ -89,11 +90,11 @@ SceneSettings.prototype.handleKeyDown = function(keyCode) {
             switch (idx) {
                 case 1: //ok
                     sf.core.localData('serverip', document.getElementById("serverip").value);
-                    sf.core.localData('startgroups', Data.startGroups);
+                    sf.core.localData('startgroups', $('#svecCheckBox_Groups').sfCheckBox('getChecked'));
                     //no break
                 case 2: //cancel
                     Data.URL = "http://" + sf.core.localData("serverip") + ":6544";
-                    if (Data.startGroups) {
+                    if (sf.core.localData('startgroups')) {
                         Data.mainScene = "Groups";
                     } else {
                         Data.mainScene = "Recordings";
@@ -104,11 +105,9 @@ SceneSettings.prototype.handleKeyDown = function(keyCode) {
                     sf.scene.focus(Data.mainScene);
                     break;
                 case 3: //groups
-                    if (Data.startGroups) {
-                        Data.startGroups = 0;
+                    if ($('#svecCheckBox_Groups').sfCheckBox('getChecked')) {
                         $('#svecCheckBox_Groups').sfCheckBox('uncheck');
                     } else {
-                        Data.startGroups = 1;
                         $('#svecCheckBox_Groups').sfCheckBox('check');
                     }
                     break;
