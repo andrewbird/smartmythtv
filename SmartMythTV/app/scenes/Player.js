@@ -8,6 +8,8 @@ function ScenePlayer(options) {
     this.options = options;
 };
 
+ScenePlayer.prototype.NAME = "Player";
+
 ScenePlayer.prototype.initialize = function() {};
 
 ScenePlayer.prototype.handleShow = function() {
@@ -101,7 +103,7 @@ ScenePlayer.prototype.endOfStream = function() {
 };
 
 ScenePlayer.prototype.doHide = function() {
-    sf.scene.hide('Player');
+    sf.scene.hide(this.NAME);
     sf.scene.show(Data.mainScene);
     sf.scene.focus(Data.mainScene);
 };

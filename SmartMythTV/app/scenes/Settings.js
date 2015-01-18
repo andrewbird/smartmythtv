@@ -7,6 +7,8 @@ function SceneSettings(options) {
     this.options = options;
 }
 
+SceneSettings.prototype.NAME = "Settings";
+
 SceneSettings.prototype.initialize = function() {
     $('#svecLabel_WPTS').sfLabel({
         text: 'Mythbackend IP: '
@@ -126,7 +128,7 @@ SceneSettings.prototype.handleKeyDown = function(keyCode) {
                     } else {
                         Data.mainScene = "Recordings";
                     }
-                    sf.scene.hide('Settings');
+                    sf.scene.hide(this.NAME);
                     sf.scene.show(Data.mainScene);
                     sf.scene.focus(Data.mainScene);
                     break;

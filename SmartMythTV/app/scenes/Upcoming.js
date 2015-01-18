@@ -1,6 +1,9 @@
 function SceneUpcoming() {
 
 }
+
+SceneUpcoming.prototype.NAME = "Upcoming";
+
 var lastStatus = 99;
 
 SceneUpcoming.prototype.initialize = function() {
@@ -157,22 +160,22 @@ SceneUpcoming.prototype.handleKeyDown = function(keyCode) {
             $('#svecPopup_ok_cancel_0AM8').sfPopup('focus');
             break;
         case sf.key.GREEN:
-            sf.scene.hide('Upcoming');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Videos');
             sf.scene.focus('Videos');
             return;
         case sf.key.YELLOW:
-            sf.scene.hide('Upcoming');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Groups');
             sf.scene.focus('Groups');
             return;
         case sf.key.BLUE:
-            sf.scene.hide('Upcoming');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Recordings');
             sf.scene.focus('Recordings');
             return;
         case sf.key.TOOLS:
-            sf.scene.hide('Recordings');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Settings');
             sf.scene.focus('Settings');
             return;

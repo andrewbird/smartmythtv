@@ -3,6 +3,8 @@ function SceneError() {
 
 }
 
+SceneError.prototype.NAME = "Error";
+
 SceneError.prototype.initialize = function() {
     alert("SceneError.initialize()");
     // this function will be called only once when the scene manager show this scene first time
@@ -66,12 +68,12 @@ SceneError.prototype.handleKeyDown = function(keyCode) {
             Data.loadedUpcoming = 0;
             Data.loadedVideos = 0;
             Data.loadedRecordings = 0;
-            sf.scene.hide('Error');
+            sf.scene.hide(this.NAME);
             sf.scene.show(Data.mainScene);
             sf.scene.focus(Data.mainScene);
             break;
         case sf.key.TOOLS:
-            sf.scene.hide('Error');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Settings');
             sf.scene.focus('Settings');
             return;

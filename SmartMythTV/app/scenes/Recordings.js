@@ -4,6 +4,8 @@ function SceneRecordings(options) {
     this.options = options;
 }
 
+SceneRecordings.prototype.NAME = "Recordings";
+
 SceneRecordings.prototype.initialize = function() {
     $('#svecListbox_BOUK').sfList({
         itemsPerPage: 10
@@ -111,9 +113,9 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
             break;
         case sf.key.ENTER:
             Data.currentStream = this.getRecording();
-            sf.scene.hide('Recordings');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Player', {
-                parent: "Recordings"
+                parent: this.NAME
             });
             sf.scene.focus('Player');
             break;
@@ -137,22 +139,22 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
             $('#svecPopup_ok_cancel_0AM7').sfPopup('focus');
             break;
         case 20: //GREEN
-            sf.scene.hide('Recordings');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Videos');
             sf.scene.focus('Videos');
             break;
         case 21: //YELLOW
-            sf.scene.hide('Recordings');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Groups');
             sf.scene.focus('Groups');
             break;
         case sf.key.TOOLS:
-            sf.scene.hide('Recordings');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Settings');
             sf.scene.focus('Settings');
             break;
         case sf.key.BLUE:
-            sf.scene.hide('Recordings');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Upcoming');
             sf.scene.focus('Upcoming');
             return;

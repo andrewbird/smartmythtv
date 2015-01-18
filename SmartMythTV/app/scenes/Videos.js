@@ -4,6 +4,8 @@ function SceneVideos(options) {
     this.options = options;
 }
 
+SceneVideos.prototype.NAME = "Videos";
+
 SceneVideos.prototype.initialize = function() {
     $('#svecListbox_BOVI').sfList({
         itemsPerPage: 10
@@ -98,9 +100,9 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
             break;
         case sf.key.ENTER:
             Data.currentStream = this.getVideo();
-            sf.scene.hide('Videos');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Player', {
-                parent: "Videos"
+                parent: this.NAME
             });
             sf.scene.focus('Player');
             break;
@@ -124,17 +126,17 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
             $('#svecPopup_ok_cancel_0AVI').sfPopup('focus');
             break;
         case sf.key.YELLOW:
-            sf.scene.hide('Videos');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Groups');
             sf.scene.focus('Groups');
             break;
         case sf.key.TOOLS:
-            sf.scene.hide('Videos');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Settings');
             sf.scene.focus('Settings');
             break;
         case sf.key.BLUE:
-            sf.scene.hide('Videos');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Upcoming');
             sf.scene.focus('Upcoming');
             return;

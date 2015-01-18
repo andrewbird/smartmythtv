@@ -4,6 +4,8 @@ function SceneGroups(options) {
 var widgetAPI = new Common.API.Widget(); // Create Common module
 var level = 0;
 
+SceneGroups.prototype.NAME = "Groups";
+
 SceneGroups.prototype.initialize = function() {
     $('#svecListbox_Groups').sfList({
         itemsPerPage: 10
@@ -88,22 +90,22 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
 
     switch (keyCode) {
         case 20: // GREEN
-            sf.scene.hide('Groups');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Videos');
             sf.scene.focus('Videos');
             return;
         case sf.key.YELLOW:
-            sf.scene.hide('Groups');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Recordings');
             sf.scene.focus('Recordings');
             return;
         case sf.key.TOOLS:
-            sf.scene.hide('Groups');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Settings');
             sf.scene.focus('Settings');
             return;
         case sf.key.BLUE:
-            sf.scene.hide('Groups');
+            sf.scene.hide(this.NAME);
             sf.scene.show('Upcoming');
             sf.scene.focus('Upcoming');
             return;
@@ -163,9 +165,9 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
             case sf.key.PLAY:
                 // Play the selected item
                 Data.currentStream = this.getRecording();
-                sf.scene.hide('Groups');
+                sf.scene.hide(this.NAME);
                 sf.scene.show('Player', {
-                    parent: "Groups"
+                    parent: this.NAME
                 });
                 sf.scene.focus('Player');
                 break;
