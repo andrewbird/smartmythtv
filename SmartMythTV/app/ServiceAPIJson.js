@@ -54,12 +54,35 @@ ServiceAPI.loadRecordings = function(context, callback, errback) {
             Data.Titles = [];
             Data.Recordings = [];
 
+            Data.GroupsGroupTitles = [];
+            Data.GroupsMemberTitles = [];
+            Data.GroupsRecordings = [];
+
             for (var i in elements.ProgramList.Programs) {
-                Data.Titles.push(list.Programs[i].Title + ": " + list.Programs[i].SubTitle);
                 Data.Recordings.push(new Rec(list.Programs[i]));
+
+                var info = list.Programs[i].SubTitle;
+                if(info.length == 0) {
+                    info = ServiceAPI.showDate(ServiceAPI.getDate(list.Programs[i].StartTime));
+                    Data.Titles.push(list.Programs[i].Title);
+                } else {
+                    Data.Titles.push(list.Programs[i].Title + ": " + info);
+                }
+
+                var pos = Data.GroupsGroupTitles.indexOf(list.Programs[i].Title);
+                if (pos == -1) { // Not found, create new group
+                    pos = Data.GroupsGroupTitles.push(list.Programs[i].Title) - 1;
+                    Data.GroupsMemberTitles.push([]);
+                    Data.GroupsRecordings.push([]);
+                }
+
+                Data.GroupsMemberTitles[pos].push(info);
+
+                Data.GroupsRecordings[pos].push(new Rec(list.Programs[i]));
             }
 
             Data.loadedRecordings = 1;
+
             callback.call(context);
         },
 
@@ -77,47 +100,6 @@ ServiceAPI.deleteRecording = function(context, callback, errback, recording) {
         data: {ChanId: recording.ChanId, StartTime: recording.StartTime},
 
         success: function(data, textStatus, jqXHR) {
-            callback.call(context);
-        },
-
-        error: function() {
-            errback.call(context);
-        }
-    });
-};
-
-
-ServiceAPI.loadGroups = function(context, callback, errback) {
-    $.ajax({
-        url: Data.URL + "/Dvr/GetRecordedList?Descending=true",
-        type: "GET",
-        beforeSend: function(xhr){xhr.setRequestHeader('Accept', 'application/json');},
-        success: function(data, textStatus, jqXHR) {
-            var elements = $.parseJSON(jqXHR.responseText);
-            var list = elements.ProgramList;
-
-            Data.GroupsGroupTitles = [];
-            Data.GroupsMemberTitles = [];
-            Data.GroupsRecordings = [];
-
-            for (var i in elements.ProgramList.Programs) {
-                var pos = Data.GroupsGroupTitles.indexOf(list.Programs[i].Title);
-                if (pos == -1) { // Not found
-                    pos = Data.GroupsGroupTitles.push(list.Programs[i].Title) - 1;
-                    Data.GroupsMemberTitles.push([]);
-                    Data.GroupsRecordings.push([]);
-                }
-
-                var info = list.Programs[i].SubTitle;
-                if (info == "") {
-                    info = ServiceAPI.showDate(ServiceAPI.getDate(list.Programs[i].StartTime));
-                }
-                Data.GroupsMemberTitles[pos].push(info);
-
-                Data.GroupsRecordings[pos].push(new Rec(list.Programs[i]));
-            }
-
-            Data.loadedGroups = 1;
             callback.call(context);
         },
 

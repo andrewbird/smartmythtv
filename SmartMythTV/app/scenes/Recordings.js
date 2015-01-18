@@ -36,23 +36,32 @@ SceneRecordings.prototype.showDescription = function() {
 
 SceneRecordings.prototype.loadData = function() {
     $('#svecLoadingImage_RBMO').sfLoading('show');
-    ServiceAPI.loadRecordings(this,
-        function() {
-            $('#svecListbox_BOUK').sfList({
-                data: Data.Titles,
-                index: 0
-            });
-            $('#svecLoadingImage_RBMO').sfLoading('hide');
 
-            // display
-            this.showDescription();
-        },
+    if (Data.loadedRecordings != 0) {
+        $('#svecListbox_BOUK').sfList({
+            data: Data.Titles,
+            index: 0
+        });
+        this.showDescription();
+        $('#svecLoadingImage_RBMO').sfLoading('hide');
 
-        function() {
-            $('#svecLoadingImage_RBMO').sfLoading('hide');
-            ServiceAPI.onError();
-        }
-    );
+    } else {
+        ServiceAPI.loadRecordings(this,
+            function() {
+                $('#svecListbox_BOUK').sfList({
+                    data: Data.Titles,
+                        index: 0
+                });
+                this.showDescription();
+                $('#svecLoadingImage_RBMO').sfLoading('hide');
+            },
+
+            function() {
+                $('#svecLoadingImage_RBMO').sfLoading('hide');
+                ServiceAPI.onError();
+            }
+        );
+    }
 };
 
 SceneRecordings.prototype.handleShow = function() {};
@@ -63,9 +72,7 @@ SceneRecordings.prototype.handleHide = function() {
 
 SceneRecordings.prototype.handleFocus = function() {
     Data.mainScene = "Recordings";
-    if (Data.loadedRecordings == 0) {
-        this.loadData();
-    }
+    this.loadData();
 };
 
 SceneRecordings.prototype.handleBlur = function() {};

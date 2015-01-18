@@ -14,33 +14,39 @@ SceneGroups.prototype.initialize = function() {
     $('#svecScrollbar_GKRU').sfScroll({
         page: 0
     });
-    if (Data.loadedGroups == 0) {
-        this.loadData();
-    }
 };
 
 
 SceneGroups.prototype.loadData = function() {
     $('#svecLoadingImage_GBMO').sfLoading('show');
 
-    ServiceAPI.loadGroups(this,
-        function() {
-            $('#svecListbox_Groups').sfList({
-                data: Data.GroupsGroupTitles,
-                index: 0
-            });
-            this.Level0();
-            $('#svecLoadingImage_GBMO').sfLoading('hide');
-        },
+    if (Data.loadedRecordings != 0) {
+        $('#svecListbox_Groups').sfList({
+            data: Data.GroupsGroupTitles,
+            index: 0
+        });
+        this.Level0();
+        $('#svecLoadingImage_GBMO').sfLoading('hide');
 
-        function() {
-            widgetAPI.putInnerHTML(document
-                .getElementById("svecDescription_GRPS"),
-                "Failed to load data from MythTv backend");
-            $('#svecLoadingImage_GBMO').sfLoading('hide');
-        }
-    );
+    } else {
+        ServiceAPI.loadRecordings(this,
+            function() {
+                $('#svecListbox_Groups').sfList({
+                    data: Data.GroupsGroupTitles,
+                    index: 0
+                });
+                this.Level0();
+                $('#svecLoadingImage_GBMO').sfLoading('hide');
+            },
 
+            function() {
+                widgetAPI.putInnerHTML(document
+                    .getElementById("svecDescription_GRPS"),
+                    "Failed to load data from MythTv backend");
+                $('#svecLoadingImage_GBMO').sfLoading('hide');
+            }
+        );
+    }
 };
 
 
@@ -73,7 +79,7 @@ SceneGroups.prototype.handleHide = function() {
 
 SceneGroups.prototype.handleFocus = function() {
     Data.mainScene = "Groups";
-    SceneGroups.prototype.loadData();
+    this.loadData();
 };
 
 SceneGroups.prototype.handleBlur = function() {};
