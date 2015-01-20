@@ -24,7 +24,7 @@ SceneGroups.prototype.loadData = function() {
     if(Data.GroupsGroupTitles.length == 0) {
         $('#svecLoadingImage_GBMO').sfLoading('show');
 
-        if (Data.loadedRecordings == 0) {
+        if (Data.Recordings.length == 0) {
             ServiceAPI.loadRecordings(this,
                 function() {
                     ServiceAPI.makeGroupsView();
@@ -117,6 +117,7 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
             sf.scene.focus('Upcoming');
             return;
         case sf.key.INFO:
+            ServiceAPI.clearRecordings();
             this.loadData();
             return;
     };

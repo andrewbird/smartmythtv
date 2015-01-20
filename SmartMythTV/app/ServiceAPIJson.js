@@ -58,8 +58,6 @@ ServiceAPI.loadRecordings = function(context, callback, errback) {
 
             }
 
-            Data.loadedRecordings = 1;
-
             callback.call(context);
         },
 
@@ -69,9 +67,19 @@ ServiceAPI.loadRecordings = function(context, callback, errback) {
     });
 };
 
+ServiceAPI.clearRecordings = function() {
+    Data.Recordings.length = 0;
+
+    Data.Titles.length = 0;
+
+    Data.GroupsGroupTitles.length = 0;
+    Data.GroupsMemberTitles.length = 0;
+    Data.GroupsRecordings.length = 0;
+};
+
 
 ServiceAPI.makeFlatView = function() {
-    Data.Titles = [];
+    Data.Titles.length = 0;
 
     var rec = null;
 
@@ -88,10 +96,9 @@ ServiceAPI.makeFlatView = function() {
 
 
 ServiceAPI.makeGroupsView = function() {
-
-    Data.GroupsGroupTitles = [];
-    Data.GroupsMemberTitles = [];
-    Data.GroupsRecordings = [];
+    Data.GroupsGroupTitles.length = 0;
+    Data.GroupsMemberTitles.length = 0;
+    Data.GroupsRecordings.length = 0;
 
     var rec = null, info = "", pos = -1;
 

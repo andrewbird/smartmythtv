@@ -40,7 +40,7 @@ SceneRecordings.prototype.loadData = function() {
     if (Data.Titles.length == 0) {
         $('#svecLoadingImage_RBMO').sfLoading('show');
 
-        if (Data.loadedRecordings == 0) {
+        if (Data.Recordings.length == 0) {
             ServiceAPI.loadRecordings(this,
                 function() {
                     ServiceAPI.makeFlatView();
