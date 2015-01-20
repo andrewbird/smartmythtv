@@ -24,8 +24,6 @@ function onStart() {
         sf.scene.show(Data.mainScene);
         sf.scene.focus(Data.mainScene);
     }
-
-    sf.start();
 }
 
 function onDestroy() {
