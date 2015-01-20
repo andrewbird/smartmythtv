@@ -176,7 +176,9 @@ SceneUpcoming.prototype.handleKeyDown = function(keyCode) {
             return;
         case sf.key.TOOLS:
             sf.scene.hide(this.NAME);
-            sf.scene.show('Settings');
+            sf.scene.show('Settings', {
+                caller: this.NAME
+            });
             sf.scene.focus('Settings');
             return;
         case sf.key.N1: // Reload

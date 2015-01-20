@@ -6,13 +6,16 @@ var pstate = 0; // stopped
 
 function ScenePlayer(options) {
     this.options = options;
+    this.caller = null;
 };
 
 ScenePlayer.prototype.NAME = "Player";
 
 ScenePlayer.prototype.initialize = function() {};
 
-ScenePlayer.prototype.handleShow = function() {
+ScenePlayer.prototype.handleShow = function(args) {
+    this.caller = args.caller;
+
     plugin = document.getElementById("pluginPlayer");
     plugin.InitPlayer(ServiceAPI.getStreamUrl(Data.currentStream));
     plugin.SetDisplayArea(0, 0, 960, 540);
@@ -104,8 +107,8 @@ ScenePlayer.prototype.endOfStream = function() {
 
 ScenePlayer.prototype.doHide = function() {
     sf.scene.hide(this.NAME);
-    sf.scene.show(Data.mainScene);
-    sf.scene.focus(Data.mainScene);
+    sf.scene.show(this.caller);
+    sf.scene.focus(this.caller);
 };
 
 ScenePlayer.prototype.IsPlaying = function() {

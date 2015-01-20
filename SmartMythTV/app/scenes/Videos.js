@@ -102,7 +102,7 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
             Data.currentStream = this.getVideo();
             sf.scene.hide(this.NAME);
             sf.scene.show('Player', {
-                parent: this.NAME
+                caller: this.NAME
             });
             sf.scene.focus('Player');
             break;
@@ -132,7 +132,9 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
             break;
         case sf.key.TOOLS:
             sf.scene.hide(this.NAME);
-            sf.scene.show('Settings');
+            sf.scene.show('Settings', {
+                caller: this.NAME
+            });
             sf.scene.focus('Settings');
             break;
         case sf.key.BLUE:

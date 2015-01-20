@@ -9,7 +9,9 @@ function onStart() {
             sf.scene.show(Data.mainScene);
             sf.scene.focus(Data.mainScene);
         } else {
-            sf.scene.show("Settings");
+            sf.scene.show("Settings", {
+                caller: Data.mainScene
+            });
             sf.scene.focus("Settings");
         }
     } else {

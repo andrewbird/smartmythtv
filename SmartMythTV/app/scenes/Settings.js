@@ -5,6 +5,7 @@ var idxMax = 3;
 
 function SceneSettings(options) {
     this.options = options;
+    this.caller = null;
 }
 
 SceneSettings.prototype.NAME = "Settings";
@@ -50,7 +51,9 @@ SceneSettings.prototype.initialize = function() {
     idx = 0;
 };
 
-SceneSettings.prototype.handleShow = function() {};
+SceneSettings.prototype.handleShow = function(args) {
+    this.caller = args.caller;
+};
 
 SceneSettings.prototype.handleHide = function() {};
 
@@ -129,8 +132,8 @@ SceneSettings.prototype.handleKeyDown = function(keyCode) {
                         Data.mainScene = "Recordings";
                     }
                     sf.scene.hide(this.NAME);
-                    sf.scene.show(Data.mainScene);
-                    sf.scene.focus(Data.mainScene);
+                    sf.scene.show(this.caller);
+                    sf.scene.focus(this.caller);
                     break;
             }
             break;

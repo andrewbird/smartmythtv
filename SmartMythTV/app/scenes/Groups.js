@@ -1,6 +1,7 @@
 function SceneGroups(options) {
     this.options = options;
 }
+
 var widgetAPI = new Common.API.Widget(); // Create Common module
 var level = 0;
 
@@ -101,7 +102,9 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
             return;
         case sf.key.TOOLS:
             sf.scene.hide(this.NAME);
-            sf.scene.show('Settings');
+            sf.scene.show('Settings', {
+                caller: this.NAME
+            });
             sf.scene.focus('Settings');
             return;
         case sf.key.BLUE:
@@ -167,7 +170,7 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
                 Data.currentStream = this.getRecording();
                 sf.scene.hide(this.NAME);
                 sf.scene.show('Player', {
-                    parent: this.NAME
+                    caller: this.NAME
                 });
                 sf.scene.focus('Player');
                 break;
