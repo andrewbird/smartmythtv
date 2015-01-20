@@ -37,32 +37,36 @@ SceneRecordings.prototype.showDescription = function() {
 };
 
 SceneRecordings.prototype.loadData = function() {
-    $('#svecLoadingImage_RBMO').sfLoading('show');
+    if (Data.Titles.length == 0) {
+        $('#svecLoadingImage_RBMO').sfLoading('show');
 
-    if (Data.loadedRecordings != 0) {
-        $('#svecListbox_BOUK').sfList({
-            data: Data.Titles,
-            index: 0
-        });
-        this.showDescription();
-        $('#svecLoadingImage_RBMO').sfLoading('hide');
+        if (Data.loadedRecordings == 0) {
+            ServiceAPI.loadRecordings(this,
+                function() {
+                    ServiceAPI.makeFlatView();
+                    $('#svecListbox_BOUK').sfList({
+                        data: Data.Titles,
+                            index: 0
+                    });
+                    this.showDescription();
+                    $('#svecLoadingImage_RBMO').sfLoading('hide');
+                },
 
-    } else {
-        ServiceAPI.loadRecordings(this,
-            function() {
-                $('#svecListbox_BOUK').sfList({
-                    data: Data.Titles,
-                        index: 0
-                });
-                this.showDescription();
-                $('#svecLoadingImage_RBMO').sfLoading('hide');
-            },
+                function() {
+                    $('#svecLoadingImage_RBMO').sfLoading('hide');
+                    ServiceAPI.onError();
+                }
+            );
 
-            function() {
-                $('#svecLoadingImage_RBMO').sfLoading('hide');
-                ServiceAPI.onError();
-            }
-        );
+        } else {
+            ServiceAPI.makeFlatView();
+            $('#svecListbox_BOUK').sfList({
+                data: Data.Titles,
+                    index: 0
+            });
+            this.showDescription();
+            $('#svecLoadingImage_RBMO').sfLoading('hide');
+        }
     }
 };
 

@@ -51,34 +51,11 @@ ServiceAPI.loadRecordings = function(context, callback, errback) {
             var elements = $.parseJSON(jqXHR.responseText);
             var list = elements.ProgramList;
 
-            Data.Titles = [];
             Data.Recordings = [];
-
-            Data.GroupsGroupTitles = [];
-            Data.GroupsMemberTitles = [];
-            Data.GroupsRecordings = [];
 
             for (var i in elements.ProgramList.Programs) {
                 Data.Recordings.push(new Rec(list.Programs[i]));
 
-                var info = list.Programs[i].SubTitle;
-                if(info.length == 0) {
-                    info = ServiceAPI.showDate(ServiceAPI.getDate(list.Programs[i].StartTime));
-                    Data.Titles.push(list.Programs[i].Title);
-                } else {
-                    Data.Titles.push(list.Programs[i].Title + ": " + info);
-                }
-
-                var pos = Data.GroupsGroupTitles.indexOf(list.Programs[i].Title);
-                if (pos == -1) { // Not found, create new group
-                    pos = Data.GroupsGroupTitles.push(list.Programs[i].Title) - 1;
-                    Data.GroupsMemberTitles.push([]);
-                    Data.GroupsRecordings.push([]);
-                }
-
-                Data.GroupsMemberTitles[pos].push(info);
-
-                Data.GroupsRecordings[pos].push(new Rec(list.Programs[i]));
             }
 
             Data.loadedRecordings = 1;
@@ -90,6 +67,53 @@ ServiceAPI.loadRecordings = function(context, callback, errback) {
             errback.call(context);
         }
     });
+};
+
+
+ServiceAPI.makeFlatView = function() {
+    Data.Titles = [];
+
+    var rec = null;
+
+    for (var i = 0; i < Data.Recordings.length; i++) {
+        rec = Data.Recordings[i];
+
+        if(rec.SubTitle.length == 0) {
+            Data.Titles.push(rec.Title);
+        } else {
+            Data.Titles.push(rec.Title + ": " + rec.SubTitle);
+        }
+    }
+};
+
+
+ServiceAPI.makeGroupsView = function() {
+
+    Data.GroupsGroupTitles = [];
+    Data.GroupsMemberTitles = [];
+    Data.GroupsRecordings = [];
+
+    var rec = null, info = "", pos = -1;
+
+    for (var i = 0; i < Data.Recordings.length; i++) {
+        rec = Data.Recordings[i];
+
+        info = rec.SubTitle;
+        if(info.length == 0) {
+            info = ServiceAPI.showDate(ServiceAPI.getDate(rec.StartTime));
+        }
+
+        pos = Data.GroupsGroupTitles.indexOf(rec.Title);
+        if (pos == -1) { // Not found, create new group
+            pos = Data.GroupsGroupTitles.push(rec.Title) - 1;
+            Data.GroupsMemberTitles.push([]);
+            Data.GroupsRecordings.push([]);
+        }
+
+        Data.GroupsMemberTitles[pos].push(info);
+
+        Data.GroupsRecordings[pos].push(rec);
+    }
 };
 
 

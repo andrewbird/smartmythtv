@@ -21,34 +21,38 @@ SceneGroups.prototype.initialize = function() {
 
 
 SceneGroups.prototype.loadData = function() {
-    $('#svecLoadingImage_GBMO').sfLoading('show');
+    if(Data.GroupsGroupTitles.length == 0) {
+        $('#svecLoadingImage_GBMO').sfLoading('show');
 
-    if (Data.loadedRecordings != 0) {
-        $('#svecListbox_Groups').sfList({
-            data: Data.GroupsGroupTitles,
-            index: 0
-        });
-        this.Level0();
-        $('#svecLoadingImage_GBMO').sfLoading('hide');
+        if (Data.loadedRecordings == 0) {
+            ServiceAPI.loadRecordings(this,
+                function() {
+                    ServiceAPI.makeGroupsView();
+                    $('#svecListbox_Groups').sfList({
+                        data: Data.GroupsGroupTitles,
+                        index: 0
+                    });
+                    this.Level0();
+                    $('#svecLoadingImage_GBMO').sfLoading('hide');
+                },
 
-    } else {
-        ServiceAPI.loadRecordings(this,
-            function() {
-                $('#svecListbox_Groups').sfList({
-                    data: Data.GroupsGroupTitles,
-                    index: 0
-                });
-                this.Level0();
-                $('#svecLoadingImage_GBMO').sfLoading('hide');
-            },
+                function() {
+                    widgetAPI.putInnerHTML(document
+                        .getElementById("svecDescription_GRPS"),
+                        "Failed to load data from MythTv backend");
+                    $('#svecLoadingImage_GBMO').sfLoading('hide');
+                }
+            );
 
-            function() {
-                widgetAPI.putInnerHTML(document
-                    .getElementById("svecDescription_GRPS"),
-                    "Failed to load data from MythTv backend");
-                $('#svecLoadingImage_GBMO').sfLoading('hide');
-            }
-        );
+        } else {
+            ServiceAPI.makeGroupsView();
+            $('#svecListbox_Groups').sfList({
+                data: Data.GroupsGroupTitles,
+                index: 0
+            });
+            this.Level0();
+            $('#svecLoadingImage_GBMO').sfLoading('hide');
+        }
     }
 };
 
