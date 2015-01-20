@@ -263,6 +263,7 @@ SceneGroups.prototype.getRecording = function() {
 SceneGroups.prototype.onDeleteRecording = function() {
     var gitem = $('#svecListbox_Groups').sfList('getIndex');
     var ritem = $('#svecListbox_Members').sfList('getIndex');
+    var rec = Data.GroupsRecordings[gitem][ritem];
 
     // Remove the item from the level 1 list
     Data.GroupsMemberTitles[gitem].splice(ritem, 1);
@@ -281,5 +282,13 @@ SceneGroups.prototype.onDeleteRecording = function() {
     } else {
         this.Level1();
     }
+
+    // We find the recording and title in the Flat list also
+    var idx = ServiceAPI.getObjectIndexInList(rec, Data.Recordings);
+    if(idx !== null) {
+        Data.Recordings.splice(idx, 1);
+        Data.Titles.length = 0; // empty the list to cause reload on show
+    }
+
     $('#svecLoadingImage_GBMO').sfLoading('hide');
 };

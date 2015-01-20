@@ -124,6 +124,16 @@ ServiceAPI.makeGroupsView = function() {
 };
 
 
+ServiceAPI.getObjectIndexInList  = function(obj, list) {
+    for (var i = 0; i < list.length; i++) {
+        if (obj === list[i]) {
+            return i;
+        }
+    }
+    return null;
+};
+
+
 ServiceAPI.deleteRecording = function(context, callback, errback, recording) {
     $.ajax({
         url: Data.URL + '/Dvr/RemoveRecorded',
