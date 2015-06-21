@@ -14,7 +14,7 @@ SceneGroups.prototype.initialize = function() {
     $('#svecListbox_Members').sfList({
         itemsPerPage: 10
     });
-    $('#svecScrollbar_GKRU').sfScroll({
+    $('#svecScrollbar_Groups').sfScroll({
         page: 0
     });
 };
@@ -32,6 +32,11 @@ SceneGroups.prototype.loadData = function() {
                         data: Data.GroupsGroupTitles,
                         index: 0
                     });
+                    $('#svecScrollbar_Groups').sfScroll({
+                        page: 0,
+                        pages: (Data.GroupsGroupTitles.length / 10)
+                    });
+                    $('#svecScrollbar_Groups').sfScroll('move',0);
                     this.Level0();
                     $('#svecLoadingImage_GBMO').sfLoading('hide');
                 },
@@ -50,6 +55,11 @@ SceneGroups.prototype.loadData = function() {
                 data: Data.GroupsGroupTitles,
                 index: 0
             });
+            $('#svecScrollbar_Groups').sfScroll({
+                page: 0,
+                pages: (Data.GroupsGroupTitles.length / 10)
+            });
+            $('#svecScrollbar_Groups').sfScroll('move',0);
             this.Level0();
             $('#svecLoadingImage_GBMO').sfLoading('hide');
         }
@@ -76,6 +86,10 @@ SceneGroups.prototype.setHelp = function() {
     }
 
     $('#svecKeyHelp_G2NM').sfKeyHelp(keys);
+};
+
+SceneGroups.prototype.updateScrollbar = function(keyCode) {
+    $('#svecScrollbar_Groups').sfScroll('move',$('#svecListbox_Groups').sfList('getIndex')/10);
 };
 
 SceneGroups.prototype.handleShow = function() {};
@@ -135,13 +149,13 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
                 break;
             case sf.key.UP:
                 // Show previous item in level 0 list
-                $('#svecScrollbar_GKRU').sfScroll('prev');
                 $('#svecListbox_Groups').sfList('prev');
+                this.updateScrollbar();
                 break;
             case sf.key.DOWN:
                 // Show next item in level 0 list
-                $('#svecScrollbar_GKRU').sfScroll('next');
                 $('#svecListbox_Groups').sfList('next');
+                this.updateScrollbar();
                 break;
         }
 
@@ -157,13 +171,11 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
                 break;
 
             case sf.key.UP:
-                $('#svecScrollbar_GKRU').sfScroll('prev');
                 $('#svecListbox_Members').sfList('prev');
                 SceneGroups.prototype.showDescription();
                 break;
 
             case sf.key.DOWN:
-                $('#svecScrollbar_GKRU').sfScroll('next');
                 $('#svecListbox_Members').sfList('next');
                 SceneGroups.prototype.showDescription();
                 break;
@@ -208,6 +220,7 @@ SceneGroups.prototype.Level0 = function() {
     $('#svecListbox_Members').sfList('hide');
     $('#svecListbox_Groups').sfList('show');
     $('#svecListbox_Groups').sfList('focus');
+    $('#svecScrollbar_Groups').sfScroll('show');
 
     level = 0;
     this.setHelp();
@@ -221,6 +234,7 @@ SceneGroups.prototype.Level1 = function() {
     alert("Going to groupid:" + gitem);
 
     $('#svecListbox_Groups').sfList('hide');
+    $('#svecScrollbar_Groups').sfScroll('hide');
 
     $('#svecListbox_Members').sfList('clear');
     $('#svecListbox_Members').sfList({
@@ -232,10 +246,6 @@ SceneGroups.prototype.Level1 = function() {
 
     level = 1;
     this.setHelp();
-
-    $('#svecScrollbar_GKRU').sfScroll({
-        page: 0
-    });
     this.showDescription();
 };
 
