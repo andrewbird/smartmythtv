@@ -48,6 +48,10 @@ SceneRecordings.prototype.loadData = function() {
                         data: Data.Titles,
                             index: 0
                     });
+                    $('#svecScrollbar_UKRU').sfScroll({
+                        page: 0,
+                        pages: (Data.Recordings.length / 10)
+                    });
                     this.showDescription();
                     $('#svecLoadingImage_RBMO').sfLoading('hide');
                 },
@@ -63,6 +67,10 @@ SceneRecordings.prototype.loadData = function() {
             $('#svecListbox_BOUK').sfList({
                 data: Data.Titles,
                     index: 0
+            });
+            $('#svecScrollbar_UKRU').sfScroll({
+                page: 0,
+                pages: (Data.Recordings.length / 10)
             });
             this.showDescription();
             $('#svecLoadingImage_RBMO').sfLoading('hide');
@@ -98,6 +106,9 @@ function toText(value) {
     return (value < 10 ? "0" : "") + value;
 }
 
+SceneRecordings.prototype.updateScrollbar = function(keyCode) {
+    $('#svecScrollbar_UKRU').sfScroll('move',$('#svecListbox_BOUK').sfList('getIndex')/10);
+};
 
 SceneRecordings.prototype.handleKeyDown = function(keyCode) {
     switch (keyCode) {
@@ -106,13 +117,13 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
         case sf.key.RIGHT:
             break;
         case sf.key.UP:
-            $('#svecScrollbar_UKRU').sfScroll('prev');
             $('#svecListbox_BOUK').sfList('prev');
+            this.updateScrollbar();
             this.showDescription();
             break;
         case sf.key.DOWN:
-            $('#svecScrollbar_UKRU').sfScroll('next');
             $('#svecListbox_BOUK').sfList('next');
+            this.updateScrollbar();
             this.showDescription();
             break;
         case sf.key.ENTER:
