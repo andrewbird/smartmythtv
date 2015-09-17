@@ -53,9 +53,10 @@ ServiceAPI.loadRecordings = function(context, callback, errback) {
 
             Data.Recordings = [];
 
-            for (var i in elements.ProgramList.Programs) {
+            for (var i in list.Programs) {
+                if (list.Programs[i].Recording.RecGroup === "Deleted")
+                    continue;
                 Data.Recordings.push(new Rec(list.Programs[i]));
-
             }
 
             callback.call(context);
