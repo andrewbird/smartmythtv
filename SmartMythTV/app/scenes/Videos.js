@@ -42,8 +42,11 @@ SceneVideos.prototype.handleFocus = function() {
                     data: Data.VideoTitles,
                     index: 0
                 });
-
                 $('#svecLoadingImage_RBVI').sfLoading('hide');
+                $('#svecScrollbar_UKVI').sfScroll({
+                    page: 0,
+                    pages: (Data.VideoTitles.length / 10)
+                });
                 this.showDescription();
             },
             function() {
@@ -71,6 +74,12 @@ SceneVideos.prototype.getVideo = function() {
     return Data.Videos[$('#svecListbox_BOVI').sfList('getIndex')];
 };
 
+
+SceneVideos.prototype.updateScrollbar = function(keyCode) {
+    $('#svecScrollbar_UKVI').sfScroll('move',$('#svecListbox_BOVI').sfList('getIndex')/10);
+};
+
+
 SceneVideos.prototype.handleKeyDown = function(keyCode) {
     switch (keyCode) {
         case sf.key.LEFT:
@@ -78,13 +87,13 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
         case sf.key.RIGHT:
             break;
         case sf.key.UP:
-            $('#svecScrollbar_UKVI').sfScroll('prev');
             $('#svecListbox_BOVI').sfList('prev');
+            this.updateScrollbar();
             this.showDescription();
             break;
         case sf.key.DOWN:
-            $('#svecScrollbar_UKVI').sfScroll('next');
             $('#svecListbox_BOVI').sfList('next');
+            this.updateScrollbar();
             this.showDescription();
             break;
         case sf.key.ENTER:
