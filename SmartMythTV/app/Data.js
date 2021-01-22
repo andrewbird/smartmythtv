@@ -1,6 +1,6 @@
 var Data = {
     URL: "",
-    SMARTMYTHTVVERSION: "SmartMythTV 0.4.3",
+    SMARTMYTHTVVERSION: "SmartMythTV 0.4.4",
     Titles: [],
     GroupsGroupTitles: [],
     GroupsMemberTitles: [],
