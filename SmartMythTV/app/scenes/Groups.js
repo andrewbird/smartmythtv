@@ -21,48 +21,39 @@ SceneGroups.prototype.initialize = function() {
 
 
 SceneGroups.prototype.loadData = function() {
-    if(Data.GroupsGroupTitles.length == 0) {
-        $('#svecLoadingImage_GBMO').sfLoading('show');
 
-        if (Data.Recordings.length == 0) {
-            ServiceAPI.loadRecordings(this,
-                function() {
-                    ServiceAPI.makeGroupsView();
-                    $('#svecListbox_Groups').sfList({
-                        data: Data.GroupsGroupTitles,
-                        index: 0
-                    });
-                    $('#svecScrollbar_Groups').sfScroll({
-                        page: 0,
-                        pages: (Data.GroupsGroupTitles.length / 10)
-                    });
-                    $('#svecScrollbar_Groups').sfScroll('move',0);
-                    this.Level0();
-                    $('#svecLoadingImage_GBMO').sfLoading('hide');
-                },
+    $('#svecLoadingImage_GBMO').sfLoading('show');
 
-                function() {
-                    widgetAPI.putInnerHTML(document
-                        .getElementById("svecDescription_GRPS"),
-                        "Failed to load data from MythTv backend");
-                    $('#svecLoadingImage_GBMO').sfLoading('hide');
-                }
-            );
+    self = this;
 
-        } else {
-            ServiceAPI.makeGroupsView();
-            $('#svecListbox_Groups').sfList({
-                data: Data.GroupsGroupTitles,
-                index: 0
-            });
-            $('#svecScrollbar_Groups').sfScroll({
-                page: 0,
-                pages: (Data.GroupsGroupTitles.length / 10)
-            });
-            $('#svecScrollbar_Groups').sfScroll('move',0);
-            this.Level0();
-            $('#svecLoadingImage_GBMO').sfLoading('hide');
-        }
+    done = function () {
+        ServiceAPI.makeGroupsView();
+        $('#svecListbox_Groups').sfList({
+            data: Data.GroupsGroupTitles,
+            index: 0
+        });
+        $('#svecScrollbar_Groups').sfScroll({
+            page: 0,
+            pages: (Data.GroupsGroupTitles.length / 10)
+        });
+        $('#svecScrollbar_Groups').sfScroll('move',0);
+        self.Level0();
+
+        $('#svecLoadingImage_GBMO').sfLoading('hide');
+    };
+
+    if (Data.Recordings.length == 0) {
+        ServiceAPI.loadRecordings(this,
+            done,
+            function() {
+                widgetAPI.putInnerHTML(document
+                    .getElementById("svecDescription_GRPS"),
+                    "Failed to load data from MythTv backend");
+                $('#svecLoadingImage_GBMO').sfLoading('hide');
+            }
+        );
+    } else {
+        done();
     }
 };
 
@@ -145,7 +136,7 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
             case sf.key.PLAY:
                 // Select a level 0 item from Group, now change the list to be All
                 // the titles in that group and move to level 1
-                SceneGroups.prototype.Level1();
+                this.Level1();
                 break;
             case sf.key.UP:
                 // Show previous item in level 0 list
@@ -167,17 +158,17 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
             case sf.key.LEFT:
             case sf.key.BACK:
                 // Go back to previous level, show all the groups
-                SceneGroups.prototype.Level0();
+                this.Level0();
                 break;
 
             case sf.key.UP:
                 $('#svecListbox_Members').sfList('prev');
-                SceneGroups.prototype.showDescription();
+                this.showDescription();
                 break;
 
             case sf.key.DOWN:
                 $('#svecListbox_Members').sfList('next');
-                SceneGroups.prototype.showDescription();
+                this.showDescription();
                 break;
 
             case sf.key.RIGHT:

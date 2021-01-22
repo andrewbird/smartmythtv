@@ -37,44 +37,35 @@ SceneRecordings.prototype.showDescription = function() {
 };
 
 SceneRecordings.prototype.loadData = function() {
-    if (Data.Titles.length == 0) {
-        $('#svecLoadingImage_RBMO').sfLoading('show');
 
-        if (Data.Recordings.length == 0) {
-            ServiceAPI.loadRecordings(this,
-                function() {
-                    ServiceAPI.makeFlatView();
-                    $('#svecListbox_BOUK').sfList({
-                        data: Data.Titles,
-                            index: 0
-                    });
-                    $('#svecScrollbar_UKRU').sfScroll({
-                        page: 0,
-                        pages: (Data.Recordings.length / 10)
-                    });
-                    this.showDescription();
-                    $('#svecLoadingImage_RBMO').sfLoading('hide');
-                },
+    $('#svecLoadingImage_RBMO').sfLoading('show');
 
-                function() {
-                    $('#svecLoadingImage_RBMO').sfLoading('hide');
-                    ServiceAPI.onError();
-                }
-            );
+    self = this;
 
-        } else {
-            ServiceAPI.makeFlatView();
-            $('#svecListbox_BOUK').sfList({
-                data: Data.Titles,
-                    index: 0
-            });
-            $('#svecScrollbar_UKRU').sfScroll({
-                page: 0,
-                pages: (Data.Recordings.length / 10)
-            });
-            this.showDescription();
-            $('#svecLoadingImage_RBMO').sfLoading('hide');
-        }
+    done = function() {
+        ServiceAPI.makeFlatView();
+        $('#svecListbox_BOUK').sfList({
+            data: Data.Titles,
+            index: 0
+        });
+        $('#svecScrollbar_UKRU').sfScroll({
+            page: 0,
+            pages: (Data.Recordings.length / 10)
+        });
+        self.showDescription();
+        $('#svecLoadingImage_RBMO').sfLoading('hide');
+    };
+
+    if (Data.Recordings.length == 0) {
+        ServiceAPI.loadRecordings(this,
+            done,
+            function() {
+                $('#svecLoadingImage_RBMO').sfLoading('hide');
+                ServiceAPI.onError();
+            }
+        );
+    } else {
+        done();
     }
 };
 
