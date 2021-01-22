@@ -42,7 +42,6 @@ Rec.prototype.toHtmlTable = function() {
     }
     data = data + "</table>";
     data = data + this.Description.replace(/\n/g, '<br>');
-    data = data + "</table>";
     return data;
 };
 
@@ -51,19 +50,11 @@ function Vid(prog) {
     this.Title = prog.Title;
     this.SubTitle = prog.SubTitle;
     this.Description = prog.Description;
-
-    if (prog.Artwork && prog.Artwork.ArtworkInfos.length > 0) {
-        for ( var j in prog.Artwork.ArtworkInfos) {
-            if (prog.Artwork.ArtworkInfos[j].Type == "coverart") {
-                this.coverart = prog.Artwork.ArtworkInfos[j].URL;
-            }
-            if (prog.Artwork.ArtworkInfos[j].Type == "fanart") {
-                this.fanart = prog.Artwork.ArtworkInfos[j].URL;
-            }
-        }
-    }
+    this.Season = prog.Season;
+    this.Episode = prog.Episode;
+    this.ReleaseDate = prog.ReleaseDate;
     this.Id = prog.Id;
-    this.length = prog.Length;
+    this.Length = prog.Length;
 
     return this;
 };
@@ -77,16 +68,29 @@ Vid.prototype.toHtmlTable = function() {
     var hasinfo = false;
     var data = "<table border>";
 
+    if (this.Title && this.Title != "") {
+        hasinfo = true;
+        data = data + "<tr><td>Title</td><td>" + this.Title + "</td></tr>";
+    }
     if (this.SubTitle && this.SubTitle != "") {
         hasinfo = true;
         data = data + "<tr><td>SubTitle</td><td>" + this.SubTitle + "</td></tr>";
     }
-    if (this.length > 0) {
+    if (this.Season != "" && this.Season != 0 && this.Episode != "" && this.Episode != 0) {
         hasinfo = true;
-        data = data + "<tr><td>Length</td><td>" + this.length + " minutes</td></tr>";
+        data = data + "<tr><td>Order</td><td>" + "S" + this.Season + " E" + this.Episode + "</td></tr>";
+    }
+    if (this.ReleaseDate && this.ReleaseDate != "") {
+        hasinfo = true;
+        data = data + "<tr><td>Release</td><td>" + this.ReleaseDate.substring(0, 10) + "</td></tr>";
+    }
+    if (this.Length > 0) {
+        hasinfo = true;
+        data = data + "<tr><td>Length</td><td>" + this.Length + " minutes</td></tr>";
     }
 
     data = data + "</table>";
+    data = data + this.Description.replace(/\n/g, '<br>');
     if (hasinfo == false) {
         data = "";
     }

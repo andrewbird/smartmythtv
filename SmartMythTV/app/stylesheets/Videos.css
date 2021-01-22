@@ -32,29 +32,10 @@
   font-size : 12pt;
   color : #FFFFFF;
   left : 550px;
-  top : 60px;
+  top : 100px;
   width : 400px;
-  height : 210px;
+  height : 400px;
   overflow : auto
-}
-
-#SceneVideos #descriptionTable_VI {
-  position : absolute;
-  font-size : 12pt;
-  color : #FFFFFF;
-  left : 755px;
-  top : 280px;
-  width : 200px;
-  height : 150px;
-  overflow : auto
-}
-
-#SceneVideos #cover_VI {
-  position : absolute;
-  left : 550px;
-  top : 280px;
-  width : 200px;
-  height : 200px
 }
 
 #SceneVideos #svecLoadingImage_RBVI {

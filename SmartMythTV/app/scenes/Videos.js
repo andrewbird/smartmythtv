@@ -59,22 +59,11 @@ SceneVideos.prototype.handleBlur = function() {};
 
 
 SceneVideos.prototype.showDescription = function() {
-    var cover = "";
-    var detail = "";
-    var description = "";
-
     var vid = this.getVideo();
     if (vid) {
-        if (vid.coverart) {
-            cover = "<img src=\"" + Data.URL + vid.coverart + "\" height=200>";
-        }
-        detail = vid.Description.replace(/\n/g, '<br>');
-        description = vid.toHtmlTable();
+        widgetAPI.putInnerHTML(document.getElementById("description_VI"), vid.toHtmlTable());
     }
 
-    widgetAPI.putInnerHTML(document.getElementById("cover_VI"), cover);
-    widgetAPI.putInnerHTML(document.getElementById("description_VI"), detail);
-    widgetAPI.putInnerHTML(document.getElementById("descriptionTable_VI"), description);
 };
 
 

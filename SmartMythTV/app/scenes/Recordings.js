@@ -33,7 +33,7 @@ SceneRecordings.prototype.getRecording = function() {
 SceneRecordings.prototype.showDescription = function() {
     var rec = this.getRecording();
 
-    widgetAPI.putInnerHTML(document.getElementById("description"), rec.toHtmlTable());
+    widgetAPI.putInnerHTML(document.getElementById("description_RE"), rec.toHtmlTable());
 };
 
 SceneRecordings.prototype.loadData = function() {
