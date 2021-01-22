@@ -46,6 +46,7 @@ ServiceAPI.loadRecordings = function(context, callback, errback) {
     $.ajax({
         url: Data.URL + "/Dvr/GetRecordedList?Descending=true",
         type: "GET",
+        cache: false,
         beforeSend: function(xhr){xhr.setRequestHeader('Accept', 'application/json');},
         success: function(data, textStatus, jqXHR) {
             var elements = $.parseJSON(jqXHR.responseText);
@@ -156,6 +157,7 @@ ServiceAPI.loadUpcoming = function(context, callback, errback) {
     $.ajax({
         url: Data.URL + "/Dvr/GetUpcomingList?Count=30&ShowAll=true",
         type: "GET",
+        cache: false,
         beforeSend: function(xhr){xhr.setRequestHeader('Accept', 'application/json');},
         success: function(data, textStatus, jqXHR) {
             var elements = $.parseJSON(jqXHR.responseText);
@@ -227,6 +229,7 @@ ServiceAPI.loadVideos = function(context, callback, errback) {
     $.ajax({
         url: Data.URL + "/Video/GetVideoList?Descending=true",
         type: "GET",
+        cache: false,
         beforeSend: function(xhr){xhr.setRequestHeader('Accept', 'application/json');},
         success: function(data, textStatus, jqXHR) {
             var elements = $.parseJSON(jqXHR.responseText);
