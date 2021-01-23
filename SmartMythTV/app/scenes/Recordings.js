@@ -4,15 +4,23 @@ function SceneRecordings(options) {
     this.options = options;
 }
 
+var $rlist, itemsPerPage = 10;
+var $rscroll;
+
 SceneRecordings.prototype.NAME = "Recordings";
 
 SceneRecordings.prototype.initialize = function() {
-    $('#svecListbox_BOUK').sfList({
-        itemsPerPage: 10
+
+    $rlist = $('#svecListbox_BOUK');
+    $rlist.sfList({
+        itemsPerPage: itemsPerPage
     });
-    $('#svecScrollbar_UKRU').sfScroll({
-        page: 0
+
+    $rscroll = $('#svecScrollbar_UKRU');
+    $rscroll.sfScroll({
+        currentPage: 0
     });
+
     $('#svecKeyHelp_O2NM').sfKeyHelp({
         'user': Data.SMARTMYTHTVVERSION,
         'red': 'Delete',
@@ -27,7 +35,7 @@ SceneRecordings.prototype.initialize = function() {
 };
 
 SceneRecordings.prototype.getRecording = function() {
-    return Data.Recordings[$('#svecListbox_BOUK').sfList('getIndex')];
+    return Data.Recordings[$rlist.sfList('getIndex')];
 };
 
 SceneRecordings.prototype.showDescription = function() {
@@ -44,14 +52,19 @@ SceneRecordings.prototype.loadData = function() {
 
     done = function() {
         ServiceAPI.makeFlatView();
-        $('#svecListbox_BOUK').sfList({
+
+        numberOfItems = Data.Recordings.length;
+
+        $rlist.sfList({
             data: Data.Titles,
             index: 0
         });
-        $('#svecScrollbar_UKRU').sfScroll({
-            page: 0,
-            pages: (Data.Recordings.length / 10)
+
+        $rscroll.sfScroll({
+            currentPage: 0,
+            pages: Math.ceil(numberOfItems / itemsPerPage)
         });
+
         self.showDescription();
         $('#svecLoadingImage_RBMO').sfLoading('hide');
     };
@@ -97,8 +110,9 @@ function toText(value) {
     return (value < 10 ? "0" : "") + value;
 }
 
-SceneRecordings.prototype.updateScrollbar = function(keyCode) {
-    $('#svecScrollbar_UKRU').sfScroll('move',$('#svecListbox_BOUK').sfList('getIndex')/10);
+SceneRecordings.prototype.updateScrollbar = function() {
+    var currentPage = $rlist.sfList('getIndex') / itemsPerPage;
+    $rscroll.sfScroll('move', Math.floor(currentPage));
 };
 
 SceneRecordings.prototype.handleKeyDown = function(keyCode) {
@@ -108,12 +122,12 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
         case sf.key.RIGHT:
             break;
         case sf.key.UP:
-            $('#svecListbox_BOUK').sfList('prev');
+            $rlist.sfList('prev');
             this.updateScrollbar();
             this.showDescription();
             break;
         case sf.key.DOWN:
-            $('#svecListbox_BOUK').sfList('next');
+            $rlist.sfList('next');
             this.updateScrollbar();
             this.showDescription();
             break;
@@ -125,8 +139,9 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
             });
             sf.scene.focus('Player');
             break;
-        case 108: //RED
+        case sf.key.RED:
             var item = this.getRecording();
+
             $('#svecPopup_ok_cancel_0AM7').sfPopup({
                 'text': 'Do you really want to delete ' + item.Title + '<BR/>' + item.SubTitle + '?',
                 buttons: ['Yes', 'No'],
@@ -134,9 +149,9 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
                     if (rlt == 0) {
                         $('#svecLoadingImage_RBMO').sfLoading('show');
                         ServiceAPI.deleteRecording(
-                            sf.scene.get('Recordings'),
-                            sf.scene.get('Recordings').onDeleteRecording,
-                            ServiceAPI.onError,
+                            sf.scene.get('Recordings'),                    // context
+                            sf.scene.get('Recordings').onDeleteRecording,  // callback
+                            ServiceAPI.onError,                            // errback
                             item);
                     }
                 }
@@ -144,12 +159,12 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
             $('#svecPopup_ok_cancel_0AM7').sfPopup('show');
             $('#svecPopup_ok_cancel_0AM7').sfPopup('focus');
             break;
-        case 20: //GREEN
+        case sf.key.GREEN:
             sf.scene.hide(this.NAME);
             sf.scene.show('Videos');
             sf.scene.focus('Videos');
             break;
-        case 21: //YELLOW
+        case sf.key.YELLOW:
             sf.scene.hide(this.NAME);
             sf.scene.show('Groups');
             sf.scene.focus('Groups');
@@ -171,16 +186,15 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
 
 
 SceneRecordings.prototype.onDeleteRecording = function() {
-    var vlist = $('#svecListbox_BOUK');
-    var current = vlist.sfList('getIndex');
+    var current = $rlist.sfList('getIndex');
     Data.Recordings.splice(current, 1);
     Data.Titles.splice(current, 1);
-    vlist.sfList({
+    $rlist.sfList({
         data: Data.Titles,
         index: 0
     });
-    if (current < vlist.Count) {
-        vlist.sfList('move', current);
+    if (current < $rlist.Count) {
+        $rlist.sfList('move', current);
     }
     this.showDescription();
     $('#svecLoadingImage_RBMO').sfLoading('hide');

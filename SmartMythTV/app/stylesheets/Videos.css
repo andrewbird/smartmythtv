@@ -7,14 +7,14 @@
   background-color : #000000
 }
 
-#SceneVideos #svecListbox_BOVI {
+#SceneVideos #svecListbox_Videos {
   position : absolute;
   left : 50px;
   top : 70px;
   width : 470px
 }
 
-#SceneVideos #svecScrollbar_UKVI {
+#SceneVideos #svecScrollbar_Videos {
   position : absolute;
   left : 540px;
   top : 70px;

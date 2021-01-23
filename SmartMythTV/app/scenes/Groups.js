@@ -5,17 +5,29 @@ function SceneGroups(options) {
 var widgetAPI = new Common.API.Widget(); // Create Common module
 var level = 0;
 
+var $glist, $mlist, itemsPerPage = 10;
+var $gscroll;
+
+
 SceneGroups.prototype.NAME = "Groups";
 
 SceneGroups.prototype.initialize = function() {
-    $('#svecListbox_Groups').sfList({
-        itemsPerPage: 10
+
+    itemsPerPage = 10;
+
+    $gscroll = $('#svecScrollbar_Groups');
+    $gscroll.sfScroll({
+        currentPage: 0
     });
-    $('#svecListbox_Members').sfList({
-        itemsPerPage: 10
+
+    $glist = $('#svecListbox_Groups');
+    $glist.sfList({
+        itemsPerPage: itemsPerPage
     });
-    $('#svecScrollbar_Groups').sfScroll({
-        page: 0
+
+    $mlist = $('#svecListbox_Members');
+    $mlist.sfList({
+        itemsPerPage: itemsPerPage
     });
 };
 
@@ -28,15 +40,19 @@ SceneGroups.prototype.loadData = function() {
 
     done = function () {
         ServiceAPI.makeGroupsView();
-        $('#svecListbox_Groups').sfList({
-            data: Data.GroupsGroupTitles,
-            index: 0
+
+        numberOfItems = Data.GroupsGroupTitles.length;
+
+        $gscroll.sfScroll({
+            pages: Math.ceil(numberOfItems / itemsPerPage)
         });
-        $('#svecScrollbar_Groups').sfScroll({
-            page: 0,
-            pages: (Data.GroupsGroupTitles.length / 10)
+        $gscroll.sfScroll('move', 0);     // current Page to be indicated
+
+        $glist.sfList({
+            data: Data.GroupsGroupTitles
         });
-        $('#svecScrollbar_Groups').sfScroll('move',0);
+        $glist.sfList('move', 0);        // Index of the current item
+
         self.Level0();
 
         $('#svecLoadingImage_GBMO').sfLoading('hide');
@@ -79,8 +95,9 @@ SceneGroups.prototype.setHelp = function() {
     $('#svecKeyHelp_G2NM').sfKeyHelp(keys);
 };
 
-SceneGroups.prototype.updateScrollbar = function(keyCode) {
-    $('#svecScrollbar_Groups').sfScroll('move',$('#svecListbox_Groups').sfList('getIndex')/10);
+SceneGroups.prototype.updateScrollbar = function() {
+    var currentPage = $glist.sfList('getIndex') / itemsPerPage;
+    $gscroll.sfScroll('move', Math.floor(currentPage));
 };
 
 SceneGroups.prototype.handleShow = function() {};
@@ -99,7 +116,7 @@ SceneGroups.prototype.handleBlur = function() {};
 SceneGroups.prototype.handleKeyDown = function(keyCode) {
 
     switch (keyCode) {
-        case 20: // GREEN
+        case sf.key.GREEN:
             sf.scene.hide(this.NAME);
             sf.scene.show('Videos');
             sf.scene.focus('Videos');
@@ -140,12 +157,12 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
                 break;
             case sf.key.UP:
                 // Show previous item in level 0 list
-                $('#svecListbox_Groups').sfList('prev');
+                $glist.sfList('prev');
                 this.updateScrollbar();
                 break;
             case sf.key.DOWN:
                 // Show next item in level 0 list
-                $('#svecListbox_Groups').sfList('next');
+                $glist.sfList('next');
                 this.updateScrollbar();
                 break;
         }
@@ -162,12 +179,12 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
                 break;
 
             case sf.key.UP:
-                $('#svecListbox_Members').sfList('prev');
+                $mlist.sfList('prev');
                 this.showDescription();
                 break;
 
             case sf.key.DOWN:
-                $('#svecListbox_Members').sfList('next');
+                $mlist.sfList('next');
                 this.showDescription();
                 break;
 
@@ -186,6 +203,7 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
             case sf.key.RED:
                 // Delete the selected item
                 var item = this.getRecording();
+
                 $('#svecPopup_ok_cancel_GAM7').sfPopup({
                     'text': 'Do you really want to delete ' + item.Title + '<BR/>' + item.SubTitle + '?',
                     buttons: ['Yes', 'No'],
@@ -193,9 +211,9 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
                         if (rlt == 0) {
                             $('#svecLoadingImage_GBMO').sfLoading('show');
                             ServiceAPI.deleteRecording(
-                                sf.scene.get('Groups'),                         // context
-                                sf.scene.get('Groups').onDeleteRecording,       // callback
-                                ServiceAPI.onError,                             // errback
+                                sf.scene.get('Groups'),                    // context
+                                sf.scene.get('Groups').onDeleteRecording,  // callback
+                                ServiceAPI.onError,                        // errback
                                 item);
                         }
                     }
@@ -208,10 +226,11 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
 };
 
 SceneGroups.prototype.Level0 = function() {
-    $('#svecListbox_Members').sfList('hide');
-    $('#svecListbox_Groups').sfList('show');
-    $('#svecListbox_Groups').sfList('focus');
-    $('#svecScrollbar_Groups').sfScroll('show');
+    $mlist.sfList('hide');
+
+    $glist.sfList('show');
+    $glist.sfList('focus');
+    $gscroll.sfScroll('show');
 
     level = 0;
     this.setHelp();
@@ -221,19 +240,18 @@ SceneGroups.prototype.Level0 = function() {
 };
 
 SceneGroups.prototype.Level1 = function() {
-    var gitem = $('#svecListbox_Groups').sfList('getIndex');
-    alert("Going to groupid:" + gitem);
+    var gitem = $glist.sfList('getIndex');
 
-    $('#svecListbox_Groups').sfList('hide');
-    $('#svecScrollbar_Groups').sfScroll('hide');
+    $glist.sfList('hide');
+    $gscroll.sfScroll('hide');
 
-    $('#svecListbox_Members').sfList('clear');
-    $('#svecListbox_Members').sfList({
+    $mlist.sfList('clear');
+    $mlist.sfList({
         data: Data.GroupsMemberTitles[gitem],
         'index': 0
     });
-    $('#svecListbox_Members').sfList('show');
-    $('#svecListbox_Members').sfList('focus');
+    $mlist.sfList('show');
+    $mlist.sfList('focus');
 
     level = 1;
     this.setHelp();
@@ -249,8 +267,8 @@ SceneGroups.prototype.showDescription = function() {
 
 // Find the current Recording
 SceneGroups.prototype.getRecording = function() {
-    var gitem = $('#svecListbox_Groups').sfList('getIndex');
-    var ritem = $('#svecListbox_Members').sfList('getIndex');
+    var gitem = $glist.sfList('getIndex');
+    var ritem = $mlist.sfList('getIndex');
     var rec = Data.GroupsRecordings[gitem][ritem];
     if(rec) {
         alert("GetRecording returning groupid=" + gitem + " ritem=" + ritem + " Filename=" + rec.FileName);
@@ -262,8 +280,8 @@ SceneGroups.prototype.getRecording = function() {
 
 // callback
 SceneGroups.prototype.onDeleteRecording = function() {
-    var gitem = $('#svecListbox_Groups').sfList('getIndex');
-    var ritem = $('#svecListbox_Members').sfList('getIndex');
+    var gitem = $glist.sfList('getIndex');
+    var ritem = $mlist.sfList('getIndex');
     var rec = Data.GroupsRecordings[gitem][ritem];
 
     // Remove the item from the level 1 list
@@ -275,7 +293,7 @@ SceneGroups.prototype.onDeleteRecording = function() {
         Data.GroupsMemberTitles.splice(gitem, 1);
         Data.GroupsRecordings.splice(gitem, 1);
         Data.GroupsGroupTitles.splice(gitem, 1);
-        $('#svecListbox_Groups').sfList({
+        $glist.sfList({
             data: Data.GroupsGroupTitles,
             index: 0
         });

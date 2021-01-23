@@ -4,15 +4,23 @@ function SceneVideos(options) {
     this.options = options;
 }
 
+var $vlist, itemsPerPage = 10;
+var $vscroll;
+
 SceneVideos.prototype.NAME = "Videos";
 
 SceneVideos.prototype.initialize = function() {
-    $('#svecListbox_BOVI').sfList({
-        itemsPerPage: 10
+
+    $vlist = $('#svecListbox_Videos');
+    $vlist.sfList({
+        itemsPerPage: itemsPerPage
     });
-    $('#svecScrollbar_UKVI').sfScroll({
-        page: 0
+
+    $vscroll = $('#svecScrollbar_Videos');
+    $vscroll.sfScroll({
+        currentPage: 0
     });
+
     $('#svecKeyHelp_O2VI').sfKeyHelp({
         'user': Data.SMARTMYTHTVVERSION,
         'red': 'Delete',
@@ -38,15 +46,19 @@ SceneVideos.prototype.handleFocus = function() {
 
         ServiceAPI.loadVideos(this,
             function() {
-                $('#svecListbox_BOVI').sfList({
+                numberOfItems = Data.VideoTitles.length;
+
+                $vlist.sfList({
                     data: Data.VideoTitles,
                     index: 0
                 });
-                $('#svecLoadingImage_RBVI').sfLoading('hide');
-                $('#svecScrollbar_UKVI').sfScroll({
-                    page: 0,
-                    pages: (Data.VideoTitles.length / 10)
+
+                $vscroll.sfScroll({
+                    currentPage: 0,
+                    pages: Math.ceil(numberOfItems / itemsPerPage)
                 });
+
+                $('#svecLoadingImage_RBVI').sfLoading('hide');
                 this.showDescription();
             },
             function() {
@@ -71,12 +83,13 @@ SceneVideos.prototype.showDescription = function() {
 
 
 SceneVideos.prototype.getVideo = function() {
-    return Data.Videos[$('#svecListbox_BOVI').sfList('getIndex')];
+    return Data.Videos[$('#svecListbox_Videos').sfList('getIndex')];
 };
 
 
-SceneVideos.prototype.updateScrollbar = function(keyCode) {
-    $('#svecScrollbar_UKVI').sfScroll('move',$('#svecListbox_BOVI').sfList('getIndex')/10);
+SceneVideos.prototype.updateScrollbar = function() {
+    var currentPage = $vlist.sfList('getIndex') / itemsPerPage;
+    $vscroll.sfScroll('move', Math.floor(currentPage));
 };
 
 
@@ -87,12 +100,12 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
         case sf.key.RIGHT:
             break;
         case sf.key.UP:
-            $('#svecListbox_BOVI').sfList('prev');
+            $('#svecListbox_Videos').sfList('prev');
             this.updateScrollbar();
             this.showDescription();
             break;
         case sf.key.DOWN:
-            $('#svecListbox_BOVI').sfList('next');
+            $('#svecListbox_Videos').sfList('next');
             this.updateScrollbar();
             this.showDescription();
             break;
@@ -104,8 +117,9 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
             });
             sf.scene.focus('Player');
             break;
-        case 108: // RED
+        case sf.key.RED:
             var item = this.getVideo();
+
             $('#svecPopup_ok_cancel_0AVI').sfPopup({
                 'text': 'Do you really want to delete ' + item.Title + '<BR/>' + item.SubTitle + '?',
                 buttons: ['Yes', 'No'],
@@ -113,9 +127,9 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
                     if (rlt == 0) {
                         $('#svecLoadingImage_RBMO').sfLoading('show');
                         ServiceAPI.deleteVideo(
-                            sf.scene.get('Videos'),
-                            sf.scene.get('Videos').onDeleteVideo,
-                            ServiceAPI.onFailed,
+                            sf.scene.get('Videos'),               // context
+                            sf.scene.get('Videos').onDeleteVideo, // callback
+                            ServiceAPI.onFailed,                  // errback
                             item);
                     }
                 }
@@ -145,16 +159,16 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
 
 
 SceneVideos.prototype.onDeleteVideo = function() {
-    var vlist = $('#svecListbox_BOVI');
-    var current = vlist.sfList('getIndex');
+    var current = $vlist.sfList('getIndex');
+
     Data.Videos.splice(current, 1);
     Data.VideoTitles.splice(current, 1);
-    vlist.sfList({
+    $vlist.sfList({
         data: Data.VideoTitles,
         index: 0
     });
-    if (current < vlist.Count) {
-        vlist.sfList('move', current);
+    if (current < $vlist.Count) {
+        $vlist.sfList('move', current);
     }
     this.showDescription();
     $('#svecLoadingImage_RBMO').sfLoading('hide');
