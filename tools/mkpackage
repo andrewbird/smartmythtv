@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# proper eclipse tool is busted, so let's make our own
+
+if [ -z "${1}" ] ; then
+  echo Usage: mkpackage filename.zip
+  exit 2
+fi
+
+cd SmartMythTV || (
+  echo wrong cwd
+  exit 1
+)
+
+zip -r ../"${1}" *
