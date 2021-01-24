@@ -1,0 +1,9 @@
+
+.sf-ui-scroll .sf-ui-scroll-body {
+/*    color: #ffffff  seems to have no effect */
+}
+
+.sf-ui-scroll .sf-ui-scroll-bg {
+/*    color: #ffffff;  seems to have no effect */
+    background-color: #000000
+}
