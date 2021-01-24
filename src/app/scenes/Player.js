@@ -276,10 +276,18 @@ ScenePlayer.prototype.handleKeyDown = function(keyCode) {
                 callback: function(rlt) {
                     if (rlt == 0) {
                         obj.Stop();
-                        if(item.StartTime) {
-                            ServiceAPI.deleteRecording(item);
+                        if (item.StartTime) {
+                            ServiceAPI.deleteRecording(
+                                sf.scene.get(obj.caller),
+                                sf.scene.get(obj.caller).onDeleteRecording,
+                                ServiceAPI.onError,
+                                item);
                         } else {
-                            ServiceAPI.deleteVideo(item);
+                            ServiceAPI.deleteVideo(
+                                sf.scene.get('Videos'),               // context
+                                sf.scene.get('Videos').onDeleteVideo, // callback
+                                ServiceAPI.onFailed,                  // errback
+                                item);
                         }
                     }
                 }
