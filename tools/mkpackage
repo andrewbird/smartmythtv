@@ -7,7 +7,7 @@ if [ -z "${1}" ] ; then
   exit 2
 fi
 
-cd SmartMythTV || (
+cd src || (
   echo wrong cwd
   exit 1
 )
