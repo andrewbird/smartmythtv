@@ -1,0 +1,5 @@
+#!/bin/sh
+
+HERE=$(realpath $(dirname $0))
+
+exec ${HERE}/../../sdk-v5.1/sec_tv_sdk_ide_5_1_linux64/eclipse
