@@ -196,6 +196,7 @@ SceneRecordings.prototype.onDeleteRecording = function() {
     if (current < $rlist.Count) {
         $rlist.sfList('move', current);
     }
+    this.updateScrollbar();
     this.showDescription();
     $('#svecLoadingImage_RBMO').sfLoading('hide');
 };

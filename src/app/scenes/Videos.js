@@ -170,6 +170,7 @@ SceneVideos.prototype.onDeleteVideo = function() {
     if (current < $vlist.Count) {
         $vlist.sfList('move', current);
     }
+    this.updateScrollbar();
     this.showDescription();
     $('#svecLoadingImage_RBMO').sfLoading('hide');
 };
