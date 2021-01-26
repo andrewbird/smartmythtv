@@ -1,12 +1,13 @@
 function SceneGroups(options) {
     this.options = options;
+    this.level = 0;
 }
 
 var widgetAPI = new Common.API.Widget(); // Create Common module
-var level = 0;
 
 var $glist, $mlist, itemsPerPage = 10;
 var $gscroll;
+var $gspinner;
 
 
 SceneGroups.prototype.NAME = "Groups";
@@ -29,48 +30,77 @@ SceneGroups.prototype.initialize = function() {
     $mlist.sfList({
         itemsPerPage: itemsPerPage
     });
+
+    $gspinner = $('#svecLoadingImage_GBMO');
 };
 
 
-SceneGroups.prototype.loadData = function() {
+SceneGroups.prototype.makeGroupsData = function() {
+    var rec = null, info = "", pos = -1;
 
-    $('#svecLoadingImage_GBMO').sfLoading('show');
+    for (var i = 0; i < Data.Recordings.length; i++) {
+        rec = Data.Recordings[i];
 
-    self = this;
+        info = rec.SubTitle;
+        if(info.length == 0) {
+            info = ServiceAPI.showDate(ServiceAPI.getDate(rec.StartTime));
+        }
 
-    done = function () {
-        ServiceAPI.makeGroupsView();
+        pos = Data.GroupsGroupTitles.indexOf(rec.Title);
+        if (pos == -1) { // Not found, create new group
+            pos = Data.GroupsGroupTitles.push(rec.Title) - 1;
+            Data.GroupsMemberTitles.push([]);
+            Data.GroupsRecordings.push([]);
+        }
 
-        numberOfItems = Data.GroupsGroupTitles.length;
+        Data.GroupsMemberTitles[pos].push(info);
 
-        $gscroll.sfScroll({
-            pages: Math.ceil(numberOfItems / itemsPerPage)
-        });
-        $gscroll.sfScroll('move', 0);     // current Page to be indicated
-
-        $glist.sfList({
-            data: Data.GroupsGroupTitles
-        });
-        $glist.sfList('move', 0);        // Index of the current item
-
-        self.Level0();
-
-        $('#svecLoadingImage_GBMO').sfLoading('hide');
-    };
-
-    if (Data.Recordings.length == 0) {
-        ServiceAPI.loadRecordings(this,
-            done,
-            function() {
-                widgetAPI.putInnerHTML(document
-                    .getElementById("svecDescription_GRPS"),
-                    "Failed to load data from MythTv backend");
-                $('#svecLoadingImage_GBMO').sfLoading('hide');
-            }
-        );
-    } else {
-        done();
+        Data.GroupsRecordings[pos].push(rec);
     }
+
+    numberOfItems = Data.GroupsGroupTitles.length;
+
+    $glist.sfList({
+        data: Data.GroupsGroupTitles
+    });
+
+    $gscroll.sfScroll({
+        pages: Math.ceil(numberOfItems / itemsPerPage)
+    });
+};
+
+
+SceneGroups.prototype.initView = function() {
+    $gspinner.sfLoading('show');
+
+    ServiceAPI.loadRecordings(this,
+
+        function () {
+            this.makeGroupsData();
+            this.selectView(0);
+
+            $gspinner.sfLoading('hide');
+        },
+
+        function() {
+            widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"),
+                "Failed to load data from MythTv backend");
+
+            $gspinner.sfLoading('hide');
+        }
+    );
+
+    $glist.sfList('clear');
+};
+
+
+SceneGroups.prototype.showView = function() {
+    if (Data.GroupsGroupTitles.length == 0) {
+        $gspinner.sfLoading('show');
+        this.makeGroupsData();
+        $gspinner.sfLoading('hide');
+    }
+    this.selectView(this.level);
 };
 
 
@@ -78,13 +108,13 @@ SceneGroups.prototype.setHelp = function() {
     var keys = {};
     keys['user'] = Data.SMARTMYTHTVVERSION;
     keys['info'] = 'Refresh';
-    if (level == 1) {
+    if (this.level == 1) {
         keys['red'] = 'Delete';
     }
     keys['green'] = 'Videos';
     keys['yellow'] = 'Recordings';
     keys['blue'] = 'Upcoming';
-    if (level == 0) {
+    if (this.level == 0) {
         keys['enter'] = 'Select';
         keys['tools'] = 'Settings';
     } else {
@@ -108,7 +138,11 @@ SceneGroups.prototype.handleHide = function() {
 
 SceneGroups.prototype.handleFocus = function() {
     Data.mainScene = "Groups";
-    this.loadData();
+    if (Data.Recordings.length == 0) {
+        this.initView();
+    } else {
+        this.showView();
+    }
 };
 
 SceneGroups.prototype.handleBlur = function() {};
@@ -139,12 +173,11 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
             sf.scene.focus('Upcoming');
             return;
         case sf.key.INFO:
-            ServiceAPI.clearRecordings();
-            this.loadData();
+            this.initView();
             return;
     };
 
-    if (level == 0) {
+    if (this.level == 0) {
         switch (keyCode) {
             case sf.key.LEFT:
                 break;
@@ -153,7 +186,8 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
             case sf.key.PLAY:
                 // Select a level 0 item from Group, now change the list to be All
                 // the titles in that group and move to level 1
-                this.Level1();
+                this.generateMemberList();
+                this.selectView(1);
                 break;
             case sf.key.UP:
                 // Show previous item in level 0 list
@@ -175,7 +209,7 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
             case sf.key.LEFT:
             case sf.key.BACK:
                 // Go back to previous level, show all the groups
-                this.Level0();
+                this.selectView(0);
                 break;
 
             case sf.key.UP:
@@ -209,7 +243,7 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
                     buttons: ['Yes', 'No'],
                     callback: function(rlt) {
                         if (rlt == 0) {
-                            $('#svecLoadingImage_GBMO').sfLoading('show');
+                            $gspinner.sfLoading('show');
                             ServiceAPI.deleteRecording(
                                 sf.scene.get('Groups'),                    // context
                                 sf.scene.get('Groups').onDeleteRecording,  // callback
@@ -225,44 +259,51 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
     }
 };
 
-SceneGroups.prototype.Level0 = function() {
-    $mlist.sfList('hide');
 
-    $glist.sfList('show');
-    $glist.sfList('focus');
-    $gscroll.sfScroll('show');
-
-    level = 0;
-    this.setHelp();
-
-    $('#svecDescription_GRPS').sfLabel('destroy');
-    widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"), "");
-};
-
-SceneGroups.prototype.Level1 = function() {
+SceneGroups.prototype.generateMemberList = function() {
     var gitem = $glist.sfList('getIndex');
-
-    $glist.sfList('hide');
-    $gscroll.sfScroll('hide');
 
     $mlist.sfList('clear');
     $mlist.sfList({
-        data: Data.GroupsMemberTitles[gitem],
-        'index': 0
+        data: Data.GroupsMemberTitles[gitem]
     });
-    $mlist.sfList('show');
-    $mlist.sfList('focus');
-
-    level = 1;
-    this.setHelp();
-    this.showDescription();
 };
+
+
+SceneGroups.prototype.selectView = function(newlevel) {
+    if (newlevel == 0) {
+        $mlist.sfList('hide');
+
+        $glist.sfList('show');
+        $glist.sfList('focus');
+        $gscroll.sfScroll('show');
+
+        this.hideDescription();
+    } else {
+        $glist.sfList('hide');
+        $gscroll.sfScroll('hide');
+
+        $mlist.sfList('show');
+        $mlist.sfList('focus');
+
+        this.showDescription();
+    }
+
+    this.level = newlevel;
+    this.setHelp();
+};
+
 
 // Fill the Description area with details of the selected Recording
 SceneGroups.prototype.showDescription = function() {
     var rec = this.getRecording();
 
     widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"), rec.toHtmlTable());
+};
+
+SceneGroups.prototype.hideDescription = function() {
+    $('#svecDescription_GRPS').sfLabel('destroy');
+    widgetAPI.putInnerHTML(document.getElementById("svecDescription_GRPS"), "");
 };
 
 // Find the current Recording
@@ -297,17 +338,22 @@ SceneGroups.prototype.onDeleteRecording = function() {
             data: Data.GroupsGroupTitles,
             index: 0
         });
-        this.Level0();
+        if (gitem > 0)
+            $glist.sfList('move', gitem - 1);
+        this.selectView(0);
     } else {
-        this.Level1();
+        this.generateMemberList();
+        if (ritem > 0)
+            $mlist.sfList('move', ritem - 1);
+        this.selectView(1);
     }
 
     // We find the recording and title in the Flat list also
     var idx = ServiceAPI.getObjectIndexInList(rec, Data.Recordings);
     if(idx !== null) {
         Data.Recordings.splice(idx, 1);
-        Data.Titles.length = 0; // empty the list to cause reload on show
+        Data.FlatTitles.length = 0; // empty the list to cause reload on show
     }
 
-    $('#svecLoadingImage_GBMO').sfLoading('hide');
+    $gspinner.sfLoading('hide');
 };

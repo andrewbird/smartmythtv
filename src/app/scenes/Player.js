@@ -105,7 +105,7 @@ ScenePlayer.prototype.endOfStream = function() {
     this.Stop();
 };
 
-ScenePlayer.prototype.doHide = function() {
+ScenePlayer.prototype.Quit = function() {
     sf.scene.hide(this.NAME);
     sf.scene.show(this.caller);
     sf.scene.focus(this.caller);
@@ -183,7 +183,6 @@ ScenePlayer.prototype.Stop = function() {
         OSD.hideOSD();
         OSD.stopOSD();
         pluginAPI.setOnScreenSaver();
-        this.doHide();
         return true;
     }
     return false;
@@ -210,15 +209,18 @@ ScenePlayer.prototype.handleKeyDown = function(keyCode) {
 
         case sf.key.RETURN:
             sf.key.preventDefault();
+            /* fall through */
+        case sf.key.STOP:
             this.Stop();
+            this.Quit();
             break;
 
         case tvKey.KEY_RETURN:
         case tvKey.KEY_PANEL_RETURN:
+            alert("tvkey.KEY{,PANEL}RETURN");
             widgetAPI.blockNavigation(keyCode);
-            /* fall through */
-        case sf.key.STOP:
             this.Stop();
+            this.Quit();
             break;
 
         case sf.key.REW:
@@ -276,6 +278,7 @@ ScenePlayer.prototype.handleKeyDown = function(keyCode) {
                 callback: function(rlt) {
                     if (rlt == 0) {
                         obj.Stop();
+                        obj.Quit();
                         if (item.StartTime) {
                             ServiceAPI.deleteRecording(
                                 sf.scene.get(obj.caller),

@@ -52,7 +52,13 @@ ServiceAPI.loadRecordings = function(context, callback, errback) {
             var elements = $.parseJSON(jqXHR.responseText);
             var list = elements.ProgramList;
 
-            Data.Recordings = [];
+// Empty the lists in parallel to the load
+//          Data.Recordings = [];
+
+            for (var i=0; Data.Recordings.length > 0 && i < 10; i++) {
+                /* spin until Data clear */
+                alert("loadRecordings.success() spinning " + Data.Recordings.length);
+            }
 
             for (var i in list.Programs) {
                 if (list.Programs[i].Recording.RecGroup === "Deleted")
@@ -67,62 +73,14 @@ ServiceAPI.loadRecordings = function(context, callback, errback) {
             errback.call(context);
         }
     });
-};
 
-ServiceAPI.clearRecordings = function() {
+    Data.GroupsGroupTitles.length = 0;
+    Data.GroupsMemberTitles.length = 0;
+    Data.GroupsRecordings.length = 0;
+
+    Data.FlatTitles.length = 0;
+
     Data.Recordings.length = 0;
-
-    Data.Titles.length = 0;
-
-    Data.GroupsGroupTitles.length = 0;
-    Data.GroupsMemberTitles.length = 0;
-    Data.GroupsRecordings.length = 0;
-};
-
-
-ServiceAPI.makeFlatView = function() {
-    Data.Titles.length = 0;
-
-    var rec = null;
-
-    for (var i = 0; i < Data.Recordings.length; i++) {
-        rec = Data.Recordings[i];
-
-        if(rec.SubTitle.length == 0) {
-            Data.Titles.push(rec.Title);
-        } else {
-            Data.Titles.push(rec.Title + ": " + rec.SubTitle);
-        }
-    }
-};
-
-
-ServiceAPI.makeGroupsView = function() {
-    Data.GroupsGroupTitles.length = 0;
-    Data.GroupsMemberTitles.length = 0;
-    Data.GroupsRecordings.length = 0;
-
-    var rec = null, info = "", pos = -1;
-
-    for (var i = 0; i < Data.Recordings.length; i++) {
-        rec = Data.Recordings[i];
-
-        info = rec.SubTitle;
-        if(info.length == 0) {
-            info = ServiceAPI.showDate(ServiceAPI.getDate(rec.StartTime));
-        }
-
-        pos = Data.GroupsGroupTitles.indexOf(rec.Title);
-        if (pos == -1) { // Not found, create new group
-            pos = Data.GroupsGroupTitles.push(rec.Title) - 1;
-            Data.GroupsMemberTitles.push([]);
-            Data.GroupsRecordings.push([]);
-        }
-
-        Data.GroupsMemberTitles[pos].push(info);
-
-        Data.GroupsRecordings[pos].push(rec);
-    }
 };
 
 

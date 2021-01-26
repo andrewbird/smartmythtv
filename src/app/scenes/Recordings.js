@@ -6,6 +6,7 @@ function SceneRecordings(options) {
 
 var $rlist, itemsPerPage = 10;
 var $rscroll;
+var $fspinner;
 
 SceneRecordings.prototype.NAME = "Recordings";
 
@@ -20,6 +21,8 @@ SceneRecordings.prototype.initialize = function() {
     $rscroll.sfScroll({
         currentPage: 0
     });
+
+    $fspinner = $('#svecLoadingImage_RBMO');
 
     $('#svecKeyHelp_O2NM').sfKeyHelp({
         'user': Data.SMARTMYTHTVVERSION,
@@ -44,42 +47,68 @@ SceneRecordings.prototype.showDescription = function() {
     widgetAPI.putInnerHTML(document.getElementById("description_RE"), rec.toHtmlTable());
 };
 
-SceneRecordings.prototype.loadData = function() {
+SceneRecordings.prototype.makeFlatData = function() {
+    Data.FlatTitles.length = 0;
 
-    $('#svecLoadingImage_RBMO').sfLoading('show');
+    var rec = null;
 
-    self = this;
+    for (var i = 0; i < Data.Recordings.length; i++) {
+        rec = Data.Recordings[i];
 
-    done = function() {
-        ServiceAPI.makeFlatView();
-
-        numberOfItems = Data.Recordings.length;
-
-        $rlist.sfList({
-            data: Data.Titles,
-            index: 0
-        });
-
-        $rscroll.sfScroll({
-            currentPage: 0,
-            pages: Math.ceil(numberOfItems / itemsPerPage)
-        });
-
-        self.showDescription();
-        $('#svecLoadingImage_RBMO').sfLoading('hide');
-    };
-
-    if (Data.Recordings.length == 0) {
-        ServiceAPI.loadRecordings(this,
-            done,
-            function() {
-                $('#svecLoadingImage_RBMO').sfLoading('hide');
-                ServiceAPI.onError();
-            }
-        );
-    } else {
-        done();
+        if(rec.SubTitle.length == 0) {
+            Data.FlatTitles.push(rec.Title);
+        } else {
+            Data.FlatTitles.push(rec.Title + ": " + rec.SubTitle);
+        }
     }
+
+    numberOfItems = Data.Recordings.length;
+
+    $rlist.sfList({
+        data: Data.FlatTitles,
+        index: 0
+    });
+
+    $rscroll.sfScroll({
+        currentPage: 0,
+        pages: Math.ceil(numberOfItems / itemsPerPage)
+    });
+};
+
+
+SceneRecordings.prototype.initView = function() {
+
+    $fspinner.sfLoading('show');
+
+    ServiceAPI.loadRecordings(this,
+
+        function() {
+            this.makeFlatData();
+            this.showDescription();
+
+            $fspinner.sfLoading('hide');
+        },
+
+        function() {
+            $fspinner.sfLoading('hide');
+            ServiceAPI.onError();
+        }
+    );
+
+    $rlist.sfList('clear');
+};
+
+SceneRecordings.prototype.showView = function() {
+    if (Data.FlatTitles.length == 0) {
+        $fspinner.sfLoading('show');
+        this.makeFlatData();
+        $fspinner.sfLoading('hide');
+    }
+
+    $rlist.sfList('show');
+    $rlist.sfList('focus');
+
+    this.showDescription();
 };
 
 SceneRecordings.prototype.handleShow = function() {};
@@ -90,25 +119,16 @@ SceneRecordings.prototype.handleHide = function() {
 
 SceneRecordings.prototype.handleFocus = function() {
     Data.mainScene = "Recordings";
-    this.loadData();
+    if (Data.Recordings.length == 0) {
+        this.initView();
+    } else {
+        this.showView();
+    }
 };
+
 
 SceneRecordings.prototype.handleBlur = function() {};
 
-SceneRecordings.prototype.receivedFailed = function() {
-    Data.Titles = [];
-    Data.Recordings = [];
-    Data.Titles[0] = "Failed to load mythtv recordings";
-    var r = new Object();
-    r.Description = "Failed to load mythtv recordings\nStatus: " + XHRObj.status + "\nURL: " + Data.URL + "/";
-    Data.Recordings[0] = r;
-    ServiceAPI.onReceived();
-    this.showDescription();
-};
-
-function toText(value) {
-    return (value < 10 ? "0" : "") + value;
-}
 
 SceneRecordings.prototype.updateScrollbar = function() {
     var currentPage = $rlist.sfList('getIndex') / itemsPerPage;
@@ -147,7 +167,7 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
                 buttons: ['Yes', 'No'],
                 callback: function(rlt) {
                     if (rlt == 0) {
-                        $('#svecLoadingImage_RBMO').sfLoading('show');
+                        $fspinner.sfLoading('show');
                         ServiceAPI.deleteRecording(
                             sf.scene.get('Recordings'),                    // context
                             sf.scene.get('Recordings').onDeleteRecording,  // callback
@@ -188,9 +208,9 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
 SceneRecordings.prototype.onDeleteRecording = function() {
     var current = $rlist.sfList('getIndex');
     Data.Recordings.splice(current, 1);
-    Data.Titles.splice(current, 1);
+    Data.FlatTitles.splice(current, 1);
     $rlist.sfList({
-        data: Data.Titles,
+        data: Data.FlatTitles,
         index: 0
     });
     if (current < $rlist.Count) {
@@ -198,5 +218,5 @@ SceneRecordings.prototype.onDeleteRecording = function() {
     }
     this.updateScrollbar();
     this.showDescription();
-    $('#svecLoadingImage_RBMO').sfLoading('hide');
+    $fspinner.sfLoading('hide');
 };
