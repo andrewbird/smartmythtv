@@ -26,7 +26,7 @@ SceneSettings.prototype.initialize = function() {
         $('#serverip').css('background-color','#999999');
     });
     $('#svecLabel_RTUS').sfLabel({
-        'text': 'Please enter IP to mythbackend (e.g. 192.168.1.99)<br>' + 'Use TTX/MIX or the GREEN key for . and the RED key to delete.'
+        'text': 'Please enter IP to mythbackend (e.g. 192.168.1.99)<br>' + 'Use the GREEN key for . and the RED key to delete.'
     });
 
     $('#svecLabel_Groups').sfLabel({
@@ -35,7 +35,7 @@ SceneSettings.prototype.initialize = function() {
     $('#svecToggleButton_Groups').sfToggleButton({
         text: {
           on: 'Groups',
-          off: 'Recordings'
+          off: 'Flat'
         },
         isOn: sf.core.localData('startgroups')
     });
@@ -129,7 +129,7 @@ SceneSettings.prototype.handleKeyDown = function(keyCode) {
                     if (sf.core.localData('startgroups')) {
                         Data.mainScene = "Groups";
                     } else {
-                        Data.mainScene = "Recordings";
+                        Data.mainScene = "Flat";
                     }
                     sf.scene.hide(this.NAME);
                     sf.scene.show(this.caller);

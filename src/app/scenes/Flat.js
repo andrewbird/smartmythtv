@@ -1,53 +1,50 @@
 var widgetAPI = new Common.API.Widget(); // Create Common module
 
-function SceneRecordings(options) {
+function SceneFlat(options) {
     this.options = options;
 }
 
-var $rlist, itemsPerPage = 10;
-var $rscroll;
+var $flist, itemsPerPage = 10;
+var $fscroll;
 var $fspinner;
 
-SceneRecordings.prototype.NAME = "Recordings";
+SceneFlat.prototype.NAME = "Flat";
 
-SceneRecordings.prototype.initialize = function() {
+SceneFlat.prototype.initialize = function() {
 
-    $rlist = $('#svecListbox_BOUK');
-    $rlist.sfList({
+    $flist = $('#svecListbox_BOUK');
+    $flist.sfList({
         itemsPerPage: itemsPerPage
     });
 
-    $rscroll = $('#svecScrollbar_UKRU');
-    $rscroll.sfScroll({
+    $fscroll = $('#svecScrollbar_UKRU');
+    $fscroll.sfScroll({
         currentPage: 0
     });
 
     $fspinner = $('#svecLoadingImage_RBMO');
 
     $('#svecKeyHelp_O2NM').sfKeyHelp({
-        'user': Data.SMARTMYTHTVVERSION,
-        'red': 'Delete',
-        'green': 'Videos',
-        'yellow': 'Groups',
-        'blue': 'Upcoming',
-        'enter': 'Play',
-        'updown': 'UpDown',
-        'tools': 'Settings',
-        'return': 'Back'
+        user   : Data.SMARTMYTHTVVERSION,
+        red    : 'Delete',
+        green  : 'Videos',
+        yellow : 'Upcoming',
+        enter  : 'Play',
+        tools  : 'Settings'
     });
 };
 
-SceneRecordings.prototype.getRecording = function() {
-    return Data.Recordings[$rlist.sfList('getIndex')];
+SceneFlat.prototype.getRecording = function() {
+    return Data.Recordings[$flist.sfList('getIndex')];
 };
 
-SceneRecordings.prototype.showDescription = function() {
+SceneFlat.prototype.showDescription = function() {
     var rec = this.getRecording();
 
     widgetAPI.putInnerHTML(document.getElementById("description_RE"), rec.toHtmlTable());
 };
 
-SceneRecordings.prototype.makeFlatData = function() {
+SceneFlat.prototype.makeFlatData = function() {
     Data.FlatTitles.length = 0;
 
     var rec = null;
@@ -64,19 +61,19 @@ SceneRecordings.prototype.makeFlatData = function() {
 
     numberOfItems = Data.Recordings.length;
 
-    $rlist.sfList({
+    $flist.sfList({
         data: Data.FlatTitles,
         index: 0
     });
 
-    $rscroll.sfScroll({
+    $fscroll.sfScroll({
         currentPage: 0,
         pages: Math.ceil(numberOfItems / itemsPerPage)
     });
 };
 
 
-SceneRecordings.prototype.initView = function() {
+SceneFlat.prototype.initView = function() {
 
     $fspinner.sfLoading('show');
 
@@ -95,30 +92,30 @@ SceneRecordings.prototype.initView = function() {
         }
     );
 
-    $rlist.sfList('clear');
+    $flist.sfList('clear');
 };
 
-SceneRecordings.prototype.showView = function() {
+SceneFlat.prototype.showView = function() {
     if (Data.FlatTitles.length == 0) {
         $fspinner.sfLoading('show');
         this.makeFlatData();
         $fspinner.sfLoading('hide');
     }
 
-    $rlist.sfList('show');
-    $rlist.sfList('focus');
+    $flist.sfList('show');
+    $flist.sfList('focus');
 
     this.showDescription();
 };
 
-SceneRecordings.prototype.handleShow = function() {};
+SceneFlat.prototype.handleShow = function() {};
 
-SceneRecordings.prototype.handleHide = function() {
+SceneFlat.prototype.handleHide = function() {
     // this function will be called when the scene manager hide this scene
 };
 
-SceneRecordings.prototype.handleFocus = function() {
-    Data.mainScene = "Recordings";
+SceneFlat.prototype.handleFocus = function() {
+    Data.mainScene = "Flat";
     if (Data.Recordings.length == 0) {
         this.initView();
     } else {
@@ -127,27 +124,30 @@ SceneRecordings.prototype.handleFocus = function() {
 };
 
 
-SceneRecordings.prototype.handleBlur = function() {};
+SceneFlat.prototype.handleBlur = function() {};
 
 
-SceneRecordings.prototype.updateScrollbar = function() {
-    var currentPage = $rlist.sfList('getIndex') / itemsPerPage;
-    $rscroll.sfScroll('move', Math.floor(currentPage));
+SceneFlat.prototype.updateScrollbar = function() {
+    var currentPage = $flist.sfList('getIndex') / itemsPerPage;
+    $fscroll.sfScroll('move', Math.floor(currentPage));
 };
 
-SceneRecordings.prototype.handleKeyDown = function(keyCode) {
+SceneFlat.prototype.handleKeyDown = function(keyCode) {
     switch (keyCode) {
+        case sf.key.RETURN:
+            sf.key.preventDefault();
+            break;
         case sf.key.LEFT:
             break;
         case sf.key.RIGHT:
             break;
         case sf.key.UP:
-            $rlist.sfList('prev');
+            $flist.sfList('prev');
             this.updateScrollbar();
             this.showDescription();
             break;
         case sf.key.DOWN:
-            $rlist.sfList('next');
+            $flist.sfList('next');
             this.updateScrollbar();
             this.showDescription();
             break;
@@ -159,6 +159,7 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
             });
             sf.scene.focus('Player');
             break;
+
         case sf.key.RED:
             var item = this.getRecording();
 
@@ -169,9 +170,9 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
                     if (rlt == 0) {
                         $fspinner.sfLoading('show');
                         ServiceAPI.deleteRecording(
-                            sf.scene.get('Recordings'),                    // context
-                            sf.scene.get('Recordings').onDeleteRecording,  // callback
-                            ServiceAPI.onError,                            // errback
+                            sf.scene.get('Flat'),                    // context
+                            sf.scene.get('Flat').onDeleteRecording,  // callback
+                            ServiceAPI.onError,                      // errback
                             item);
                     }
                 }
@@ -186,9 +187,10 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
             break;
         case sf.key.YELLOW:
             sf.scene.hide(this.NAME);
-            sf.scene.show('Groups');
-            sf.scene.focus('Groups');
+            sf.scene.show('Upcoming');
+            sf.scene.focus('Upcoming');
             break;
+
         case sf.key.TOOLS:
             sf.scene.hide(this.NAME);
             sf.scene.show('Settings', {
@@ -196,26 +198,24 @@ SceneRecordings.prototype.handleKeyDown = function(keyCode) {
             });
             sf.scene.focus('Settings');
             break;
-        case sf.key.BLUE:
-            sf.scene.hide(this.NAME);
-            sf.scene.show('Upcoming');
-            sf.scene.focus('Upcoming');
-            return;
     }
 };
 
 
-SceneRecordings.prototype.onDeleteRecording = function() {
-    var current = $rlist.sfList('getIndex');
+SceneFlat.prototype.onDeleteRecording = function() {
+    var current = $flist.sfList('getIndex');
     Data.Recordings.splice(current, 1);
     Data.FlatTitles.splice(current, 1);
-    $rlist.sfList({
+    $flist.sfList({
         data: Data.FlatTitles,
         index: 0
     });
-    if (current < $rlist.Count) {
-        $rlist.sfList('move', current);
+    if (current < $flist.Count) {
+        $flist.sfList('move', current);
     }
+
+    // FIXME: perhaps we need to invalidate the group data to cause reload
+
     this.updateScrollbar();
     this.showDescription();
     $fspinner.sfLoading('hide');

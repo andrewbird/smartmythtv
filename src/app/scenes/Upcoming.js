@@ -4,6 +4,7 @@ function SceneUpcoming() {
 
 SceneUpcoming.prototype.NAME = "Upcoming";
 
+var $uspinner;
 var lastStatus = 99;
 
 SceneUpcoming.prototype.initialize = function() {
@@ -14,52 +15,41 @@ SceneUpcoming.prototype.initialize = function() {
     // here
     // scene HTML and CSS will be loaded before this function is called
 
+    $uspinner = $('#svecLoadingImage_Upcoming');
+
     this.setHelp();
 };
 
+
 SceneUpcoming.prototype.setHelp = function() {
+    var keys;
     var rec = this.getRecording();
     if (rec && lastStatus == rec.Status) {
         // Same status, no need to redraw
         return;
     }
 
-    if (rec && rec.Status == 10) {
-        // Inactive
-        $('#svecKeyHelp_Upcoming').sfKeyHelp({
-            'user': Data.SMARTMYTHTVVERSION,
-            'red': "Enable Recording",
-            'green': 'Videos',
-            'yellow': 'Groups',
-            'blue': 'Recordings',
-            'tools': 'Settings',
-            'return': 'Back'
-        });
-        lastStatus = rec.Status;
+    keys = {
+        user   : Data.SMARTMYTHTVVERSION,
+        red    :  'xxxx',  // placeholder to maintain the order
+        green  : 'Videos',
+        yellow : 'Groups',
+        info   : 'Refresh',
+        tools  : 'Settings'
+    };
 
+    if (rec && rec.Status == 10) {
+        keys['red'] = "Enable Recording";       // Inactive
     } else if (rec && rec.Status == -1) {
-        $('#svecKeyHelp_Upcoming').sfKeyHelp({
-            'user': Data.SMARTMYTHTVVERSION,
-            'red': "Disable Recording",
-            'green': 'Videos',
-            'yellow': 'Groups',
-            'blue': 'Recordings',
-            'tools': 'Settings',
-            'return': 'Back'
-        });
-        lastStatus = rec.Status;
+        keys['red'] = "Disable Recording";      // Active
     } else {
-        $('#svecKeyHelp_Upcoming').sfKeyHelp({
-            'user': Data.SMARTMYTHTVVERSION,
-            'green': 'Videos',
-            'yellow': 'Groups',
-            'blue': 'Recordings',
-            'tools': 'Settings',
-            'return': 'Back'
-        });
+        delete keys.red;
     }
+    $('#svecKeyHelp_Upcoming').sfKeyHelp(keys);
 
 };
+
+
 SceneUpcoming.prototype.handleShow = function(data) {
     alert("SceneUpcoming.handleShow()");
     // this function will be called when the scene manager show this scene
@@ -73,7 +63,7 @@ SceneUpcoming.prototype.handleHide = function() {
 SceneUpcoming.prototype.handleFocus = function() {
     Data.mainScene = "Upcoming";
     if (Data.loadedUpcoming == 0) {
-        $('#svecLoadingImage_Upcoming').sfLoading('show');
+        $uspinner.sfLoading('show');
 
         ServiceAPI.onDeleteCurrent = function() {
             alert("onDeleteCurrent upcoming");
@@ -94,12 +84,12 @@ SceneUpcoming.prototype.handleFocus = function() {
                 });
                 this.showDescription();
                 $('#svecListbox_N9NK').sfList('focus');
-                $('#svecLoadingImage_Upcoming').sfLoading('hide');
+                $uspinner.sfLoading('hide');
                 lastStatus = 99;
             },
 
             function() {
-                $('#svecLoadingImage_Upcoming').sfLoading('hide');
+                $uspinner.sfLoading('hide');
                 ServiceAPI.onError();
             }
         );
@@ -116,6 +106,9 @@ SceneUpcoming.prototype.handleKeyDown = function(keyCode) {
     alert("SceneUpcoming.handleKeyDown(" + keyCode + ")");
     // TODO : write an key event handler when this scene get focued
     switch (keyCode) {
+        case sf.key.RETURN:
+            sf.key.preventDefault();
+            break;
         case sf.key.LEFT:
             break;
         case sf.key.RIGHT:
@@ -130,8 +123,10 @@ SceneUpcoming.prototype.handleKeyDown = function(keyCode) {
             break;
         case sf.key.ENTER:
             break;
+
         case sf.key.RED:
-            var rec = SceneUpcoming.prototype.getRecording();
+            var rec = this.getRecording();
+
             var question = "Do you really want to disable rule<br>";
             if (rec.Status == -1) {
                 // default
@@ -148,7 +143,7 @@ SceneUpcoming.prototype.handleKeyDown = function(keyCode) {
                 buttons: ['Yes', 'No'],
                 callback: function(rlt) {
                     if (rlt == 0) { // Yes
-                        $('#svecLoadingImage_Upcoming').sfLoading('show');
+                        $uspinner.sfLoading('show');
                         // TODO integrate "Don't record" feature, when
                         // available in backend
                         ServiceAPI.changeRecordSchedule(rec);
@@ -170,10 +165,8 @@ SceneUpcoming.prototype.handleKeyDown = function(keyCode) {
             sf.scene.focus('Groups');
             return;
         case sf.key.BLUE:
-            sf.scene.hide(this.NAME);
-            sf.scene.show('Recordings');
-            sf.scene.focus('Recordings');
-            return;
+            break;
+
         case sf.key.TOOLS:
             sf.scene.hide(this.NAME);
             sf.scene.show('Settings', {
@@ -181,10 +174,11 @@ SceneUpcoming.prototype.handleKeyDown = function(keyCode) {
             });
             sf.scene.focus('Settings');
             return;
-        case sf.key.N1: // Reload
-            $('#svecLoadingImage_Upcoming').sfLoading('show');
+
+        case sf.key.INFO: // Reload
+            $uspinner.sfLoading('show');
             ServiceAPI.loadUpcoming();
-            $('#svecLoadingImage_Upcoming').sfLoading('hide');
+            $uspinner.sfLoading('hide');
             return;
     };
 };

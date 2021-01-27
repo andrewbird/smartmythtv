@@ -308,12 +308,5 @@ ScenePlayer.prototype.handleKeyDown = function(keyCode) {
                 letterbox = true;
             }
             break;
-
-        case tvKey.KEY_BLUE:
-            sf.service.AVSetting.show(function() {
-
-            });
-            break;
-
     }
 };

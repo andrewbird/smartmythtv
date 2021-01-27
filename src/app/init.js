@@ -19,7 +19,7 @@ function onStart() {
         if (sf.core.localData("startgroups")) {
             Data.mainScene = "Groups";
         } else {
-            Data.mainScene = "Recordings";
+            Data.mainScene = "Flat";
         }
         sf.scene.show(Data.mainScene);
         sf.scene.focus(Data.mainScene);

@@ -22,14 +22,13 @@ SceneVideos.prototype.initialize = function() {
     });
 
     $('#svecKeyHelp_O2VI').sfKeyHelp({
-        'user': Data.SMARTMYTHTVVERSION,
-        'red': 'Delete',
-        'yellow': 'Groups',
-        'blue': 'Upcoming',
-        'enter': 'Play',
-        'updown': 'UpDown',
-        'tools': 'Settings',
-        'return': 'Back'
+        user   : Data.SMARTMYTHTVVERSION,
+        red    : 'Delete',
+        green  : 'Recordings',
+        enter  : 'Play',
+        updown : 'UpDown',
+        info   : 'Refresh',
+        tools  : 'Settings',
     });
 };
 
@@ -95,6 +94,9 @@ SceneVideos.prototype.updateScrollbar = function() {
 
 SceneVideos.prototype.handleKeyDown = function(keyCode) {
     switch (keyCode) {
+        case sf.key.RETURN:
+            sf.key.preventDefault();
+            break;
         case sf.key.LEFT:
             break;
         case sf.key.RIGHT:
@@ -137,7 +139,7 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
             $('#svecPopup_ok_cancel_0AVI').sfPopup('show');
             $('#svecPopup_ok_cancel_0AVI').sfPopup('focus');
             break;
-        case sf.key.YELLOW:
+        case sf.key.GREEN:
             sf.scene.hide(this.NAME);
             sf.scene.show('Groups');
             sf.scene.focus('Groups');

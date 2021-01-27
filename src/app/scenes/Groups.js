@@ -105,25 +105,25 @@ SceneGroups.prototype.showView = function() {
 
 
 SceneGroups.prototype.setHelp = function() {
-    var keys = {};
-    keys['user'] = Data.SMARTMYTHTVVERSION;
-    keys['info'] = 'Refresh';
-    if (this.level == 1) {
-        keys['red'] = 'Delete';
-    }
-    keys['green'] = 'Videos';
-    keys['yellow'] = 'Recordings';
-    keys['blue'] = 'Upcoming';
+    var keys = {
+       user   : Data.SMARTMYTHTVVERSION,
+       red    : 'Delete',
+       green  : 'Videos',
+       yellow : 'Flat',
+       enter  : 'Select',
+       info   : 'Refresh',
+       tools  : 'Settings'
+    };
+
     if (this.level == 0) {
-        keys['enter'] = 'Select';
-        keys['tools'] = 'Settings';
-    } else {
+        delete keys.red;
+    } else if (this.level == 1) {
         keys['enter'] = 'Play';
-        keys['return'] = 'Back';
     }
 
     $('#svecKeyHelp_G2NM').sfKeyHelp(keys);
 };
+
 
 SceneGroups.prototype.updateScrollbar = function() {
     var currentPage = $glist.sfList('getIndex') / itemsPerPage;
@@ -157,8 +157,8 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
             return;
         case sf.key.YELLOW:
             sf.scene.hide(this.NAME);
-            sf.scene.show('Recordings');
-            sf.scene.focus('Recordings');
+            sf.scene.show('Flat');
+            sf.scene.focus('Flat');
             return;
         case sf.key.TOOLS:
             sf.scene.hide(this.NAME);
@@ -166,11 +166,6 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
                 caller: this.NAME
             });
             sf.scene.focus('Settings');
-            return;
-        case sf.key.BLUE:
-            sf.scene.hide(this.NAME);
-            sf.scene.show('Upcoming');
-            sf.scene.focus('Upcoming');
             return;
         case sf.key.INFO:
             this.initView();
@@ -309,12 +304,12 @@ SceneGroups.prototype.hideDescription = function() {
 // Find the current Recording
 SceneGroups.prototype.getRecording = function() {
     var gitem = $glist.sfList('getIndex');
-    var ritem = $mlist.sfList('getIndex');
-    var rec = Data.GroupsRecordings[gitem][ritem];
+    var mitem = $mlist.sfList('getIndex');
+    var rec = Data.GroupsRecordings[gitem][mitem];
     if(rec) {
-        alert("GetRecording returning groupid=" + gitem + " ritem=" + ritem + " Filename=" + rec.FileName);
+        alert("GetRecording returning groupid=" + gitem + " mitem=" + mitem + " Filename=" + rec.FileName);
     } else {
-        alert("GetRecording returning groupid=" + gitem + " ritem=" + ritem + " - Not found");
+        alert("GetRecording returning groupid=" + gitem + " mitem=" + mitem + " - Not found");
     }
     return rec;
 };
@@ -322,12 +317,12 @@ SceneGroups.prototype.getRecording = function() {
 // callback
 SceneGroups.prototype.onDeleteRecording = function() {
     var gitem = $glist.sfList('getIndex');
-    var ritem = $mlist.sfList('getIndex');
-    var rec = Data.GroupsRecordings[gitem][ritem];
+    var mitem = $mlist.sfList('getIndex');
+    var rec = Data.GroupsRecordings[gitem][mitem];
 
     // Remove the item from the level 1 list
-    Data.GroupsMemberTitles[gitem].splice(ritem, 1);
-    Data.GroupsRecordings[gitem].splice(ritem, 1);
+    Data.GroupsMemberTitles[gitem].splice(mitem, 1);
+    Data.GroupsRecordings[gitem].splice(mitem, 1);
 
     if (Data.GroupsMemberTitles[gitem].length == 0) {
         // Last one in this group, so remove the group from level0
@@ -343,12 +338,12 @@ SceneGroups.prototype.onDeleteRecording = function() {
         this.selectView(0);
     } else {
         this.generateMemberList();
-        if (ritem > 0)
-            $mlist.sfList('move', ritem - 1);
+        if (mitem > 0)
+            $mlist.sfList('move', mitem - 1);
         this.selectView(1);
     }
 
-    // We find the recording and title in the Flat list also
+    // We find the recording and title in the Flat list
     var idx = ServiceAPI.getObjectIndexInList(rec, Data.Recordings);
     if(idx !== null) {
         Data.Recordings.splice(idx, 1);
