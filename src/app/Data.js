@@ -12,7 +12,6 @@ var Data = {
     Videos: [],
     loaded: 0,
     loadedUpcoming: 0,
-    loadedVideos: 0,
     currentStream: 0,
     mainScene: ""
 };

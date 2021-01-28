@@ -66,7 +66,6 @@ SceneError.prototype.handleKeyDown = function(keyCode) {
         case sf.key.RED:
             //Retry
             Data.loadedUpcoming = 0;
-            Data.loadedVideos = 0;
             sf.scene.hide(this.NAME);
             sf.scene.show(Data.mainScene);
             sf.scene.focus(Data.mainScene);

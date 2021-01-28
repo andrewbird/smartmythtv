@@ -200,8 +200,6 @@ ServiceAPI.loadVideos = function(context, callback, errback) {
                 Data.VideoTitles.push(list.VideoMetadataInfos[i].Title);
             }
 
-            Data.loadedVideos = 1;
-
             callback.call(context);
         },
 

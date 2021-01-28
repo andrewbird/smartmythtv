@@ -6,6 +6,7 @@ function SceneVideos(options) {
 
 var $vlist, itemsPerPage = 10;
 var $vscroll;
+var $vspinner;
 
 SceneVideos.prototype.NAME = "Videos";
 
@@ -20,6 +21,8 @@ SceneVideos.prototype.initialize = function() {
     $vscroll.sfScroll({
         currentPage: 0
     });
+
+    $vspinner = $('#svecLoadingImage_RBVI');
 
     $('#svecKeyHelp_O2VI').sfKeyHelp({
         user   : Data.SMARTMYTHTVVERSION,
@@ -40,8 +43,8 @@ SceneVideos.prototype.handleHide = function() {
 
 SceneVideos.prototype.handleFocus = function() {
     Data.mainScene = "Videos";
-    if (Data.loadedVideos == 0) {
-        $('#svecLoadingImage_RBVI').sfLoading('show');
+    if (Data.VideoTitles.length == 0) {
+        $vspinner.sfLoading('show');
 
         ServiceAPI.loadVideos(this,
             function() {
@@ -57,11 +60,11 @@ SceneVideos.prototype.handleFocus = function() {
                     pages: Math.ceil(numberOfItems / itemsPerPage)
                 });
 
-                $('#svecLoadingImage_RBVI').sfLoading('hide');
+                $vspinner.sfLoading('hide');
                 this.showDescription();
             },
             function() {
-                $('#svecLoadingImage_RBVI').sfLoading('hide');
+                $vspinner.sfLoading('hide');
                 ServiceAPI.onError();
             }
         );
@@ -82,7 +85,7 @@ SceneVideos.prototype.showDescription = function() {
 
 
 SceneVideos.prototype.getVideo = function() {
-    return Data.Videos[$('#svecListbox_Videos').sfList('getIndex')];
+    return Data.Videos[$vlist.sfList('getIndex')];
 };
 
 
@@ -102,12 +105,12 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
         case sf.key.RIGHT:
             break;
         case sf.key.UP:
-            $('#svecListbox_Videos').sfList('prev');
+            $vlist.sfList('prev');
             this.updateScrollbar();
             this.showDescription();
             break;
         case sf.key.DOWN:
-            $('#svecListbox_Videos').sfList('next');
+            $vlist.sfList('next');
             this.updateScrollbar();
             this.showDescription();
             break;
@@ -127,7 +130,7 @@ SceneVideos.prototype.handleKeyDown = function(keyCode) {
                 buttons: ['Yes', 'No'],
                 callback: function(rlt) {
                     if (rlt == 0) {
-                        $('#svecLoadingImage_RBMO').sfLoading('show');
+                        $vspinner.sfLoading('show');
                         ServiceAPI.deleteVideo(
                             sf.scene.get('Videos'),               // context
                             sf.scene.get('Videos').onDeleteVideo, // callback
@@ -174,5 +177,5 @@ SceneVideos.prototype.onDeleteVideo = function() {
     }
     this.updateScrollbar();
     this.showDescription();
-    $('#svecLoadingImage_RBMO').sfLoading('hide');
+    $vspinner.sfLoading('hide');
 };
