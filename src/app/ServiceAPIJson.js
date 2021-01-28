@@ -113,7 +113,7 @@ ServiceAPI.deleteRecording = function(context, callback, errback, recording) {
 
 ServiceAPI.loadUpcoming = function(context, callback, errback) {
     $.ajax({
-        url: Data.URL + "/Dvr/GetUpcomingList?Count=30&ShowAll=true",
+        url: Data.URL + "/Dvr/GetUpcomingList?Count=20&ShowAll=true",
         type: "GET",
         cache: false,
         beforeSend: function(xhr){xhr.setRequestHeader('Accept', 'application/json');},
@@ -125,25 +125,20 @@ ServiceAPI.loadUpcoming = function(context, callback, errback) {
             Data.UpcomingDetail = [];
 
             for (var i in list.Programs) {
-
                 var status = list.Programs[i].Recording.Status;
                 var title = list.Programs[i].Title;
-                if (status == 10) { //Inactive
+
+                if (status == 10) {        // Inactive
                     title = "<FONT COLOR='4682BE'>" + title + "</FONT>";
-                } else if (status == 7) { //Conflict
+                } else if (status == 7) {  // Conflict
                     title = "<FONT COLOR='FF0000'>" + title + "</FONT>";
-                } else if (status != -1) { //Will Record
+                } else if (status != -1) { // Will Record
                     continue; //We don't show any other statuses
                 }
                 Data.UpcomingList.push(title);
                 Data.UpcomingDetail.push(new Rec(list.Programs[i]));
-
-                if (Data.UpcomingList.length == 20) {
-                    break;
-                }
             }
 
-            Data.loadedUpcoming = 1;
             callback.call(context);
         },
 
@@ -154,23 +149,23 @@ ServiceAPI.loadUpcoming = function(context, callback, errback) {
 };
 
 
-ServiceAPI.changeRecordSchedule = function(recording, callback, errback) {
+ServiceAPI.changeRecordSchedule = function(context, callback, errback, rec) {
     var url;
 
-    alert("change Record Schedule " + recording.RecordId);
+    alert("change Record Schedule " + rec.RecordId);
 
-    if (recording.Status == -1) {
-        //Current active, need to disable
+    if (rec.Status == -1) {
+        // Current active, need to disable
         url = Data.URL + '/Dvr/DisableRecordSchedule';
     } else {
-        //Current inactive, need to enable
+        // Current inactive, need to enable
         url = Data.URL + '/Dvr/EnableRecordSchedule';
     }
 
     $.ajax({
         url: url,
         type: "POST",
-        data: {RecordId: recording.RecordId},
+        data: {RecordId: rec.RecordId},
 
         success: function(data, textStatus, jqXHR) {
             callback.call(context);

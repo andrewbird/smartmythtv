@@ -11,7 +11,6 @@ var Data = {
     VideoTitles: [],
     Videos: [],
     loaded: 0,
-    loadedUpcoming: 0,
     currentStream: 0,
     mainScene: ""
 };
