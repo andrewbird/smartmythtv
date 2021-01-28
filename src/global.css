@@ -1,3 +1,13 @@
+h1.scene-title {
+    position : absolute;
+    left : 35px;
+    top : 0px;
+
+    color: LightBlue;
+    font-family: arial, sans-serif;
+    font-size: 28px;
+    font-weight: normal
+}
 
 .sf-ui-scroll .sf-ui-scroll-body {
 /*    color: #ffffff  seems to have no effect */
