@@ -30,8 +30,7 @@ SceneVideos.prototype.initialize = function() {
         green  : 'Recordings',
         enter  : 'Play',
         updown : 'UpDown',
-        info   : 'Refresh',
-        tools  : 'Settings',
+        tools  : 'Settings'
     });
 };
 
