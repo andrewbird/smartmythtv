@@ -110,15 +110,13 @@ SceneGroups.prototype.setHelp = function() {
        red    : 'Delete',
        green  : 'Videos',
        yellow : 'Flat',
-       enter  : 'Select',
-       info   : 'Refresh',
+       enter  : 'Play',
        tools  : 'Settings'
     };
 
     if (this.level == 0) {
         delete keys.red;
-    } else if (this.level == 1) {
-        keys['enter'] = 'Play';
+        keys['enter'] = 'Select';
     }
 
     $('#svecKeyHelp_G2NM').sfKeyHelp(keys);
@@ -173,16 +171,27 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
     };
 
     if (this.level == 0) {
+        var curpage, maxpage;
+
         switch (keyCode) {
-            case sf.key.LEFT:
+            case sf.key.RETURN:
+                sf.key.preventDefault();
                 break;
+            case sf.key.LEFT:
             case sf.key.RIGHT:
-            case sf.key.ENTER:
-            case sf.key.PLAY:
-                // Select a level 0 item from Group, now change the list to be All
-                // the titles in that group and move to level 1
-                this.generateMemberList();
-                this.selectView(1);
+                // Paging
+                curpage = Math.floor($glist.sfList('getIndex') / itemsPerPage);
+                if (keyCode == sf.key.RIGHT)
+                    curpage += 1;
+                else
+                    curpage -= 1;
+                maxpage = Math.floor(Data.GroupsGroupTitles.length / itemsPerPage);
+                if (curpage < 0)
+                    curpage = maxpage;
+                if (curpage > maxpage)
+                    curpage = 0;
+                $glist.sfList('move', curpage * itemsPerPage);
+                this.updateScrollbar();
                 break;
             case sf.key.UP:
                 // Show previous item in level 0 list
@@ -194,6 +203,12 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
                 $glist.sfList('next');
                 this.updateScrollbar();
                 break;
+            case sf.key.ENTER:
+                // Select a level 0 item from Group, now change the list to be All
+                // the titles in that group and move to level 1
+                this.generateMemberList();
+                this.selectView(1);
+                break;
         }
 
     } else {
@@ -201,23 +216,22 @@ SceneGroups.prototype.handleKeyDown = function(keyCode) {
         switch (keyCode) {
             case sf.key.RETURN:
                 sf.key.preventDefault();
+                /* fall through */
             case sf.key.LEFT:
-            case sf.key.BACK:
                 // Go back to previous level, show all the groups
                 this.selectView(0);
                 break;
-
+            case sf.key.RIGHT:
+                break;
             case sf.key.UP:
                 $mlist.sfList('prev');
                 this.showDescription();
                 break;
-
             case sf.key.DOWN:
                 $mlist.sfList('next');
                 this.showDescription();
                 break;
 
-            case sf.key.RIGHT:
             case sf.key.ENTER:
             case sf.key.PLAY:
                 // Play the selected item
