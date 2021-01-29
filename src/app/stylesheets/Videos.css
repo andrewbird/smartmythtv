@@ -37,9 +37,3 @@
   height : 400px;
   overflow : auto
 }
-
-#SceneVideos #svecLoadingImage_RBVI {
-  position : absolute;
-  left : 270px;
-  top : 190px
-}

@@ -37,9 +37,3 @@
   height : 400px;
   overflow : auto
 }
-
-#SceneFlat #svecLoadingImage_RBMO {
-  position : absolute;
-  left : 270px;
-  top : 190px
-}
