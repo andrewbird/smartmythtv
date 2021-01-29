@@ -6,6 +6,13 @@ img.scene-logo {
   height : 40px
 }
 
+div.scene-scrollbar {
+  position : absolute;
+  left : 540px;
+  top : 70px;
+  height : 400px
+}
+
 div.scene-spinner {
   position : absolute;
   left : 250px;
