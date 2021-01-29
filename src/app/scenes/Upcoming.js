@@ -1,3 +1,5 @@
+var widgetAPI = new Common.API.Widget(); // Create Common module
+
 function SceneUpcoming() {
 
 }
@@ -92,6 +94,10 @@ SceneUpcoming.prototype.handleBlur = function() {
 SceneUpcoming.prototype.handleKeyDown = function(keyCode) {
     // TODO : write an key event handler when this scene get focued
     switch (keyCode) {
+        case sf.key.EXIT:
+            sf.key.preventDefault();
+            widgetAPI.sendReturnEvent();
+            return;
         case sf.key.RETURN:
             sf.key.preventDefault();
             break;

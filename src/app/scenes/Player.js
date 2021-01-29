@@ -199,20 +199,21 @@ ScenePlayer.prototype.Toggle = function() {
 
 ScenePlayer.prototype.handleKeyDown = function(keyCode) {
     switch (keyCode) {
-        case sf.key.PAUSE:
-            this.Pause();
-            break;
-
-        case sf.key.PLAY:
-            this.Play();
-            break;
-
+        case sf.key.EXIT:
         case sf.key.RETURN:
             sf.key.preventDefault();
             /* fall through */
         case sf.key.STOP:
             this.Stop();
             this.Quit();
+            break;
+
+        case sf.key.PAUSE:
+            this.Pause();
+            break;
+
+        case sf.key.PLAY:
+            this.Play();
             break;
 
         case tvKey.KEY_RETURN:

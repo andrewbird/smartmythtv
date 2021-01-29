@@ -96,6 +96,10 @@ SceneVideos.prototype.updateScrollbar = function() {
 
 SceneVideos.prototype.handleKeyDown = function(keyCode) {
     switch (keyCode) {
+        case sf.key.EXIT:
+            sf.key.preventDefault();
+            widgetAPI.sendReturnEvent();
+            return;
         case sf.key.RETURN:
             sf.key.preventDefault();
             break;

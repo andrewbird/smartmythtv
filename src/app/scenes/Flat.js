@@ -134,6 +134,10 @@ SceneFlat.prototype.updateScrollbar = function() {
 
 SceneFlat.prototype.handleKeyDown = function(keyCode) {
     switch (keyCode) {
+        case sf.key.EXIT:
+            sf.key.preventDefault();
+            widgetAPI.sendReturnEvent();
+            break;
         case sf.key.RETURN:
             sf.key.preventDefault();
             break;

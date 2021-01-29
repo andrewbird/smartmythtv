@@ -1,9 +1,9 @@
+var widgetAPI = new Common.API.Widget(); // Create Common module
+
 function SceneGroups(options) {
     this.options = options;
     this.level = 0;
 }
-
-var widgetAPI = new Common.API.Widget(); // Create Common module
 
 var $glist, $mlist, itemsPerPage = 10;
 var $gscroll;
@@ -148,6 +148,10 @@ SceneGroups.prototype.handleBlur = function() {};
 SceneGroups.prototype.handleKeyDown = function(keyCode) {
 
     switch (keyCode) {
+        case sf.key.EXIT:
+            sf.key.preventDefault();
+            widgetAPI.sendReturnEvent();
+            return;
         case sf.key.GREEN:
             sf.scene.hide(this.NAME);
             sf.scene.show('Videos');

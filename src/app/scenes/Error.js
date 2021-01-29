@@ -1,5 +1,6 @@
-function SceneError() {
+var widgetAPI = new Common.API.Widget(); // Create Common module
 
+function SceneError() {
 
 }
 
@@ -46,8 +47,14 @@ SceneError.prototype.handleBlur = function() {
 };
 
 SceneError.prototype.handleKeyDown = function(keyCode) {
-
     switch (keyCode) {
+        case sf.key.EXIT:
+            sf.key.preventDefault();
+            widgetAPI.sendReturnEvent();
+            break;
+        case sf.key.RETURN:
+            sf.key.preventDefault();
+            break;
         case sf.key.LEFT:
             break;
         case sf.key.RIGHT:

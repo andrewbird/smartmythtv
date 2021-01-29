@@ -95,6 +95,10 @@ addchar = function(c) {
 
 SceneSettings.prototype.handleKeyDown = function(keyCode) {
     switch (keyCode) {
+        case sf.key.EXIT:
+        case sf.key.RETURN:
+            sf.key.preventDefault();
+            break;
         case sf.key.LEFT:
         case sf.key.UP:
             changestate(idx, 'blur');
