@@ -320,11 +320,13 @@ SceneGroups.prototype.getRecording = function() {
     var gitem = $glist.sfList('getIndex');
     var mitem = $mlist.sfList('getIndex');
     var rec = Data.GroupsRecordings[gitem][mitem];
+/*
     if(rec) {
         alert("GetRecording returning groupid=" + gitem + " mitem=" + mitem + " Filename=" + rec.FileName);
     } else {
         alert("GetRecording returning groupid=" + gitem + " mitem=" + mitem + " - Not found");
     }
+ */
     return rec;
 };
 

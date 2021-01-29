@@ -217,7 +217,6 @@ ScenePlayer.prototype.handleKeyDown = function(keyCode) {
 
         case tvKey.KEY_RETURN:
         case tvKey.KEY_PANEL_RETURN:
-            alert("tvkey.KEY{,PANEL}RETURN");
             widgetAPI.blockNavigation(keyCode);
             this.Stop();
             this.Quit();

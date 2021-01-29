@@ -49,12 +49,10 @@ SceneUpcoming.prototype.setHelp = function() {
 
 
 SceneUpcoming.prototype.handleShow = function(data) {
-    alert("SceneUpcoming.handleShow()");
     // this function will be called when the scene manager show this scene
 };
 
 SceneUpcoming.prototype.handleHide = function() {
-    alert("SceneUpcoming.handleHide()");
     // this function will be called when the scene manager hide this scene
 };
 
@@ -87,13 +85,11 @@ SceneUpcoming.prototype.handleFocus = function() {
 };
 
 SceneUpcoming.prototype.handleBlur = function() {
-    alert("SceneUpcoming.handleBlur()");
     // this function will be called when the scene manager move focus to another
     // scene from this scene
 };
 
 SceneUpcoming.prototype.handleKeyDown = function(keyCode) {
-    alert("SceneUpcoming.handleKeyDown(" + keyCode + ")");
     // TODO : write an key event handler when this scene get focued
     switch (keyCode) {
         case sf.key.RETURN:

@@ -57,7 +57,6 @@ ServiceAPI.loadRecordings = function(context, callback, errback) {
 
             for (var i=0; Data.Recordings.length > 0 && i < 10; i++) {
                 /* spin until Data clear */
-                alert("loadRecordings.success() spinning " + Data.Recordings.length);
             }
 
             for (var i in list.Programs) {
@@ -151,8 +150,6 @@ ServiceAPI.loadUpcoming = function(context, callback, errback) {
 
 ServiceAPI.changeRecordSchedule = function(context, callback, errback, rec) {
     var url;
-
-    alert("change Record Schedule " + rec.RecordId);
 
     if (rec.Status == -1) {
         // Current active, need to disable
